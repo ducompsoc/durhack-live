@@ -55,9 +55,7 @@ let socket: SocketIOClient.Socket;
 let currentOverlay: IOverlayState | null = null;
 
 function onYouTubeIframeAPIReady() {
-    //let url = `http://127.0.0.1:3001`;
-    const url = `https://8e9a21317b41.ngrok.io`;
-
+    const url = window.location.host.includes('live.durhack.com') ? '/' : 'http://127.0.0.1:3001';
     socket = io(url, { transports: ['websocket'] });
 
     socket.on('connect', () => {

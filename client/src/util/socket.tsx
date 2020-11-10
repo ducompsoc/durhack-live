@@ -86,8 +86,7 @@ let lastConnection: THackathonConnection = { connected: false, role: null, state
 let socket: SocketIOClient.Socket | null = null;
 
 export function connect() {
-	// socket = IO('https://8e9a21317b41.ngrok.io');
-	socket = IO('http://127.0.0.1:3001');
+	socket = IO(window.location.host.includes('live.durhack.com') ? '/' : 'http://127.0.0.1:3001');
 
 	let userRole: string | null = null;
 

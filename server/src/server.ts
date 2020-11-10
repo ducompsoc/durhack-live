@@ -1,4 +1,3 @@
-import { methodNotAllowed } from '@hapi/boom';
 import * as Hapi from '@hapi/hapi';
 import * as Joi from '@hapi/joi';
 import * as SocketIO from 'socket.io';
