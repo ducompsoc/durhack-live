@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700;800;900&display=swap');
+
+@font-face {
+	font-family: 'Deciso';
+	font-weight: bold;
+	src: url('/Deciso-Bold.otf');
+}
+
+body {
+	background-color: #000;
+	color: #fff;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	margin: 0px;
+}
+
+body, button, input, select, textarea {
+	font-family: 'Exo 2', 'Open Sans', Arial, sans-serif;
+}
+
+code {
+	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h3, label {
+	display: block;
+	font-weight: 800;
+	font-size: 15px;
+	text-transform: uppercase;
+}
+
+h3 {
+	margin: 0px 0px 6px 0px;
+}
+
+.row {
+	display: flex;
+	flex-direction: row;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
+.center, .align-center {
+	align-items: center;
+}
+
+.center {
+	justify-content: center;
+}
+
+.wrap {
+	flex-wrap: wrap;
+}
+
+.flex {
+	flex: 1;
+}
+
+a {
+	color: #fff;
+}
