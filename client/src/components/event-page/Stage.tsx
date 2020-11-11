@@ -52,6 +52,7 @@ const LiveEventButton = styled.div`
 	padding-top: 16px;
 `;
 
+/* eslint-disable react/no-array-index-key */
 const TopTip = React.memo(() => {
 	const { state } = useHackathon();
 	const [tip, setTip] = React.useState<string>();
@@ -85,7 +86,7 @@ const TopTip = React.memo(() => {
 
 	return (
 		<div>
-			{tip.split('\n').map(line => <p>{line}</p>)}
+			{tip.split('\n').map((line, index) => <p key={index}>{line}</p>)}
 		</div>
 	);
 });

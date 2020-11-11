@@ -20,6 +20,7 @@ const AnnouncementText = styled.div`
 	padding: 9px 0px;
 `;
 
+/* eslint-disable react/no-array-index-key */
 export const Announcement = React.memo(() => {
 	const { state } = useHackathon();
 
@@ -34,7 +35,7 @@ export const Announcement = React.memo(() => {
 			<AnnouncementContainer>
 				<AnnouncementTitle>{state.announcement.title}</AnnouncementTitle>
 				<AnnouncementText>
-					{announcement.text.split('\n').map(line => <div>{line || <>&nbsp;</>}</div>)}
+					{announcement.text.split('\n').map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
 				</AnnouncementText>
 				{announcement.buttonLink && (
 					<LinkButton href={announcement.buttonLink} target="_blank" rel="noopener" primary>{announcement.buttonText}</LinkButton>

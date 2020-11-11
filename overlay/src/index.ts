@@ -59,7 +59,9 @@ function onYouTubeIframeAPIReady() {
     socket = io(url, { transports: ['websocket'] });
 
     socket.on('connect', () => {
-        socket.emit('authenticate', '___durhack_stream_token_tA1qI0wB5pZ9oU0k', (err: Error) => {
+        const tokenSplit = window.location.search.split('?token=')[1];
+
+        socket.emit('authenticate', tokenSplit ? tokenSplit.split('&')[0] : (localStorage.getItem('token') || ''), (err: Error) => {
             if (err) {
                 alert('Failed to authenticate with live.durhack.com');
                 console.error(err);
