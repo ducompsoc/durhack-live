@@ -138,7 +138,7 @@ async function switchScene(sceneName: string, countdown: number) {
         
         await waitFor(1);
         switchSceneTo(sceneName);
-        await waitFor(2);
+        await waitFor(6);
         
         classList('.text-pattern-bg').remove('animate-in-out');
 
