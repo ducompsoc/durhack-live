@@ -111,7 +111,7 @@ export const Stage = React.memo(() => {
 			scheduleAfterInProgress = state.schedule.slice(state.schedule.length - inProgressEventIndex);
 		}
 
-		setUpNext(scheduleAfterInProgress.find(item => item.state === 'scheduled' && item.onStream) || null);
+		setUpNext(scheduleAfterInProgress.find(item => item.state === 'scheduled') || null);
 		setOnTheSide(state.schedule.find(item => item.state === 'in-progress' && !item.onStream) || null);
 	}, [state]);
 
@@ -152,7 +152,8 @@ export const Stage = React.memo(() => {
 					<LiveEventIcon><span className="far fa-clock" /></LiveEventIcon>
 					{startDate && (
 						<div className="flex">
-							Live here in {startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment'}
+							{upNext.onStream ? 'Live here' : 'Takes place'} in{' '}
+							{startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment'}
 						</div>
 					)}
 				</LiveEventWhen>

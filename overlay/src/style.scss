@@ -186,6 +186,11 @@ html, body {
                 font-size: 72px;
                 font-weight: 900;
             }
+
+            img {
+                width: auto;
+                max-height: 300px;
+            }
         }
 
         &.animate-in {

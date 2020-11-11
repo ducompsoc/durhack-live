@@ -330,110 +330,123 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 	</OverlayForm>
 ));
 
-const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
-	<OverlayForm hackathon={hackathon} category="schedule">
-		{props => (
-			<>
-				<h3>Schedule</h3>
+const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
+	const newItem = {
+		name: '',
+		icon: '',
+		start: '',
+		end: '',
+		liveLink: '',
+		recordingLink: '',
+		state: 'scheduled',
+		onStream: false,
+	};
 
-				<p>This schedule solely affects what is shown on this website. It does not affect the livestream.</p>
+	return (
+		<OverlayForm hackathon={hackathon} category="schedule">
+			{props => (
+				<>
+					<h3>Schedule</h3>
 
-				<Table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th>Icon</th>
-							<th>Start</th>
-							<th>End</th>
-							<th>Zoom/Slack</th>
-							<th>YouTube</th>
-							<th>State</th>
-							<th>Stream</th>
-						</tr>
-					</thead>
+					<p>This schedule solely affects what is shown on this website. It does not affect the livestream.</p>
 
-					<tbody>
-						<FieldArray
-							name="schedule"
-							render={arrayHelpers => (
-								<>
-									{(props.values.schedule as void[]).map((_, index) => (
-										<tr key={index}>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.name`} />
-											</td>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.icon`} style={{ width: 90 }} />
-											</td>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.start`} />
-											</td>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.end`} />
-											</td>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.liveLink`} style={{ width: 90 }} />
-											</td>
-											<td className="flex">
-												<Field type="text" name={`schedule.${index}.recordingLink`} style={{ width: 90 }} />
-											</td>
-											<td className="flex">
-												<Field as="select" name={`schedule.${index}.state`}>
-													<option value="scheduled">Scheduled</option>
-													<option value="in-progress">In progress</option>
-													<option value="done">Done</option>
-												</Field>
-											</td>
-											<td className="flex">
-												<Field type="checkbox" name={`schedule.${index}.onStream`} />
-											</td>
+					<Table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Icon</th>
+								<th>Start</th>
+								<th>End</th>
+								<th>Zoom/Slack</th>
+								<th>YouTube</th>
+								<th>State</th>
+								<th>Stream</th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<FieldArray
+								name="schedule"
+								render={arrayHelpers => (
+									<>
+										{(props.values.schedule as void[]).map((_, index) => (
+											<tr key={index}>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.name`} />
+												</td>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.icon`} style={{ width: 90 }} />
+												</td>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.start`} />
+												</td>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.end`} />
+												</td>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.liveLink`} style={{ width: 90 }} />
+												</td>
+												<td className="flex">
+													<Field type="text" name={`schedule.${index}.recordingLink`} style={{ width: 90 }} />
+												</td>
+												<td className="flex">
+													<Field as="select" name={`schedule.${index}.state`}>
+														<option value="scheduled">Scheduled</option>
+														<option value="in-progress">In progress</option>
+														<option value="done">Done</option>
+													</Field>
+												</td>
+												<td className="flex">
+													<Field type="checkbox" name={`schedule.${index}.onStream`} />
+												</td>
+												<td>
+													<button
+														type="button"
+														onClick={() => arrayHelpers.remove(index)}
+													>
+														-
+													</button>
+													<button
+														type="button"
+														onClick={() => arrayHelpers.insert(index, { ...newItem })}
+													>
+														+
+													</button>
+													<button
+														type="button"
+														onClick={() => arrayHelpers.move(index, Math.max(0, index - 1))}
+													>
+														&uarr;
+													</button>
+													<button
+														type="button"
+														onClick={() => arrayHelpers.move(index, index + 1)}
+													>
+														&darr;
+													</button>
+												</td>
+											</tr>
+										))}
+										<tr>
 											<td>
 												<button
 													type="button"
-													onClick={() => arrayHelpers.remove(index)}
+													onClick={() => arrayHelpers.insert(props.values.schedule.length, { ...newItem })}
 												>
-													-
-												</button>
-												<button
-													type="button"
-													onClick={() => arrayHelpers.insert(index, { state: 'scheduled' })}
-												>
-													+
-												</button>
-												<button
-													type="button"
-													onClick={() => arrayHelpers.move(index, Math.max(0, index - 1))}
-												>
-													&uarr;
-												</button>
-												<button
-													type="button"
-													onClick={() => arrayHelpers.move(index, index + 1)}
-												>
-													&darr;
+													+ Add Schedule item
 												</button>
 											</td>
 										</tr>
-									))}
-									<tr>
-										<td>
-											<button
-												type="button"
-												onClick={() => arrayHelpers.insert(props.values.schedule.length, { state: 'scheduled' })}
-											>
-												+ Add Schedule item
-											</button>
-										</td>
-									</tr>
-								</>
-							)}
-						/>
-					</tbody>
-				</Table>
-			</>
-		)}
-	</OverlayForm>
-));
+									</>
+								)}
+							/>
+						</tbody>
+					</Table>
+				</>
+			)}
+		</OverlayForm>
+	);
+});
 
 const Announcement = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 	<OverlayForm hackathon={hackathon} category="announcement">

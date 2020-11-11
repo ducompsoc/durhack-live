@@ -239,7 +239,7 @@ function getMainTextEl(text: string, className: string) {
     const innerDivOne = document.createElement('div');
     const innerDivTwo = document.createElement('div');
     const innerDivThree = document.createElement('div');
-    innerDivThree.textContent = text;
+    innerDivThree.innerHTML = text;
     innerDivTwo.appendChild(innerDivThree);
     innerDivTwo.style.animationDelay = `${mainAnimationDelay}s`;
     innerDivOne.appendChild(innerDivTwo);
@@ -260,7 +260,7 @@ function getMainSepEl() {
 let cycleIteration: number | null = null;
 let cycleTimeout: number;
 async function startCyclingMain() {
-    console.log('cycling: ' + cycleIteration);
+    console.log('Cycling: ' + cycleIteration);
 
     if (cycleIteration !== null) {
         const slides = document.querySelectorAll('.slides > div');
@@ -268,11 +268,14 @@ async function startCyclingMain() {
         if (slide) {
             slide.classList.remove('animate-in');
             slide.classList.add('animate-out');
+
+            console.log('Slide max delay is', (<any>slide).dataset.maxDelay, 'so will animate out after', (Number((<any>slide).dataset.maxDelay || 1) + 1.5) * 1000);
             await new Promise(resolve => {
                 cycleTimeout = setTimeout(() => {
                     resolve();
-                }, (Number((<any>slide).dataset.maxDelay || 1) + 1) * 1000);
+                }, (Number((<any>slide).dataset.maxDelay || 1) + 1.5) * 1000);
             });
+            
             slide.classList.remove('animate-out');
         }
 
@@ -290,14 +293,19 @@ async function startCyclingMain() {
 
         // If the next up is nearly over, stay with it.
         if (slide.classList.contains('nextup') && mainNextUpWhen && Date.now() - new Date(mainNextUpWhen).getTime() > 1000 * 60 * 1.5) {
+            console.log('"Next Up" is about to end. Refusing to cycle.');
             return;
         }
     }
 
     if (document.querySelectorAll('.slides > div').length > 1) {
+        console.log('Will cycle in 15 secs...');
+
         cycleTimeout = setTimeout(() => {
             startCyclingMain();
         }, 15000);
+    } else {
+        console.log('Only one slide. Not cycling.');
     }
 }
 
@@ -309,7 +317,8 @@ async function updateMain(enabled: boolean, pretext: string, title: string, when
     const currentSlide = document.querySelector('.slides > div.animate-in');
     if (currentSlide) {
         currentSlide.classList.add('animate-out');
-        await waitFor(Number((<any>currentSlide).dataset.maxDelay || 1) + 1);
+        console.log('Updating main. Slide max delay is', (<any>currentSlide).dataset.maxDelay, 'so will animate out after', Number((<any>currentSlide).dataset.maxDelay || 1) + 1);
+        await waitFor(Number((<any>currentSlide).dataset.maxDelay || 1) + 1.5);
         currentSlide.classList.remove('animate-out');
         currentSlide.classList.remove('animate-in');
     }
