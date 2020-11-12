@@ -136,9 +136,15 @@ async function switchScene(sceneName: string, countdown: number) {
 
         classList('.text-pattern-bg').add('animate-in-out');
         
-        await waitFor(1);
-        switchSceneTo(sceneName);
-        await waitFor(6);
+        if (sceneName.startsWith('Recording')) {
+            await waitFor(5);
+            switchSceneTo(sceneName);
+            await waitFor(4);
+        } else {
+            await waitFor(1);
+            switchSceneTo(sceneName);
+            await waitFor(8);
+        }
         
         classList('.text-pattern-bg').remove('animate-in-out');
 
