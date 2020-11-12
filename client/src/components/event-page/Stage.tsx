@@ -18,7 +18,7 @@ const LiveNowPlaying = styled(Card)`
 `;
 
 const Player = styled.div`
-	height: 445px;
+	height: 447px;
 	background-color: #000;
 `;
 
