@@ -394,7 +394,7 @@ html, body {
     &.animate-in-out {
         display: block;
         animation-name: text-pattern-in-out;
-        animation-duration: 8s;
+        animation-duration: 7s;
 
         .lines > div {
             animation-timing-function: linear;
@@ -443,12 +443,12 @@ html, body {
             left: -150px;
         }
 
-        15% {
+        25% {
             right: -100px;
             left: -100px;
         }
 
-        85% {
+        75% {
             right: -100px;
             left: -100px;
         }
