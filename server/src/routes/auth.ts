@@ -7,9 +7,9 @@ import { sign } from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
 import * as mailgun from 'mailgun-js';
+import { Op } from 'sequelize';
 
 import { User } from '../database';
-import { Op } from 'sequelize/types';
 
 const mg = mailgun(get('mailgun'));
 
