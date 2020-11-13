@@ -45,7 +45,7 @@ export const loginRoute: ServerRoute = {
 
         const user = await User.findOne({
             where: {
-                email: augmentedEmail,
+                email: { [Op.or]: augmentedEmail },
             },
         });
 
