@@ -1,10 +1,11 @@
 import React from 'react';
+
 import { Page } from '../common/Page';
 import { Announcement } from './Announcement';
 import { HackerPack } from './HackerPack';
 import { Socials } from './Socials';
-
 import { Stage } from './Stage';
+import { Team } from './Team';
 
 export const EventPage = React.memo(() => (
 	<Page>
@@ -12,5 +13,6 @@ export const EventPage = React.memo(() => (
 		<Socials />
 		<Announcement />
 		<HackerPack />
+		<Team />
 	</Page>
 ));
