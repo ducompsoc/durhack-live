@@ -9,6 +9,7 @@ import { promisify } from 'util';
 import * as mailgun from 'mailgun-js';
 
 import { User } from '../database';
+import { Op } from 'sequelize/types';
 
 const mg = mailgun(get('mailgun'));
 
@@ -35,7 +36,18 @@ export const loginRoute: ServerRoute = {
     async handler(req) {
         const { email, password, verifyCode } = <ILoginPayload>req.payload;
 
-        const user = await User.findOne({ where: { email } });
+        let augmentedEmail = [email];
+        if (email.endsWith('@dur.ac.uk') || email.endsWith('@durham.ac.uk')) {
+            const [prefix] = email.split('@');
+
+            augmentedEmail = [`${prefix}@dur.ac.uk`, `${prefix}@durham.ac.uk`];
+        }
+
+        const user = await User.findOne({
+            where: {
+                email: augmentedEmail,
+            },
+        });
 
         if (!user) {
             throw badRequest('Incorrect email.');
