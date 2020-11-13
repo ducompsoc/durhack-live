@@ -141,7 +141,7 @@ async function switchScene(sceneName: string, countdown: number) {
             switchSceneTo(sceneName);
             await waitFor(3);
         } else {
-            await waitFor(1);
+            await waitFor(1.2);
             switchSceneTo(sceneName);
             await waitFor(7);
         }
