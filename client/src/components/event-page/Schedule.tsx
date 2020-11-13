@@ -224,7 +224,7 @@ export const Schedule = React.memo(() => {
 										{event.state === 'done' && event.recordingLink && (
 											<PlayButton href={event.recordingLink} target="_blank">
 												<span className="fas fa-play" />
-												Watch back
+												{event.recordingLink.includes('youtube') ? 'Watch back' : 'Get resources'}
 											</PlayButton>
 										)}
 									</EventContent>
