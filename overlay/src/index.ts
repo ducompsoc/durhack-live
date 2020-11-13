@@ -238,8 +238,8 @@ async function updateFeature(enabled: boolean, icon: string, title: string, text
 
     if (enabled) {
         document.querySelector('.feature .icon span')!.className = icon;
-        document.querySelector('.feature .text')!.textContent = title;
-        document.querySelector('.feature .title')!.textContent = text;
+        document.querySelector('.feature .text')!.textContent = text;
+        document.querySelector('.feature .title')!.textContent = title;
 
         classList('.feature').add('animate-in');
     }
