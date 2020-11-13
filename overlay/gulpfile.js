@@ -9,7 +9,7 @@ const tsProject = ts.createProject('tsconfig.json');
 sass.compiler = require('node-sass');
 
 gulp.task('assets', () => {
-    return gulp.src('./src/**/*.{html,js,svg,png,jpg,jpeg,gif,ico}')
+    return gulp.src('./src/**/*.{html,js,svg,png,jpg,jpeg,gif,ico,woff}')
         .pipe(gulp.dest('./dist'));
 });
 
