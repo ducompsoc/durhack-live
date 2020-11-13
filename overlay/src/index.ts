@@ -156,11 +156,16 @@ async function switchScene(sceneName: string, countdown: number) {
     let currentCountdown = countdown;
     document.querySelector('.text-pattern-bg .countdown')!.textContent = `${currentCountdown}`;
     
+    let hasSwitchedScene = false;
+
     clearInterval(sceneSwitchInterval);
     sceneSwitchInterval = setInterval(async () => {
-        if (currentCountdown <= 0) {
+        if (!hasSwitchedScene && currentCountdown <= (sceneName.startsWith('Recording') ? 3 : 8)) {
             switchSceneTo(sceneName);
+            hasSwitchedScene = true;
+        }
 
+        if (currentCountdown <= 0) {
             clearInterval(sceneSwitchInterval);
             
             classList('.text-pattern-bg').remove('animate-in');
