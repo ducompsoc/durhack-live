@@ -96,6 +96,7 @@ export const Stage = React.memo(() => {
 	const [inProgressEvent, setInProgressEvent] = React.useState<IScheduledEvent | null>(null);
 	const [upNext, setUpNext] = React.useState<IScheduledEvent | null>(null);
 	const [onTheSide, setOnTheSide] = React.useState<IScheduledEvent | null>(null);
+	const [upNextTimeToGo, setUpNextTimeToGo] = React.useState<string>('');
 
 	React.useEffect(() => {
 		if (!state) {
@@ -115,6 +116,27 @@ export const Stage = React.memo(() => {
 		setUpNext(scheduleAfterInProgress.find(item => item.state === 'scheduled') || null);
 		setOnTheSide(state.schedule.find(item => item.state === 'in-progress' && !item.onStream) || null);
 	}, [state]);
+
+	React.useEffect(() => {
+		if (!upNext) {
+			return;
+		}
+
+		let startDate: Date = new Date(upNext.start);
+		if (isNaN(startDate.getTime())) { /* eslint-disable-line no-restricted-globals */
+			setUpNextTimeToGo('');
+			return;
+		}
+
+		setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment');
+		const interval = setInterval(() => {
+			setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment');
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	}, [upNext]);
 
 	if (!state) {
 		return <></>;
@@ -154,7 +176,7 @@ export const Stage = React.memo(() => {
 					{startDate && (
 						<div className="flex">
 							{upNext.onStream ? 'Live here' : 'Takes place'} in{' '}
-							{startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment'}
+							{upNextTimeToGo}
 						</div>
 					)}
 				</LiveEventWhen>
