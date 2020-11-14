@@ -512,7 +512,7 @@ function breakUp(text: string, kind: string) {
         let nextPhrase = `${phrase} ${word}`;
         if (fakeCtx.measureText(`${phrase} ${word}`).width > limit) {
             result.push(phrase.trim());
-            phrase = '';
+            phrase = word;
         } else {
             phrase = nextPhrase;
         }
