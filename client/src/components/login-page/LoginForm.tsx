@@ -42,6 +42,197 @@ const Button = styled.button`
 `;
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
+export const CheckInForm = React.memo(() => {
+	const [error, setError] = React.useState<string>();
+	const [loading, setLoading] = React.useState<boolean>(false);
+	const [checkedIn, setCheckedIn] = React.useState<boolean>(false);
+
+	const errorMessage = error ? <ErrorAlert>{error}</ErrorAlert> : <></>;
+
+	const handleSubmit = React.useCallback((submission: any) => {
+		setError(undefined);
+
+		query('POST', 'checkin', submission)
+			.then(res => {
+				if (res.hUKConsent) {
+					localStorage.setItem('checkin', 'true');
+					setCheckedIn(true);
+					return;
+				}
+
+				if (res.message) {
+					setError(res.message);
+					return;
+				}
+
+				throw new Error(res);
+			})
+			.catch(err => {
+				console.error(err);
+
+				setError(
+					'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask a '
+					+ 'member of the DurHack team.',
+				);
+			});
+	}, []);
+
+	const formik = useFormik({
+		initialValues: {},
+		onSubmit: handleSubmit,
+	});
+
+	React.useEffect(() => {
+		setLoading(true);
+		setError(undefined);
+
+		query('GET', 'checkin')
+			.then(res => {
+				if (res.checkedIn) {
+					localStorage.setItem('checkin', 'true');
+				}
+
+				setLoading(false);
+				setCheckedIn(!!res.checkedIn);
+				formik.setValues({
+					...res,
+					ethnicity: res.ethnicity || 'Prefer not to say',
+					gender: res.gender || 'Prefer not to say',
+					hUKConsent: res.hUKConsent || false,
+					hUKMarketing: res.hUKMarketing || false,
+				});
+			})
+			.catch(err => {
+				console.error(err);
+
+				setError(
+					'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask a '
+					+ 'member of the DurHack team.',
+				);
+			});
+	}, []);
+
+	if (loading) {
+		return <div>{errorMessage}<p>Verifying your details...</p></div>;
+	}
+
+	if (checkedIn) {
+		return <Redirect to="/" />;
+	}
+
+	return (
+		<div>
+			<form onSubmit={formik.handleSubmit}>
+				<p>
+					Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any we're missing.
+				</p>
+
+				<FormSection>
+					<label htmlFor="age">Age:</label>
+					<Textbox
+						key="age"
+						id="age"
+						type="number"
+						min={18}
+						placeholder="Age"
+						required
+						{...formik.getFieldProps('age')}
+					/>
+				</FormSection>
+
+				<FormSection>
+					<label htmlFor="phoneNumber">Phone number:</label>
+					<Textbox
+						key="phoneNumber"
+						id="phoneNumber"
+						type="text"
+						placeholder="Phone number"
+						required
+						{...formik.getFieldProps('phoneNumber')}
+					/>
+				</FormSection>
+
+				<FormSection>
+					<label htmlFor="university">University:</label>
+					<Textbox
+						key="university"
+						id="university"
+						type="text"
+						placeholder="University"
+						required
+						{...formik.getFieldProps('university')}
+					/>
+				</FormSection>
+
+				<FormSection>
+					<label htmlFor="graduationYear">Graduation Year:</label>
+					<Textbox
+						key="graduationYear"
+						id="graduationYear"
+						type="text"
+						placeholder="Graduation Year"
+						required
+						{...formik.getFieldProps('graduationYear')}
+					/>
+				</FormSection>
+
+				<FormSection>
+					<label htmlFor="ethnicity">Ethnicity (optional):</label>
+					<select
+						key="ethnicity"
+						id="ethnicity"
+						placeholder="Ethnicity"
+						required
+						{...formik.getFieldProps('ethnicity')}
+					>
+						<option value="American Indian or Alaskan Native">American Indian or Alaskan Native</option>
+						<option value="Asian / Pacific Islander">Asian / Pacific Islander</option>
+						<option value="Black or African American">Black or African American</option>
+						<option value="Hispanic">Hispanic</option>
+						<option value="White / Caucasian">White / Caucasian</option>
+						<option value="Multiple ethnicity / Other">Multiple ethnicity / Other</option>
+						<option value="Prefer not to say">Prefer not to say</option>
+					</select>
+				</FormSection>
+
+				<FormSection>
+					<label htmlFor="gender">Gender (optional):</label>
+					<select
+						key="gender"
+						id="gender"
+						placeholder="Gender"
+						required
+						{...formik.getFieldProps('gender')}
+					>
+						<option value="Male">Male</option>
+						<option value="Female">Female</option>
+						<option value="Non-Binary / Third Gender">Non-Binary / Third Gender</option>
+						<option value="Other">Other</option>
+						<option value="Prefer not to say">Prefer not to say</option>
+					</select>
+				</FormSection>
+
+				<FormSection>
+					<input type="checkbox" id="hUKConsent" key="hUKConsent" required {...formik.getFieldProps('hUKConsent')} />
+					<label htmlFor="hUKConsent" style={{ textTransform: 'none' }}>(required) <span style={{ fontWeight: 'normal' }}>I authorise you to share my application/registration information with Hackathons UK Limited for event administration, Hackathons UK Limited administration, and with my authorisation email in-line with the Hackathons UK Limited Privacy Policy.</span></label>
+				</FormSection>
+
+				<FormSection>
+					<input type="checkbox" id="hUKMarketing" key="hUKMarketing" {...formik.getFieldProps('hUKMarketing')} />
+					<label htmlFor="hUKMarketing" style={{ textTransform: 'none' }}>(optional) <span style={{ fontWeight: 'normal' }}>I authorise Hackathons UK Limited to send me occasional messages about hackathons and their activities.</span></label>
+				</FormSection>
+
+				<p>
+					<Button type="submit">Check in</Button>
+				</p>
+
+				{errorMessage}
+			</form>
+		</div>
+	);
+});
+
+/* eslint-disable jsx-a11y/label-has-associated-control */
 export const LoginForm = React.memo(() => {
 	const [error, setError] = React.useState<string>();
 	const [email, setEmail] = React.useState<string>();
@@ -69,8 +260,8 @@ export const LoginForm = React.memo(() => {
 					console.error(err);
 
 					setError(
-						'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask an '
-						+ 'organiser on Slack or email hello@durhack.com.',
+						'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask a '
+						+ 'member of the DurHack team.',
 					);
 				});
 		}
@@ -89,9 +280,9 @@ export const LoginForm = React.memo(() => {
 				if (res.statusCode === 400) {
 					if (res.message === 'Incorrect email.') {
 						setError(
-							'We can\'t find a DurHack ticket for that email address. Please be sure you\'re using '
-							+ 'your @durham.ac.uk Durham email address, and that it\'s spelt correctly. If you\'re '
-							+ 'still struggling, please reach out to an Organiser; it could be a mistake.',
+							'We can\'t find a DurHack ticket for that email address. If you\'re a Durham student, you might want ' +
+							'to try both your name and CIS code (e.g. if john.smith@durham.ac.uk doesn\'t work, try abcd12@durham.ac.uk). ' +
+							'If you\'re still struggling, please chat to a member of the DurHack team; it could be a mistake.',
 						);
 
 						return;
@@ -134,8 +325,8 @@ export const LoginForm = React.memo(() => {
 				console.error(err);
 
 				setError(
-					'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask an '
-					+ 'organiser on Slack or email hello@durhack.com.',
+					'An unknown error occurred. Please try a refresh, and if you\'re still having problems, ask a '
+					+ 'member of the DurHack team.',
 				);
 			});
 	}, [authType, email, passwordCreation]);
@@ -157,7 +348,7 @@ export const LoginForm = React.memo(() => {
 				<p>Thanks, you&apos;re in!</p>
 
 				<p>
-					One last thing: next time you log in, we&apos;d like to ask you for a password instead. What{' '}
+					Next time you log in, we&apos;d like to ask you for a password instead. What{' '}
 					would you like your password to be?
 				</p>
 
@@ -192,11 +383,11 @@ export const LoginForm = React.memo(() => {
 		formContent = (
 			<>
 				<p>
-					Welcome to DurHack! To confirm you are a Durham student, we&apos;ve just emailed you a verification code.
+					Welcome to DurHack! We&apos;ve just emailed you a verification code.
 				</p>
 				<p>
 					<strong>Please check your email, and type your code in here.</strong> Make sure you double-check your spam folder.{' '}
-					If it&apos;s been a while and you still don&apos;t have one, please reach out to an Organiser.
+					If it&apos;s been a while and you still don&apos;t have one, please talk to someone on the DurHack team.
 				</p>
 
 				<FormSection>
@@ -249,7 +440,11 @@ export const LoginForm = React.memo(() => {
 	}
 
 	if (loggedIn) {
-		return <Redirect to="/" />;
+		if (localStorage.getItem('checkin')) {
+			return <Redirect to="/" />;
+		}
+
+		return <CheckInForm />;
 	}
 
 	return (

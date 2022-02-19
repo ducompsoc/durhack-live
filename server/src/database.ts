@@ -13,13 +13,22 @@ export class User extends Model {
     public id!: number;
     public email!: string;
     public password!: string | null;
-    public firstName!: string;
-    public lastName!: string;
+    public preferredName!: string;
+    public fullName!: string;
     public role!: string | null;
     public verifyCode!: string | null;
     public verifySentAt!: Date | null;
     public initiallyLoggedInAt!: Date | null;
     public lastLoggedInAt!: Date | null;
+    public age!: number | null;
+    public phoneNumber!: string | null;
+    public university!: string | null;
+    public graduationYear!: string | null;
+    public ethnicity!: string | null;
+    public gender!: string | null;
+    public hUKMarketing!: boolean | null;
+    public hUKConsent!: boolean | null;
+    public checkedIn!: boolean | null;
 }
 
 User.init(
@@ -32,11 +41,11 @@ User.init(
             type: DataTypes.STRING,
             allowNull: true,
         },
-        firstName: {
+        fullName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        lastName: {
+        preferredName: {
             type: DataTypes.STRING,
             allowNull: false,
         },
@@ -59,6 +68,51 @@ User.init(
         lastLoggedInAt: {
             type: DataTypes.DATE,
             allowNull: true,
+        },
+        age: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null,
+        },
+        phoneNumber: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        university: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        graduationYear: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        ethnicity: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        gender: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        hUKMarketing: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: null,
+        },
+        hUKConsent: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: null,
+        },
+        checkedIn: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
         },
     },
     {

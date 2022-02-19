@@ -13,7 +13,7 @@ const ContentArea = styled.div`
 `;
 
 export const Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
-	if (requireAuth !== false && !localStorage.getItem('token')) {
+	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
 		return <Redirect to="/login" />;
 	}
 

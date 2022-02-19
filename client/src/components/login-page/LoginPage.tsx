@@ -60,10 +60,11 @@ export const LoginPage = React.memo(() => (
 						<LoginForm />
 					</LoginCard>
 					<LoginCard>
-						<p>Please use the Durham email address you entered when you signed up for DurHack.</p>
 						<p>
-							Having trouble? Please ask an organiser on Slack or email{' '}
-							<a href="mailto:hello@durhack.com">hello@durhack.com</a>
+							Please use the email you entered when you registered for DurHack.
+						</p>
+						<p>
+							Having trouble? Please chat to a member of the DurHack team.
 						</p>
 					</LoginCard>
 				</LoginContainer>

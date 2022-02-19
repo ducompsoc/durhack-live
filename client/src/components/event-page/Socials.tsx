@@ -10,6 +10,7 @@ const SocialOptionButton = styled.a`
 	color: #fff;
 	text-decoration: none;
 	padding: 32px 18px;
+	transition: .3s ease;
 
 	&:before {
 		position: absolute;
@@ -24,6 +25,10 @@ const SocialOptionButton = styled.a`
 
 	&:hover:before {
 		bottom: 0px;
+	}
+
+	&:hover {
+		color: #1e1e1e;
 	}
 `;
 
@@ -72,10 +77,10 @@ export const Socials = React.memo(() => (
 		<div>
 			<Card className="row" noPadding>
 				<SocialOption
-					href="https://durhack.com/slack"
-					icon="fab fa-slack-hash"
-					pretext="Chat to hackers on"
-					text="Slack"
+					href="https://discord.gg/vCJjtzvNhH"
+					icon="fab fa-discord"
+					pretext="Chat to others on"
+					text="Discord"
 				/>
 
 				<SocialOption
@@ -86,10 +91,10 @@ export const Socials = React.memo(() => (
 				/>
 
 				<SocialOption
-					href="https://instagram.com/DurHack.Events"
+					href="https://instagram.com/DurHackEvent"
 					icon="fab fa-instagram"
 					pretext="Tag us on Instagram"
-					text="@DurHack.Events"
+					text="@DurHackEvent"
 				/>
 
 				<SocialOption

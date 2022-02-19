@@ -63,131 +63,107 @@ const TeamContainer = styled.div`
 export const Team = React.memo(() => (
 	<TeamContainer>
 		<div className="inner">
-			<p>Your organisers for DurHack 2020</p>
+			<p>Your organisers for DurHack:</p>
 			<div className="team-grid row center template">
 				<div className="column center">
-					<PurpleTippy content={<><div><strong>Zeynep</strong></div><div>Publicity Officer</div></>}>
+					<PurpleTippy content={<><div><strong>Mohammed</strong></div><div>Workshop Officer</div></>}>
 						<span>
-							<img src="https://durhack.com/assets/team/zeynep.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Laszlo</strong></div><div>Design Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/laszlo.png" />
+							<img src="https://durhack.com/assets/team/mohammed.jpg" />
 						</span>
 					</PurpleTippy>
 				</div>
 				<div className="column center">
-					<PurpleTippy content={<><div><strong>Hugo</strong></div><div>Design Assistant</div></>}>
+					<PurpleTippy content={<><div><strong>Tom N</strong></div><div>Logistics Assistant</div></>}>
 						<span>
-							<img src="https://durhack.com/assets/team/placeholder.png" />
+							<img src="https://durhack.com/assets/team/tomnudd.jpg" />
+						</span>
+					</PurpleTippy>
+					<PurpleTippy content={<><div><strong>Tom M</strong></div><div>Catering Officer</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/tommorris.jpg" />
 						</span>
 					</PurpleTippy>
 				</div>
 				<div className="column center">
-					<PurpleTippy content={<><div><strong>Ethan</strong></div><div>Web Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/ethan.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Heidi</strong></div><div>Press Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/heidi.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Amy</strong></div><div>Diversity Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/amy.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Irenitemi</strong></div><div>Outreach Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/irenitemi.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Betty</strong></div><div>Head of Finance</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/placeholder.png" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Jamie</strong></div><div>Head of Hacker Experience</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/jamie.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Alex</strong></div><div>Lead Organiser</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/alex.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Christos</strong></div><div>Head of Logistics</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/christos.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Karl</strong></div><div>Head of Sponsorship</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/karl.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Peter</strong></div><div>Deputy Head of Logistics</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/peter.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Kah</strong></div><div>Logistics Assistant</div></>}>
+					<PurpleTippy content={<><div><strong>Kah</strong></div><div>Head of Logistics</div></>}>
 						<span>
 							<img src="https://durhack.com/assets/team/kah.png" />
 						</span>
 					</PurpleTippy>
 				</div>
 				<div className="column center">
-					<PurpleTippy content={<><div><strong>Sam</strong></div><div>Tech Officer</div></>}>
+					<PurpleTippy content={<><div><strong>Omar</strong></div><div>Co-Head of Sponsorship</div></>}>
 						<span>
-							<img src="https://durhack.com/assets/team/sam.jpg" />
+							<img src="https://durhack.com/assets/team/omar.jpg" />
+						</span>
+					</PurpleTippy>
+					<PurpleTippy content={<><div><strong>Alperen</strong></div><div>Sponsorship Officer</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/alperen.jpg" />
 						</span>
 					</PurpleTippy>
 				</div>
 				<div className="column center">
-					<PurpleTippy content={<><div><strong>Kevin</strong></div><div>Catering Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/kevin.jpg" />
-						</span>
-					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Devansh</strong></div><div>Finance Assistant</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/devansh.png" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Henry</strong></div><div>Sponsorship Officer</div></>}>
-						<span>
-							<img src="https://durhack.com/assets/team/henry.jpg" />
-						</span>
-					</PurpleTippy>
-				</div>
-				<div className="column center">
-					<PurpleTippy content={<><div><strong>Matt</strong></div><div>Sponsorship Officer</div></>}>
+					<PurpleTippy content={<><div><strong>Matthew</strong></div><div>Co-Head of Sponsorship</div></>}>
 						<span>
 							<img src="https://durhack.com/assets/team/matt.jpg" />
 						</span>
 					</PurpleTippy>
-					<PurpleTippy content={<><div><strong>Omar</strong></div><div>Sponsorship Officer</div></>}>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>Karl</strong></div><div>Co-Lead Organiser</div></>}>
 						<span>
-							<img src="https://durhack.com/assets/team/omar.jpg" />
+							<img src="https://durhack.com/assets/team/karl.jpg" />
+						</span>
+					</PurpleTippy>
+					<PurpleTippy content={<><div><strong>Amy</strong></div><div>Co-Lead Organiser</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/amy.jpg" />
+						</span>
+					</PurpleTippy>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>Heidi</strong></div><div>Head of Media, Publicity, and Design</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/heidi.jpg" />
+						</span>
+					</PurpleTippy>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>Mingyue</strong></div><div>Media &amp; Publicity Assistant</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/mingyue.jpg" />
+						</span>
+					</PurpleTippy>
+					<PurpleTippy content={<><div><strong>Zeynep</strong></div><div>Media &amp; Publicity Assistant</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/zeynep.jpg" />
+						</span>
+					</PurpleTippy>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>Matus</strong></div><div>Finance Officer</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/matus.jpg" />
+						</span>
+					</PurpleTippy>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>Ethan</strong></div><div>Head of Tech</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/ethan.jpg" />
+						</span>
+					</PurpleTippy>
+					<PurpleTippy content={<><div><strong>Abhinav</strong></div><div>Tech Officer</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/abhinav.png" />
+						</span>
+					</PurpleTippy>
+				</div>
+				<div className="column center">
+					<PurpleTippy content={<><div><strong>DurHack Dino</strong></div><div>Mascot</div></>}>
+						<span>
+							<img src="https://durhack.com/assets/team/dino.png" />
 						</span>
 					</PurpleTippy>
 				</div>

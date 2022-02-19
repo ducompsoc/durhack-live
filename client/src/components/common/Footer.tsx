@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { ContentContainer } from './ContentContainer';
 
 const FooterContainer = styled.div`
+	text-align: center;
 	color: #fff;
 	padding: 32px 0px;
 `;
@@ -28,12 +29,7 @@ export const Footer = React.memo(() => (
 					rel="noopener"
 				>
 					MLH Code of Conduct
-				</ExternalLink>.
-			</p>
-
-			<p>
-				If something goes wrong, private message an organiser on Slack or{' '}
-				email <ExternalLink href="mailto:incidents@durhack.com">incidents@durhack.com</ExternalLink>.
+				</ExternalLink>. If something goes wrong, please talk to an organiser.
 			</p>
 		</ContentContainer>
 	</FooterContainer>

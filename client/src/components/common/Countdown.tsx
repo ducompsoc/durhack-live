@@ -5,15 +5,16 @@ import { useHackathon } from '../../util/socket';
 
 const Wrapper = styled.div`
 	width: 33%;
-	color: #92CED4;
+	color: #363636;
 	box-sizing: border-box;
-	padding: 0px 32px 0px calc(32px + 16px);
+	/* padding: 0px 32px 0px calc(32px + 16px); */
+	padding: 0px 0px 0px 16px;
 `;
 
 const WrapperInner = styled.div`
 	width: 100%;
-	background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
-	padding: 0px 32px;
+	/* background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0));
+	padding: 0px 32px; */
 `;
 
 const CountdownTitle = styled.div`
@@ -21,18 +22,18 @@ const CountdownTitle = styled.div`
 	font-size: 24px;
     font-weight: 600;
 	text-transform: uppercase;
-	margin-bottom: -12px;
+	margin-bottom: -6px;
 `;
 
 const CountdownContainer = styled.div`
 	width: 100%;
-	font-family: Deciso, 'Exo 2', sans-serif;
-	font-size: 72px;
+	font-family: 'Audiowide', 'Exo 2', sans-serif;
+	font-size: 64px;
 `;
 
 const CountdownDigit = styled.span`
 	display: inline-block;
-	width: 42px;
+	width: 58px;
 	text-align: center;
 `;
 

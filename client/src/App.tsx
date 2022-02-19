@@ -7,9 +7,9 @@ import { LoginPage } from './components/login-page/LoginPage';
 import { AdminPage } from './components/admin-page/AdminPage';
 
 const theme = {
-	primaryLight: '#842FD7',
+	primaryLight: '#D7BFE7',
 	primaryDark: '#751C9E',
-	secondaryA: '#C5E3B3',
+	secondaryA: '#D7BFE7',
 	secondaryB: '#92CED4',
 	dark: '#222',
 };

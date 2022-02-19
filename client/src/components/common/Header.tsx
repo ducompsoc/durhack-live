@@ -4,12 +4,10 @@ import { ContentContainer } from './ContentContainer';
 import { Countdown } from './Countdown';
 
 const HeaderContainer = styled.div`
-	background-color: ${p => p.theme.primaryDark};
+	background-image: linear-gradient(45deg, #FFB9D2, #A4E0E1);
 `;
 
 const HeaderInner = styled.div`
-	background-image: url('/images/header-tile.png');
-	background-repeat: repeat-x;
 	padding: 64px 0px 0px 0px;
 `;
 
@@ -22,31 +20,12 @@ const Logo = styled.img`
 	height: 92px;
 `;
 
-const PoweredByContainer = styled.a`
-	text-decoration: none;
-	margin: 0px 9px;
-`;
-
-const PoweredByText = styled.div`
-	margin-top: -4px;
-`;
-
-const PoweredByLogo = styled.img`
-	width: auto;
-	height: 24px;
-	margin: 9px 0px 0px 6px;
-`;
-
 export const Header = React.memo(() => (
 	<HeaderContainer>
 		<HeaderInner>
 			<ContentContainer className="row">
 				<LogoWrapper className="column center">
-					<Logo src="/images/logo-white.png" alt="Logo" />
-					<PoweredByContainer href="https://aws.amazon.com/" target="_blank" rel="noopener" className="row center">
-						<PoweredByText>powered by</PoweredByText>
-						<PoweredByLogo src="/images/header-aws.png" alt="AWS" />
-					</PoweredByContainer>
+					<Logo src="/images/logo-dark.png" alt="Logo" />
 				</LogoWrapper>
 				<div className="flex" />
 				<Countdown />

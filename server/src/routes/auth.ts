@@ -81,9 +81,9 @@ export const loginRoute: ServerRoute = {
                     to: user.email,
                     subject: `Your DurHack verification code is ${user.verifyCode}`,
                     text: [
-                        `Hi ${user.firstName},`,
-                        `Welcome to DurHack 2020! Your verification code is ${user.verifyCode}`,
-                        'If you have any questions, please reach out to hello@durhack.com.',
+                        `Hi ${user.preferredName},`,
+                        `Welcome to DurHack! Your verification code is ${user.verifyCode}`,
+                        'If you have any questions, please chat to one of us.',
                         'Thanks,',
                         'The DurHack Team',
                         '(If you didn\'t request this code, you can safely ignore this email.)',

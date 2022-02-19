@@ -1,12 +1,9 @@
 import { ServerRoute } from '@hapi/hapi';
-import { randomBytes } from 'crypto';
-import { promisify } from 'util';
 
 import { requireAdmin } from '../auth';
 import { setHackathonState } from '../state';
 import { IHackathonState } from '../types';
 import { getServer } from '../socket';
-
 
 export const loginRoute: ServerRoute = {
     method: 'PUT',

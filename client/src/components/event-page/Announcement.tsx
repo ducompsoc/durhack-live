@@ -7,12 +7,12 @@ import { LinkButton } from '../common/LinkButton';
 import { Section } from '../common/Section';
 
 const AnnouncementContainer = styled(Card)`
-	border-left: solid 4px #C5E3B3;
+	border-left: solid 4px #D7BFE7;
 `;
 
 const AnnouncementTitle = styled.h2`
 	font-size: 36px;
-	color: #C5E3B3;
+	color: #D7BFE7;
 	margin: 0px;
 `;
 
