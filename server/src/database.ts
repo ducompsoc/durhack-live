@@ -29,6 +29,8 @@ export class User extends Model {
     public hUKMarketing!: boolean | null;
     public hUKConsent!: boolean | null;
     public checkedIn!: boolean | null;
+    public discordId!: string | null;
+    public discordName!: string | null;
 }
 
 User.init(
@@ -113,6 +115,16 @@ User.init(
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
+        },
+        discordId: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
+        },
+        discordName: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null,
         },
     },
     {

@@ -77,7 +77,7 @@ export const Socials = React.memo(() => (
 		<div>
 			<Card className="row" noPadding>
 				<SocialOption
-					href="https://discord.gg/vCJjtzvNhH"
+					href="/discord"
 					icon="fab fa-discord"
 					pretext="Chat to others on"
 					text="Discord"

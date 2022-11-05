@@ -5,6 +5,7 @@ import * as SocketIO from 'socket.io';
 import { sequelize } from './database';
 import { loginRoute } from './routes/auth';
 import { doCheckInRoute, getCheckInRoute } from './routes/checkIn';
+import { doDiscordRoute } from './routes/discord';
 import { passwordRoute } from './routes/password';
 import { setServer } from './socket';
 
@@ -41,6 +42,7 @@ async function init() {
     server.route(passwordRoute);
     server.route(getCheckInRoute);
     server.route(doCheckInRoute);
+    server.route(doDiscordRoute);
 
     const io = SocketIO(server.listener);
     setServer(io);
