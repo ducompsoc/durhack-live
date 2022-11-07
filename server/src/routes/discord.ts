@@ -29,6 +29,6 @@ export const doDiscordRoute: ServerRoute = {
             discordName: `${discordUser.user.username}#${discordUser.user.discriminator}`,
         });
 
-        return { inviteUrl: 'https://discord.gg/vCJjtzvNhH' };
+        return { inviteUrl: 'https://discord.gg/a7xrC3sQZ2' };
     },
 };
