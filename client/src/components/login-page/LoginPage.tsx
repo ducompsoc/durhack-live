@@ -12,17 +12,17 @@ const LoginWrapper = styled.div`
 
 const LoginPurpleKeyframes = keyframes`
 	0% {
-		background-color: rgba(132, 47, 215, 1);
+		background-color: rgba(255, 0, 64, 1);
 	}
 
 	100% {
-		background-color: rgba(132, 47, 215, 0.7);
+		background-color: rgba(255, 0, 64, 0.6);
 	}
 `;
 
 const LoginInner = styled.div`
 	min-height: 100vh;
-	background-color: rgba(132, 47, 215, 1);
+	background-color: rgba(255, 0, 64, 1);
 
 	animation-name: ${LoginPurpleKeyframes};
 	animation-delay: 1s;
@@ -42,7 +42,7 @@ const LoginTitle = styled.h1`
 `;
 
 const LoginCard = styled.div`
-	background-color: rgba(51, 51, 51, 0.9);
+	background-color: rgba(17, 17, 17, 0.9);
 	margin-top: 16px;
 	padding: 16px 36px;
 `;
