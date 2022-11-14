@@ -4,7 +4,7 @@ import { ContentContainer } from './ContentContainer';
 import { Countdown } from './Countdown';
 
 const HeaderContainer = styled.div`
-	background-image: linear-gradient(45deg, #FFB9D2, #A4E0E1);
+	background-image: linear-gradient(45deg, #52216b, #ff0040);
 `;
 
 const HeaderInner = styled.div`
@@ -17,7 +17,7 @@ const LogoWrapper = styled.div`
 
 const Logo = styled.img`
 	width: auto;
-	height: 92px;
+	height: 66px;
 `;
 
 export const Header = React.memo(() => (
@@ -25,7 +25,7 @@ export const Header = React.memo(() => (
 		<HeaderInner>
 			<ContentContainer className="row">
 				<LogoWrapper className="column center">
-					<Logo src="/images/logo-dark.png" alt="Logo" />
+					<Logo src="/images/logo-white-22.png" alt="Logo" />
 				</LogoWrapper>
 				<div className="flex" />
 				<Countdown />

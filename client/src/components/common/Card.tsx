@@ -7,7 +7,7 @@ export interface ICardProps {
 }
 
 export const Card = styled.div<ICardProps>`
-	background-color: ${p => (p.colour ? p.theme[p.colour] : '#333')};
+	background-color: ${p => (p.colour ? p.theme[p.colour] : '#141B2F')};
 	margin: 9px;
 	overflow: hidden;
 

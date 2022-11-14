@@ -17,6 +17,7 @@ const InteractionContainer = styled.div`
 const LargerText = styled.p`
 	font-size: 20px;
 	padding-bottom: 2px;
+	color: white;
 `;
 
 const EmphasisedText = styled.p`

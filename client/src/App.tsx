@@ -9,11 +9,11 @@ import { DiscordPage } from './components/discord-page/DiscordPage';
 import { SchedulePage } from './components/schedule-page/SchedulePage';
 
 const theme = {
-	primaryLight: '#D7BFE7',
-	primaryDark: '#751C9E',
-	secondaryA: '#D7BFE7',
-	secondaryB: '#92CED4',
-	dark: '#222',
+	primaryLight: '#E8C5FF',
+	primaryDark: '#FF0040',
+	secondaryA: '#00FFF0',
+	secondaryB: '#E3709C',
+	dark: '#111',
 };
 
 export const App = React.memo(() => (

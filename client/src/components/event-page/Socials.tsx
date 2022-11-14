@@ -19,7 +19,7 @@ const SocialOptionButton = styled.a`
 		bottom: 100%;
 		left: 0px;
 		content: '';
-		background-color: ${p => p.theme.primaryLight};
+		background-color: ${p => p.theme.primaryDark};
 		transition: .5s ease;
 	}
 

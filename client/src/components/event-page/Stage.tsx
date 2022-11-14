@@ -24,6 +24,7 @@ const Player = styled.div`
 
 const LiveNowPlayingInner = styled.div`
 	padding-left: 18px;
+	color: white;
 `;
 
 const LiveSidebar = styled.div`
@@ -44,7 +45,7 @@ const LiveEventIcon = styled.div`
 
 const LiveEventWhen = styled.div`
 	font-size: 18px;
-	color: ${p => p.theme.secondaryB};
+	color: ${p => p.theme.secondaryA};
 	padding-top: 12px;
 `;
 
@@ -145,7 +146,7 @@ export const Stage = React.memo(() => {
 	let nowPlayingEl: JSX.Element | undefined;
 	if (inProgressEvent) {
 		nowPlayingEl = (
-			<LiveNowPlaying colour="primaryLight" style={{ color: '#1e1e1e' }}>
+			<LiveNowPlaying colour="primaryDark" style={{ color: '#1e1e1e' }}>
 				<LiveNowPlayingInner>
 					<h3>Live now</h3>
 					<LiveEventName className="row center">
@@ -211,7 +212,7 @@ export const Stage = React.memo(() => {
 
 	return (
 		<Section className="row" style={{ marginBottom: 0 }}>
-			<LiveCard noPadding colour="primaryLight" style={{ color: '#1e1e1e' }}>
+			<LiveCard noPadding colour="primaryDark" style={{ color: '#1e1e1e' }}>
 				<Player>
 					<iframe
 						title="DurHack Livestream"

@@ -22,7 +22,7 @@ const TimelineContainer = styled.div`
 		&:before, .event .line:before, .event .line:after {
 			content: '';
 			height: 2px;
-			background-color: #92CED4;
+			background-color: ${p => p.theme.secondaryA};
 		}
 
 		&:before {
@@ -49,14 +49,14 @@ const TimelineContainer = styled.div`
 				width: 12px;
 				height: 244px;
 				border-style: solid;
-				border-color: #92CED4;
+				border-color: ${p => p.theme.secondaryA};
 				margin-top: -149px;
 
 				.day {
 					width: 164px;
 					font-weight: bold;
 					text-align: center;
-					color: #92CED4;
+					color: ${p => p.theme.secondaryA};
 					transform: rotate(-90deg);
 					margin-left: -48px;
 				}
@@ -87,8 +87,8 @@ const TimelineContainer = styled.div`
 
 			.time {
 				display: inline-block;
-				background-color: #92CED4;
-				border: solid 2px #92CED4;
+				background-color: ${p => p.theme.secondaryA};
+				border: solid 2px ${p => p.theme.secondaryA};
 				border-radius: 4px;
 				line-height: 18px;
 				font-size: 14px;
