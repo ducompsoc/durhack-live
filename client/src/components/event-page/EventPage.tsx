@@ -5,7 +5,7 @@ import { Announcement } from './Announcement';
 import { HackerPack } from './HackerPack';
 import { Socials } from './Socials';
 import { Stage } from './Stage';
-import { Team } from './Team';
+import { MainWebsiteLink } from './MainWebsiteLink';
 
 export const EventPage = React.memo(() => (
 	<Page>
@@ -13,6 +13,6 @@ export const EventPage = React.memo(() => (
 		<Socials />
 		<Announcement />
 		<HackerPack />
-		<Team />
+		<MainWebsiteLink />
 	</Page>
 ));
