@@ -37,8 +37,10 @@ interface IOverlayState {
     };
     lowerThird: {
         enabled: boolean;
-        icon: string;
-        text: string;
+		icon: string;
+		pretext: string;
+		text: string;
+		when: string;
     };
     milestone: {
         enabled: boolean;

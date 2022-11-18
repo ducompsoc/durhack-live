@@ -254,8 +254,18 @@ const LowerThird = React.memo(({ hackathon }: { hackathon: IHackathonState }) =>
 		</Segment>
 
 		<Segment className="row">
+			<Label>Pre-text:</Label>
+			<div><Field type="text" name="pretext" /></div>
+		</Segment>
+
+		<Segment className="row">
 			<Label>Text:</Label>
 			<div><Field type="text" name="text" /></div>
+		</Segment>
+
+		<Segment className="row">
+			<Label>Countdown until:</Label>
+			<div><Field type="text" name="when" /></div>
 		</Segment>
 	</OverlayForm>
 ));

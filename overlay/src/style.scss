@@ -601,7 +601,28 @@ html, body {
         }
     }
 
-    > div {
+    .pre-text {
+        position: relative;
+        display: none;
+        width: 1152px;
+        opacity: 0.8;
+        float: left;
+
+        &.active {
+            display: flex;
+        }
+
+        .text {
+            display: inline-block;
+            background-color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            padding: 16px 24px;
+        }
+    }
+
+    .main-text {
         position: relative;
         display: flex;
         width: 1152px;
@@ -610,7 +631,7 @@ html, body {
         box-sizing: border-box;
         font-size: 32px;
         color: #fff;
-        padding: 16px 128px 16px 24px;
+        padding: 16px 120px 16px 24px;
         opacity: 0.95;
 
         .bg {
@@ -632,7 +653,19 @@ html, body {
         }
 
         .text {
+            display: flex;
+            flex: 1;
             padding: 0px 0px 4px 12px;
+
+            > div {
+                width: 100%;
+            }
+        }
+
+        .countdown {
+            min-width: 100px;
+            font-weight: bold;
+            text-align: right;
         }
     }
 }

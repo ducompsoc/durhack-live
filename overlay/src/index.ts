@@ -34,7 +34,9 @@ interface IOverlayState {
     lowerThird: {
         enabled: boolean;
         icon: string;
+        pretext: string;
         text: string;
+        when: string;
     };
     milestone: {
         enabled: boolean;
@@ -78,7 +80,7 @@ function onYouTubeIframeAPIReady() {
         }
 
         if (!isEqual(overlay.lowerThird, currentOverlay?.lowerThird)) {
-            updateLowerThird(overlay.lowerThird.enabled, overlay.lowerThird.icon, overlay.lowerThird.text);
+            updateLowerThird(overlay.lowerThird.enabled, overlay.lowerThird.icon, overlay.lowerThird.pretext, overlay.lowerThird.text, overlay.lowerThird.when);
         }
 
         if (!isEqual(overlay.upperThird, currentOverlay?.upperThird)) {
@@ -197,16 +199,36 @@ function switchSceneTo(sceneName: string) {
     });
 }
 
-async function updateLowerThird(enabled: boolean, icon: string, text: string) {
+let lowerThirdWhen: string | null = null;
+async function updateLowerThird(enabled: boolean, icon: string, pretext: string, text: string, when: string) {
     if (classList('.lower-third').contains('animate-in')) {
         classList('.lower-third').remove('animate-in');
         classList('.lower-third').add('animate-out');
         await waitFor(1.5);
     }
 
+    lowerThirdWhen = enabled ? when : null;
+
     if (enabled) {
         document.querySelector('.lower-third .icon span')!.className = icon;
-        document.querySelector('.lower-third .text')!.textContent = text;
+        
+        const textEls = document.querySelector('.lower-third .main-text .text')!;
+        textEls.innerHTML = '';
+        text.split('||').forEach(part => {
+            const textEl = document.createElement('div');
+            textEl.textContent = part;
+            textEls.appendChild(textEl);
+        });
+
+        const pretextEl = document.querySelector('.lower-third .pre-text')!;
+        if (pretext) {
+            pretextEl.classList.add('active');
+        } else {
+            pretextEl.classList.remove('active');
+        }
+        document.querySelector('.lower-third .pre-text .text')!.textContent = pretext;
+        
+        document.querySelector('.lower-third .countdown')!.textContent = when ? getNextUpCountdown(when) : '';
 
         classList('.lower-third').remove('animate-out');
         classList('.lower-third').add('animate-in');
@@ -657,6 +679,12 @@ setInterval(() => {
     const nextUpCountdown = document.querySelector('.nextup-countdown');
     if (mainNextUpWhen && nextUpCountdown) {
         nextUpCountdown.textContent = getNextUpCountdown(mainNextUpWhen);
+    }
+
+    // "Lower third countdown" tick
+    const lowerThirdCountdown = document.querySelector('.lower-third .countdown');
+    if (lowerThirdWhen && lowerThirdCountdown) {
+        lowerThirdCountdown.textContent = getNextUpCountdown(lowerThirdWhen);
     }
 
     // "Milestone" tick

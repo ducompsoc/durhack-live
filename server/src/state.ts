@@ -208,7 +208,9 @@ let state: IHackathonState = {
         lowerThird: {
             enabled: false,
             icon: '',
+            pretext: '',
             text: '',
+            when: '',
         },
         milestone: {
             enabled: false,
