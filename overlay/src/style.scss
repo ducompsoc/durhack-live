@@ -240,7 +240,7 @@ html, body {
 
 .gradient-bg {
     height: 720px;
-    background-image: url('/assets/livestream-slate-0.png');
+    background-image: url('assets/livestream-slate-0.png');
     background-size: cover;
     background-repeat: no-repeat;
     animation-name: hue-pulse;
@@ -249,11 +249,11 @@ html, body {
     animation-iteration-count: infinite, infinite;
 
     &.bg-1 {
-        background-image: url('/assets/livestream-slate-1.png');
+        background-image: url('assets/livestream-slate-1.png');
     }
 
     &.bg-2 {
-        background-image: url('/assets/livestream-slate-2.png');
+        background-image: url('assets/livestream-slate-2.png');
     }
 
     /* Everything below this point is for the wacky animated gradient */
