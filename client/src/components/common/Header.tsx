@@ -17,7 +17,7 @@ const LogoWrapper = styled.div`
 
 const Logo = styled.img`
 	width: auto;
-	height: 66px;
+	height: 100px;
 `;
 
 export const Header = React.memo(() => (
@@ -25,7 +25,7 @@ export const Header = React.memo(() => (
 		<HeaderInner>
 			<ContentContainer className="row">
 				<LogoWrapper className="column center">
-					<Logo src="/images/logo-white-22.png" alt="Logo" />
+					<Logo src="/images/header-logo.png" alt="Logo" />
 				</LogoWrapper>
 				<div className="flex" />
 				<Countdown />
