@@ -189,6 +189,8 @@ function switchSceneTo(sceneName: string) {
     if (sceneName === 'Default') {
         classList('.main-wrapper').remove('animate-out');
         classList('.main-wrapper').add('animate-in');
+
+        classList('.gradient-bg').add('bg-' + Math.floor(Math.random() * 3));
     } else {
         classList('.main-wrapper').remove('animate-in');
         classList('.main-wrapper').add('animate-out');
@@ -478,10 +480,10 @@ async function updateYouTube(enabled: boolean, queue: { id: string; lowerThird: 
             const currentId = youtubePlayer.getVideoUrl().split('?v=')[1].split('&')[0];
             const queued = queue.find(({ id }) => id === currentId);
             if (queued) {
-                updateLowerThird(true, 'fas fa-film', queued.lowerThird);
+                updateLowerThird(true, 'fas fa-film', '', queued.lowerThird, '');
 
                 timeout = setTimeout(() => {
-                    updateLowerThird(false, '', '');
+                    updateLowerThird(false, '', '', '', '');
                     clearTimeout(timeout);
                 }, 16000);
             }
