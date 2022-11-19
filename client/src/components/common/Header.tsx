@@ -25,7 +25,7 @@ export const Header = React.memo(() => (
 		<HeaderInner>
 			<ContentContainer className="row">
 				<LogoWrapper className="column center">
-					<Logo src="/images/header-logo.png" alt="Logo" />
+					<a href="/"><Logo src="/images/header-logo.png" alt="Logo" /></a>
 				</LogoWrapper>
 				<div className="flex" />
 				<Countdown />
