@@ -5,7 +5,7 @@ import { useHackathon } from '../../util/socket';
 
 const Wrapper = styled.div`
 	width: 33%;
-	color: #363636;
+	color: white;
 	box-sizing: border-box;
 	/* padding: 0px 32px 0px calc(32px + 16px); */
 	padding: 0px 0px 0px 16px;
