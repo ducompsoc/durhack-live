@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 
-export const LinkButton = styled.a<{ primary?: boolean }>`
+const LinkButton = styled.a<{ primary?: boolean }>`
 	display: inline-block;
 	background-color: rgba(17, 17, 17, 0.5);
 	border-radius: 100px;
@@ -24,3 +24,5 @@ export const LinkButton = styled.a<{ primary?: boolean }>`
 		}
 	`}
 `;
+
+export default LinkButton;

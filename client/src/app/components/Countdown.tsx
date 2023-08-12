@@ -49,7 +49,7 @@ function digitise(num: string) {
 	return num.split('').map(char => <CountdownDigit>{char}</CountdownDigit>);
 }
 
-export const Countdown = React.memo(() => {
+const Countdown = React.memo(() => {
 	const { state } = useHackathon();
 	const [countdownValues, setCountdownValues] = React.useState<[number, number, number]>();
 
@@ -104,3 +104,5 @@ export const Countdown = React.memo(() => {
 		</Wrapper>
 	);
 });
+
+export default Countdown;

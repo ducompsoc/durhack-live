@@ -12,7 +12,7 @@ const ContentArea = styled.div`
 	padding: 32px 0px;
 `;
 
-export const Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
+const _Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
 	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
 		return <Redirect to="/login" />;
 	}
@@ -32,3 +32,5 @@ export const Page = React.memo(({ requireAuth, children }: React.PropsWithChildr
 		</div>
 	);
 });
+
+export default _Page;

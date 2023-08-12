@@ -6,7 +6,7 @@ export interface ICardProps {
 	highlight?: boolean;
 }
 
-export const Card = styled.div<ICardProps>`
+const Card = styled.div<ICardProps>`
 	background-color: ${p => (p.colour ? p.theme[p.colour] : '#141B2F')};
 	margin: 9px;
 	overflow: hidden;
@@ -19,3 +19,5 @@ export const Card = styled.div<ICardProps>`
 		padding: 24px;
 	`}
 `;
+
+export default Card;

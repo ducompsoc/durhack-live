@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ContentContainer } from './ContentContainer';
+import ContentContainer from './ContentContainer';
 
 const FooterContainer = styled.div`
 	text-align: center;
@@ -18,7 +18,7 @@ const ExternalLink = styled.a`
 	}
 `;
 
-export const Footer = React.memo(() => (
+const Footer = React.memo(() => (
 	<FooterContainer>
 		<ContentContainer>
 			<p>
@@ -34,3 +34,5 @@ export const Footer = React.memo(() => (
 		</ContentContainer>
 	</FooterContainer>
 ));
+
+export default Footer;

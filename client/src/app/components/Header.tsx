@@ -20,7 +20,7 @@ const Logo = styled.img`
 	height: 100px;
 `;
 
-export const Header = React.memo(() => (
+const Header = React.memo(() => (
 	<HeaderContainer>
 		<HeaderInner>
 			<ContentContainer className="row">
@@ -33,3 +33,5 @@ export const Header = React.memo(() => (
 		</HeaderInner>
 	</HeaderContainer>
 ));
+
+export default Header;

@@ -23,7 +23,7 @@ const Muted = styled.span`
 	color: #ccc;
 `;
 
-export const ConnectionBar = React.memo(() => {
+const ConnectionBar = React.memo(() => {
 	const { connected } = useHackathon();
 
 	if (connected) {
@@ -43,3 +43,5 @@ export const ConnectionBar = React.memo(() => {
 		</ConnectionBarContainer>
 	);
 });
+
+export default ConnectionBar;
