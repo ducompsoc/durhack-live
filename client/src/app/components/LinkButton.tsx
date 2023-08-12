@@ -1,3 +1,5 @@
+'use client';
+
 import styled, { css } from 'styled-components';
 
 const LinkButton = styled.a<{ primary?: boolean }>`

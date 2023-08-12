@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import styled from 'styled-components';
 import format from 'date-fns/format';
@@ -158,7 +160,7 @@ const PlayButton = styled.a`
 	}
 `;
 
-export const Schedule = React.memo(() => {
+const Schedule = React.memo(() => {
 	const { state } = useHackathon();
 
 	const groups = React.useMemo(() => {
@@ -237,3 +239,5 @@ export const Schedule = React.memo(() => {
 		</Wrapper>
 	);
 });
+
+export default Schedule;

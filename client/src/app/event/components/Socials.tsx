@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import styled from 'styled-components';
 
-import { Card } from '../common/Card';
-import { Section } from '../common/Section';
+import Card from '@/app/components/Card';
+import Section from '@/app/components/Section';
 
 const SocialOptionButton = styled.a`
 	position: relative;
@@ -72,7 +74,7 @@ const SocialOption = React.memo(({
 	</SocialOptionButton>
 ));
 
-export const Socials = React.memo(() => (
+const Socials = React.memo(() => (
 	<Section>
 		<div>
 			<Card className="row" noPadding>
@@ -107,3 +109,5 @@ export const Socials = React.memo(() => (
 		</div>
 	</Section>
 ));
+
+export default Socials;

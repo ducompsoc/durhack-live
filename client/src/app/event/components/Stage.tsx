@@ -1,12 +1,14 @@
+'use client';
+
 import React from 'react';
 import styled from 'styled-components';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
 import { useHackathon, IScheduledEvent } from '../../util/socket';
-import { Card } from '../common/Card';
-import { Section } from '../common/Section';
-import { Interaction } from './Interaction';
-import { LinkButton } from '../common/LinkButton';
+import Card from '@/app/components/Card';
+import Section from '@/app/components/Section';
+import Interaction from './Interaction';
+import LinkButton from '@/app/components/LinkButton';
 
 const LiveCard = styled(Card)`
 	width: 66%;
@@ -92,7 +94,7 @@ const TopTip = React.memo(() => {
 	);
 });
 
-export const Stage = React.memo(() => {
+const Stage = React.memo(() => {
 	const { state } = useHackathon();
 	const [inProgressEvent, setInProgressEvent] = React.useState<IScheduledEvent | null>(null);
 	const [upNext, setUpNext] = React.useState<IScheduledEvent | null>(null);
@@ -238,3 +240,5 @@ export const Stage = React.memo(() => {
 		</Section>
 	);
 });
+
+export default Stage;

@@ -1,6 +1,8 @@
+'use client';
+
 import { useFormik } from 'formik';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { redirect } from 'next/navigation';
 import styled from 'styled-components';
 import { query } from '../../util/api';
 import { connect } from '../../util/socket';
@@ -42,7 +44,7 @@ const Button = styled.button`
 `;
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-export const CheckInForm = React.memo(() => {
+const CheckInForm = React.memo(() => {
 	const [error, setError] = React.useState<string>();
 	const [loading, setLoading] = React.useState<boolean>(false);
 	const [checkedIn, setCheckedIn] = React.useState<boolean>(false);
@@ -117,7 +119,7 @@ export const CheckInForm = React.memo(() => {
 	}
 
 	if (checkedIn) {
-		return <Redirect to="/" />;
+		return redirect("/");
 	}
 
 	return (
@@ -233,7 +235,7 @@ export const CheckInForm = React.memo(() => {
 });
 
 /* eslint-disable jsx-a11y/label-has-associated-control */
-export const LoginForm = React.memo(() => {
+const LoginForm = React.memo(() => {
 	const [error, setError] = React.useState<string>();
 	const [email, setEmail] = React.useState<string>();
 	const [authType, setAuthType] = React.useState<'code' | 'password'>();
@@ -441,7 +443,7 @@ export const LoginForm = React.memo(() => {
 
 	if (loggedIn) {
 		if (localStorage.getItem('checkin')) {
-			return <Redirect to="/" />;
+			return redirect("/");
 		}
 
 		return <CheckInForm />;
@@ -461,3 +463,5 @@ export const LoginForm = React.memo(() => {
 		</div>
 	);
 });
+
+export default LoginForm;

@@ -1,10 +1,12 @@
+'use client';
+
 import * as React from 'react';
 import styled from 'styled-components';
 
 import { useHackathon } from '../../util/socket';
-import { Card } from '../common/Card';
-import { LinkButton } from '../common/LinkButton';
-import { Section } from '../common/Section';
+import Card from '@/app/components/Card';
+import LinkButton from '@/app//components/LinkButton';
+import Section from '@/app//components/Section';
 
 const AnnouncementContainer = styled(Card)`
 	border-left: solid 4px ${p => p.theme.secondaryA};
@@ -21,7 +23,7 @@ const AnnouncementText = styled.div`
 `;
 
 /* eslint-disable react/no-array-index-key */
-export const Announcement = React.memo(() => {
+const Announcement = React.memo(() => {
 	const { state } = useHackathon();
 
 	if (!state || !state.announcement.enabled) {
@@ -44,3 +46,5 @@ export const Announcement = React.memo(() => {
 		</Section>
 	);
 });
+
+export default Announcement;

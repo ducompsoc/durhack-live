@@ -1,5 +1,5 @@
 import * as React from 'react';
-import IO from 'socket.io-client';
+import IO, { Socket } from 'socket.io-client';
 import { EventEmitter } from 'events';
 
 export interface IScheduledEvent {
@@ -85,7 +85,7 @@ export type THackathonConnection = IHackathonConnectedConnection | { connected: 
 
 const events = new EventEmitter();
 let lastConnection: THackathonConnection = { connected: false, role: null, state: null };
-let socket: SocketIOClient.Socket | null = null;
+let socket: Socket | null = null;
 
 export function connect() {
 	socket = IO(window.location.host.includes('live.durhack.com') ? '/' : 'http://127.0.0.1:3001');

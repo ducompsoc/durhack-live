@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
 import styled from 'styled-components';
-import { useHackathon } from '../../util/socket';
-import { LinkButton } from '../common/LinkButton';
+import { useHackathon } from '@/app/util/socket';
+import LinkButton from '@/app/components/LinkButton';
 
 const InteractionContainer = styled.div`
 	height: 68px;
@@ -25,7 +27,7 @@ const EmphasisedText = styled.p`
 	font-weight: bold;
 `;
 
-export const Interaction = React.memo(() => {
+const Interaction = React.memo(() => {
 	const hackathon = useHackathon();
 
 	if (hackathon.state) {
@@ -65,3 +67,5 @@ export const Interaction = React.memo(() => {
 		</InteractionContainer>
 	);
 });
+
+export default Interaction;

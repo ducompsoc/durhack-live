@@ -1,13 +1,15 @@
+'use client';
+
 import {
 	Field, FieldArray, Form, Formik, FormikProps,
 } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
 
-import { IHackathonState, pushHackathon, useHackathon } from '../../util/socket';
-import { Card } from '../common/Card';
-import { Page } from '../common/Page';
-import { Section } from '../common/Section';
+import { IHackathonState, pushHackathon, useHackathon } from '@/app/util/socket';
+import Card from '@/app/components/Card';
+import Page from '@/app/components/_Page';
+import Section from '@/app/components/Section';
 
 /* eslint-disable react/no-array-index-key */
 
@@ -526,7 +528,7 @@ const Tips = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 	</OverlayForm>
 ));
 
-export const AdminPage = React.memo(() => {
+export default React.memo(() => {
 	const hackathon = useHackathon();
 
 	if (!hackathon.connected) {

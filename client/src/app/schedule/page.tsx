@@ -1,7 +1,9 @@
+'use client';
+
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { Schedule } from './Schedule';
+import Schedule from './components/Schedule';
 
 const PageContainer = styled.div`
 	width: 100vw;
@@ -19,7 +21,7 @@ const PageContainer = styled.div`
 	}
 `;
 
-export const SchedulePage = React.memo(() => (
+export default React.memo(() => (
 	<PageContainer>
 		<div><Schedule /></div>
 	</PageContainer>

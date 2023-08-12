@@ -1,6 +1,8 @@
+'use client';
+
 import * as React from 'react';
-import { query } from '../../util/api';
-import { Page } from '../common/Page';
+import { query } from '@/app/util/api';
+import Page from '@/app/components/_Page';
 
 interface IOAuthResponse {
 	access_token?: string;
@@ -50,4 +52,4 @@ const DiscordContent = React.memo(() => {
 	return <p>{error || 'Redirecting...'}</p>;
 });
 
-export const DiscordPage = React.memo(() => <Page><DiscordContent /></Page>);
+export const Page = React.memo(() => <Page><DiscordContent /></Page>);

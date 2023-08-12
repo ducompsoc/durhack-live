@@ -1,11 +1,13 @@
+'use client';
+
 import React from 'react';
 import styled from 'styled-components';
-import { Redirect } from 'react-router-dom';
+import { redirect } from 'next/navigation'
 
-import { ContentContainer } from './ContentContainer';
-import { Header } from './Header';
-import { Footer } from './Footer';
-import { ConnectionBar } from './ConnectionBar';
+import ContentContainer from './ContentContainer';
+import Header from './Header';
+import Footer from './Footer';
+import ConnectionBar from './ConnectionBar';
 
 const ContentArea = styled.div`
 	background-color: ${p => p.theme.dark};
@@ -14,7 +16,7 @@ const ContentArea = styled.div`
 
 const _Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
 	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
-		return <Redirect to="/login" />;
+    return redirect("/login");
 	}
 
 	return (

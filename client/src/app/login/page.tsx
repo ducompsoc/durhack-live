@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { ContentContainer } from '../common/ContentContainer';
-import { LoginForm } from './LoginForm';
+import ContentContainer from '@/app/components/ContentContainer';
+import LoginForm from './components/LoginForm';
 
 const LoginWrapper = styled.div`
 	background-image: url('/images/login-background.jpg');
@@ -47,7 +49,7 @@ const LoginCard = styled.div`
 	padding: 16px 36px;
 `;
 
-export const LoginPage = React.memo(() => (
+export default React.memo(() => (
 	<LoginWrapper>
 		<LoginInner className="column">
 			<div className="flex" />
