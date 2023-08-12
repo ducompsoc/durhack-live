@@ -48,7 +48,7 @@ function zeroPad(num: number): string {
 }
 
 function digitise(num: string) {
-	return num.split('').map(char => <CountdownDigit>{char}</CountdownDigit>);
+	return num.split('').map((char, index) => <CountdownDigit key={index}>{char}</CountdownDigit>);
 }
 
 const Countdown = React.memo(() => {

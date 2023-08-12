@@ -52,4 +52,4 @@ const DiscordContent = React.memo(() => {
 	return <p>{error || 'Redirecting...'}</p>;
 });
 
-export const Page = React.memo(() => <_Page><DiscordContent /></_Page>);
+export default React.memo(() => <_Page><DiscordContent /></_Page>);

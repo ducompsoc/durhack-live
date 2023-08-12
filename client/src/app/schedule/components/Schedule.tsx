@@ -195,17 +195,17 @@ const Schedule = React.memo(() => {
 	return (
 		<Wrapper>
 			<TimelineContainer>
-				{groups.map((events, idx) => (
-					<div className="group">
-						{idx !== 0 && (
+				{groups.map((event_group, group_idx) => (
+					<div className="group" key={group_idx}>
+						{group_idx !== 0 && (
 							<div className="bracket center column">
 								<div className="day" />
 							</div>
 						)}
 
 						<div className="row set">
-							{events.map(event => (
-								<div className={`event ${event.state}`}>
+							{event_group.map((event, event_idx) => (
+								<div className={`event ${event.state}`} key={event_idx}>
 									<div className="time">
 										{event.startDate ? format(event.startDate, 'p').toLowerCase() : '--:--'}
 										{event.endDate && <> &ndash; {format(new Date(event.endDate), 'p').toLowerCase()}</>}

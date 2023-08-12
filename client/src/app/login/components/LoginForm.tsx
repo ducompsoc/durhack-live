@@ -126,7 +126,7 @@ const CheckInForm = React.memo(() => {
 		<div>
 			<form onSubmit={formik.handleSubmit}>
 				<p>
-					Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any we're missing.
+					Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any w&rsquo;re missing.
 				</p>
 
 				<FormSection>
