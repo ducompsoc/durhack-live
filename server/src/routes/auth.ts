@@ -1,20 +1,19 @@
 import { badRequest } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
-import * as Joi from 'joi';
-import { compare } from 'bcryptjs';
-import { get } from 'config';
-import { sign } from 'jsonwebtoken';
-import { randomBytes } from 'crypto';
-import { promisify } from 'util';
+import Joi from 'joi';
+import config from 'config';
+import * as jsonWebToken from 'jsonwebtoken';
 import * as FormData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { Op } from 'sequelize';
+
+import { checkPassword, randomBytesAsync } from "../auth";
 import { User } from '../database';
 
 const mailgun = new Mailgun(FormData)
-const mailgunClient = mailgun.client(get('mailgun')) // will error; mailgun-js init is different to mailgun.js
+const mailgunClient = mailgun.client(config.get('mailgun')) // will error; mailgun-js init is different to mailgun.js
 
-const randomBytesAsync = promisify(randomBytes);
+
 
 interface ILoginPayload {
     email: string;
@@ -56,7 +55,7 @@ export const loginRoute: ServerRoute = {
 
         if (user.password) {
             if (password) {
-                const comparison = await compare(password, user.password);
+                const comparison = await checkPassword(user, password);
                 if (!comparison) {
                     throw badRequest('Incorrect password.');
                 }
@@ -76,7 +75,7 @@ export const loginRoute: ServerRoute = {
                     verifySentAt: new Date(),
                 });
 
-                await mailgunClient.messages.create((get('mailgun') as any).domain,
+                await mailgunClient.messages.create((config.get('mailgun') as any).domain,
                   {
                     from: 'DurHack <noreply@live.durhack.com>',
                     'h:Reply-To': 'hello@durhack.com',
@@ -103,7 +102,7 @@ export const loginRoute: ServerRoute = {
         await user.update(update);
 
         return {
-            token: sign(JSON.stringify(user.toJSON()), get('jwt'), { algorithm: 'HS256' }),
+            token: jsonWebToken.sign(JSON.stringify(user.toJSON()), config.get('jwt'), { algorithm: 'HS256' }),
         };
     },
 };

@@ -12,7 +12,8 @@ export const sequelize = new Sequelize({
 export class User extends Model {
     public id!: number;
     public email!: string;
-    public password!: string | null;
+    public hashed_password!: Buffer | null;
+    public password_salt!: Buffer | null;
     public preferredName!: string;
     public fullName!: string;
     public role!: string | null;
@@ -39,9 +40,13 @@ User.init(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        password: {
-            type: DataTypes.STRING,
-            allowNull: true,
+        hashed_password: {
+          type: DataTypes.BLOB('tiny'),
+          allowNull: true,
+        },
+        password_salt: {
+          type: DataTypes.BLOB('tiny'),
+          allowNull: true,
         },
         fullName: {
             type: DataTypes.STRING,

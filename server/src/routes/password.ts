@@ -1,8 +1,7 @@
 import { ServerRoute } from '@hapi/hapi';
-import * as Joi from 'joi';
-import { hash } from 'bcryptjs';
+import Joi from 'joi';
 
-import { requireUser } from '../auth';
+import { hashPasswordText, randomBytesAsync, requireUser } from '../auth';
 
 export const passwordRoute: ServerRoute = {
     method: 'POST',
@@ -17,7 +16,9 @@ export const passwordRoute: ServerRoute = {
     async handler(req) {
         const user = await requireUser(req);
 
-        await user.update({ password: await hash((<{ password: string }>req.payload).password, 8) });
+        user.password_salt = await randomBytesAsync(16);
+        user.hashed_password = await hashPasswordText((req.payload as { password: string }).password, user.password_salt);
+        await user.save();
 
         return { status: true };
     },
