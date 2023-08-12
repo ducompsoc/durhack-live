@@ -4,8 +4,9 @@
   "private": true,
   "description": "Server for DurHack event site",
   "main": "src/server.ts",
+  "type": "module",
   "scripts": {
-    "start": "ts-node ./src/server"
+    "start": "tsx ./src/server"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
   "contributors": [
@@ -18,9 +19,8 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.178",
     "@types/socket.io": "^2.1.11",
-    "ts-node": "^9.0.0",
     "tslint": "^6.1.3",
-    "typescript": "^4.0.3"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "@hapi/boom": "^10.0.1",
@@ -35,6 +35,7 @@
     "mysql2": "^2.2.5",
     "node-fetch": "^3.3.2",
     "sequelize": "^6.3.5",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "tsx": "^3.12.7"
   }
 }
