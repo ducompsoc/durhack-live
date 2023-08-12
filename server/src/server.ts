@@ -36,7 +36,7 @@ async function init() {
         },
     })
 
-    server.validator(<any>Joi);
+    server.validator(Joi);
 
     server.route(loginRoute);
     server.route(passwordRoute);
