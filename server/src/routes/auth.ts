@@ -6,12 +6,13 @@ import { get } from 'config';
 import { sign } from 'jsonwebtoken';
 import { randomBytes } from 'crypto';
 import { promisify } from 'util';
-import * as mailgun from 'mailgun-js';
+import * as FormData from 'form-data';
+import Mailgun from 'mailgun.js';
 import { Op } from 'sequelize';
-
 import { User } from '../database';
 
-const mg = mailgun(get('mailgun'));
+const mailgun = new Mailgun(FormData)
+const mailgunClient = mailgun.client(get('mailgun')) // will error; mailgun-js init is different to mailgun.js
 
 const randomBytesAsync = promisify(randomBytes);
 
@@ -75,7 +76,8 @@ export const loginRoute: ServerRoute = {
                     verifySentAt: new Date(),
                 });
 
-                await mg.messages().send({
+                await mailgunClient.messages.create((get('mailgun') as any).domain,
+                  {
                     from: 'DurHack <noreply@live.durhack.com>',
                     'h:Reply-To': 'hello@durhack.com',
                     to: user.email,
