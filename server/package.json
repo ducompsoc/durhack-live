@@ -8,6 +8,9 @@
     "start": "ts-node ./src/server"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
+  "contributors": [
+    "Joe Clack <durhack@joeclack.me.uk>"
+  ],
   "license": "UNLICENSED",
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
