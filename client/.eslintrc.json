@@ -17,7 +17,7 @@
     "react/jsx-indent": ["error", "tab"],
     "react/jsx-indent-props": ["error", "tab"],
     "arrow-parens": "off",
-    "max-len": ["error", 140],
+    "max-len": ["warn", 140],
     "react/jsx-one-expression-per-line": "off",
     "react/prop-types": "off",
     "react/require-default-props": "off",
