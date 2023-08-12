@@ -13,6 +13,7 @@
       "error",
       "always"
     ],
+    "react/display-name": "off",
     "react/jsx-indent": ["error", "tab"],
     "react/jsx-indent-props": ["error", "tab"],
     "arrow-parens": "off",
