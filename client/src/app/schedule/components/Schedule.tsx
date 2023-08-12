@@ -161,83 +161,83 @@ const PlayButton = styled.a`
 `;
 
 const Schedule = React.memo(() => {
-	const { state } = useHackathon();
+  const { state } = useHackathon();
 
-	const groups = React.useMemo(() => {
-		if (!state) {
-			return [];
-		}
+  const groups = React.useMemo(() => {
+    if (!state) {
+      return [];
+    }
 
-		const scheduledItems = [...state.schedule];
-		const elementsPerGroup = Math.min(6, Math.ceil(state.schedule.length / 3));
-		const result: IAugmentedScheduledEvent[][] = [];
-		while (scheduledItems.length) {
-			result.push(
-				scheduledItems
-					.splice(0, elementsPerGroup)
-					.map((event: IScheduledEvent) => {
-						const startDate = new Date(event.start);
-						const endDate = event.end ? new Date(event.end) : undefined;
+    const scheduledItems = [...state.schedule];
+    const elementsPerGroup = Math.min(6, Math.ceil(state.schedule.length / 3));
+    const result: IAugmentedScheduledEvent[][] = [];
+    while (scheduledItems.length) {
+      result.push(
+        scheduledItems
+          .splice(0, elementsPerGroup)
+          .map((event: IScheduledEvent) => {
+            const startDate = new Date(event.start);
+            const endDate = event.end ? new Date(event.end) : undefined;
 
-						/* eslint-disable-next-line no-restricted-globals */
-						if (isNaN(startDate.getTime()) || (endDate && isNaN(endDate?.getTime()))) {
-							return event;
-						}
+            /* eslint-disable-next-line no-restricted-globals */
+            if (isNaN(startDate.getTime()) || (endDate && isNaN(endDate?.getTime()))) {
+              return event;
+            }
 
-						return { ...event, startDate, endDate };
-					}),
-			);
-		}
+            return { ...event, startDate, endDate };
+          }),
+      );
+    }
 
-		return result;
-	}, [state]);
+    return result;
+  }, [state]);
 
-	return (
-		<Wrapper>
-			<TimelineContainer>
-				{groups.map((event_group, group_idx) => (
-					<div className="group" key={group_idx}>
-						{group_idx !== 0 && (
-							<div className="bracket center column">
-								<div className="day" />
-							</div>
-						)}
+  return (
+    <Wrapper>
+      <TimelineContainer>
+        {groups.map((event_group, group_idx) => (
+          <div className="group" key={group_idx}>
+            {group_idx !== 0 && (
+              <div className="bracket center column">
+                <div className="day" />
+              </div>
+            )}
 
-						<div className="row set">
-							{event_group.map((event, event_idx) => (
-								<div className={`event ${event.state}`} key={event_idx}>
-									<div className="time">
-										{event.startDate ? format(event.startDate, 'p').toLowerCase() : '--:--'}
-										{event.endDate && <> &ndash; {format(new Date(event.endDate), 'p').toLowerCase()}</>}
-									</div>
-									<div className="line row center">
-										<div className="icon">
-											<span className={event.icon} />
-										</div>
-									</div>
-									<EventContent>
-										<div className="title">{event.name}</div>
-										{event.state === 'in-progress' && event.liveLink && !event.liveLink.startsWith('#') && (
-											<PlayButton href={event.liveLink} target="_blank">
-												<span className="fas fa-play" />
-												Join Zoom
-											</PlayButton>
-										)}
-										{event.state === 'done' && event.recordingLink && (
-											<PlayButton href={event.recordingLink} target="_blank">
-												<span className="fas fa-play" />
-												{event.recordingLink.includes('youtube') ? 'Watch back' : 'Get resources'}
-											</PlayButton>
-										)}
-									</EventContent>
-								</div>
-							))}
-						</div>
-					</div>
-				))}
-			</TimelineContainer>
-		</Wrapper>
-	);
+            <div className="row set">
+              {event_group.map((event, event_idx) => (
+                <div className={`event ${event.state}`} key={event_idx}>
+                  <div className="time">
+                    {event.startDate ? format(event.startDate, 'p').toLowerCase() : '--:--'}
+                    {event.endDate && <> &ndash; {format(new Date(event.endDate), 'p').toLowerCase()}</>}
+                  </div>
+                  <div className="line row center">
+                    <div className="icon">
+                      <span className={event.icon} />
+                    </div>
+                  </div>
+                  <EventContent>
+                    <div className="title">{event.name}</div>
+                    {event.state === 'in-progress' && event.liveLink && !event.liveLink.startsWith('#') && (
+                      <PlayButton href={event.liveLink} target="_blank">
+                        <span className="fas fa-play" />
+                        Join Zoom
+                      </PlayButton>
+                    )}
+                    {event.state === 'done' && event.recordingLink && (
+                      <PlayButton href={event.recordingLink} target="_blank">
+                        <span className="fas fa-play" />
+                        {event.recordingLink.includes('youtube') ? 'Watch back' : 'Get resources'}
+                      </PlayButton>
+                    )}
+                  </EventContent>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </TimelineContainer>
+    </Wrapper>
+  );
 });
 
 export default Schedule;

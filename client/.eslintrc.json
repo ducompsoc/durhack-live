@@ -1,9 +1,9 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "indent": [
+    "react/jsx-indent": [
       "error",
-      "tab"
+      2
     ],
     "quotes": [
       "error",
@@ -14,7 +14,6 @@
       "always"
     ],
     "react/display-name": "off",
-    "react/jsx-indent": ["error", "tab"],
     "react/jsx-indent-props": ["error", "tab"],
     "arrow-parens": "off",
     "max-len": ["warn", 140],

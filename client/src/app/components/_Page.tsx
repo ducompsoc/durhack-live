@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import { redirect } from 'next/navigation';
 
@@ -15,24 +15,26 @@ const ContentArea = styled.div`
 `;
 
 const _Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
-	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
-		return redirect('/login');
-	}
+  useEffect(() => {
+    if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
+      return redirect('/login');
+    }
+  });
 
-	return (
-		<div>
-			<ConnectionBar />
-			<Header />
+  return (
+    <div>
+      <ConnectionBar />
+      <Header />
 
-			<ContentArea>
-				<ContentContainer>
-					{children}
-				</ContentContainer>
-			</ContentArea>
+      <ContentArea>
+        <ContentContainer>
+          {children}
+        </ContentContainer>
+      </ContentArea>
 
-			<Footer />
-		</div>
-	);
+      <Footer />
+    </div>
+  );
 });
 
 export default _Page;

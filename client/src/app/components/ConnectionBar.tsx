@@ -26,24 +26,24 @@ const Muted = styled.span`
 `;
 
 const ConnectionBar = React.memo(() => {
-	const { connected } = useHackathon();
+  const { connected } = useHackathon();
 
-	if (connected) {
-		return <></>;
-	}
+  if (connected) {
+    return <></>;
+  }
 
-	return (
-		<ConnectionBarContainer>
-			<ContentContainer className="row center">
-				<SpinnerContainer>
-					<span className="fas fa-sync fa-spin" />
-				</SpinnerContainer>
-				<div className="flex">
-					Connecting to DurHack. <Muted>Taking too long? Try a refresh, or ping an organiser on Slack.</Muted>
-				</div>
-			</ContentContainer>
-		</ConnectionBarContainer>
-	);
+  return (
+    <ConnectionBarContainer>
+      <ContentContainer className="row center">
+        <SpinnerContainer>
+          <span className="fas fa-sync fa-spin" />
+        </SpinnerContainer>
+        <div className="flex">
+          Connecting to DurHack. <Muted>Taking too long? Try a refresh, or ping an organiser on Slack.</Muted>
+        </div>
+      </ContentContainer>
+    </ConnectionBarContainer>
+  );
 });
 
 export default ConnectionBar;

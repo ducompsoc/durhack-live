@@ -11,45 +11,45 @@ interface IOAuthResponse {
 }
 
 const DiscordContent = React.memo(() => {
-	const [error, setError] = React.useState<string>();
+  const [error, setError] = React.useState<string>();
 
-	React.useEffect(() => {
-		if (!window.location.hash) {
-			window.location.href = `https://discord.com/oauth2/authorize?client_id=1038564110138355752&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=token&scope=identify`;
+  React.useEffect(() => {
+    if (!window.location.hash) {
+      window.location.href = `https://discord.com/oauth2/authorize?client_id=1038564110138355752&redirect_uri=${encodeURIComponent(window.location.href)}&response_type=token&scope=identify`;
 
-			return;
-		}
+      return;
+    }
 
-		const hash = new URLSearchParams(window.location.hash.slice(1));
-		if (hash.has('error')) {
-			setError(`We received an error from Discord: "${hash.get('error_description')}". If you\'re having problems, ask a member of the DurHack team.`);
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    if (hash.has('error')) {
+      setError(`We received an error from Discord: "${hash.get('error_description')}". If you\'re having problems, ask a member of the DurHack team.`);
 
-			return;
-		}
+      return;
+    }
 
-		const accessToken = hash.get('access_token');
-		if (!accessToken) {
-			setError('There\'s a problem with the URL. If you\'re having problems, ask a member of the DurHack team.');
+    const accessToken = hash.get('access_token');
+    if (!accessToken) {
+      setError('There\'s a problem with the URL. If you\'re having problems, ask a member of the DurHack team.');
 
-			return;
-		}
+      return;
+    }
 
-		query('POST', 'discord', { accessToken })
-			.then(res => {
-				if (!res.inviteUrl) {
-					throw new Error('No invite URL provided.');
-				}
+    query('POST', 'discord', { accessToken })
+      .then(res => {
+        if (!res.inviteUrl) {
+          throw new Error('No invite URL provided.');
+        }
 
-				window.location.href = res.inviteUrl;
-			})
-			.catch(err => {
-				console.error(err);
+        window.location.href = res.inviteUrl;
+      })
+      .catch(err => {
+        console.error(err);
 
-				setError('An unknown error occurred. If you\'re having problems, ask a member of the DurHack team.');
-			});
-	}, []);
+        setError('An unknown error occurred. If you\'re having problems, ask a member of the DurHack team.');
+      });
+  }, []);
 
-	return <p>{error || 'Redirecting...'}</p>;
+  return <p>{error || 'Redirecting...'}</p>;
 });
 
 export default React.memo(() => <_Page><DiscordContent /></_Page>);

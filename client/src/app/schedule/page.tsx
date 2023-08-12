@@ -22,7 +22,7 @@ const PageContainer = styled.div`
 `;
 
 export default React.memo(() => (
-	<PageContainer>
-		<div><Schedule /></div>
-	</PageContainer>
+  <PageContainer>
+    <div><Schedule /></div>
+  </PageContainer>
 ));

@@ -40,71 +40,71 @@ const CountdownDigit = styled.span`
 `;
 
 function zeroPad(num: number): string {
-	if (num < 10) {
-		return `0${num}`;
-	}
+  if (num < 10) {
+    return `0${num}`;
+  }
 
-	return `${num}`;
+  return `${num}`;
 }
 
 function digitise(num: string) {
-	return num.split('').map((char, index) => <CountdownDigit key={index}>{char}</CountdownDigit>);
+  return num.split('').map((char, index) => <CountdownDigit key={index}>{char}</CountdownDigit>);
 }
 
 const Countdown = React.memo(() => {
-	const { state } = useHackathon();
-	const [countdownValues, setCountdownValues] = React.useState<[number, number, number]>();
+  const { state } = useHackathon();
+  const [countdownValues, setCountdownValues] = React.useState<[number, number, number]>();
 
-	const countdownTo = React.useMemo(() => {
-		if (!state) {
-			return null;
-		}
+  const countdownTo = React.useMemo(() => {
+    if (!state) {
+      return null;
+    }
 
-		const millis = (state as any).milestoneMillis;
-		if (millis === null) {
-			return null;
-		}
+    const millis = (state as any).milestoneMillis;
+    if (millis === null) {
+      return null;
+    }
 
-		return Date.now() + millis;
-	}, [state]);
+    return Date.now() + millis;
+  }, [state]);
 
-	React.useEffect(() => {
-		if (!countdownTo) {
-			return () => {};
-		}
+  React.useEffect(() => {
+    if (!countdownTo) {
+      return () => {};
+    }
 
-		const countdownToSeconds = Math.floor(countdownTo / 1000);
-		const interval = setInterval(() => {
-			const diffSeconds = Math.max(0, countdownToSeconds - Math.floor(Date.now() / 1000));
-			const hours = Math.floor(diffSeconds / 3600);
-			const minutes = Math.floor((diffSeconds - (hours * 3600)) / 60);
-			const seconds = diffSeconds - (hours * 3600) - (minutes * 60);
-			setCountdownValues([hours, minutes, seconds]);
-		}, 500);
+    const countdownToSeconds = Math.floor(countdownTo / 1000);
+    const interval = setInterval(() => {
+      const diffSeconds = Math.max(0, countdownToSeconds - Math.floor(Date.now() / 1000));
+      const hours = Math.floor(diffSeconds / 3600);
+      const minutes = Math.floor((diffSeconds - (hours * 3600)) / 60);
+      const seconds = diffSeconds - (hours * 3600) - (minutes * 60);
+      setCountdownValues([hours, minutes, seconds]);
+    }, 500);
 
-		return () => {
-			clearInterval(interval);
-		};
-	}, [countdownTo]);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [countdownTo]);
 
-	if (!state || !state.overlay.milestone.enabled || !countdownValues) {
-		return <></>;
-	}
+  if (!state || !state.overlay.milestone.enabled || !countdownValues) {
+    return <></>;
+  }
 
-	return (
-		<Wrapper className="column center">
-			<WrapperInner className="column center flex">
-				<CountdownTitle>{state.overlay.milestone.text}</CountdownTitle>
-				<CountdownContainer>
-					{digitise(zeroPad(countdownValues[0]))}
-					:
-					{digitise(zeroPad(countdownValues[1]))}
-					:
-					{digitise(zeroPad(countdownValues[2]))}
-				</CountdownContainer>
-			</WrapperInner>
-		</Wrapper>
-	);
+  return (
+    <Wrapper className="column center">
+      <WrapperInner className="column center flex">
+        <CountdownTitle>{state.overlay.milestone.text}</CountdownTitle>
+        <CountdownContainer>
+          {digitise(zeroPad(countdownValues[0]))}
+          :
+          {digitise(zeroPad(countdownValues[1]))}
+          :
+          {digitise(zeroPad(countdownValues[2]))}
+        </CountdownContainer>
+      </WrapperInner>
+    </Wrapper>
+  );
 });
 
 export default Countdown;

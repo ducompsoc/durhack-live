@@ -10,11 +10,11 @@ import Stage from './components/Stage';
 import MainWebsiteLink from './components/MainWebsiteLink';
 
 export default React.memo(() => (
-	<_Page>
-		<Stage />
-		<Socials />
-		<Announcement />
-		<HackerPack />
-		<MainWebsiteLink />
-	</_Page>
+  <_Page>
+    <Stage />
+    <Socials />
+    <Announcement />
+    <HackerPack />
+    <MainWebsiteLink />
+  </_Page>
 ));

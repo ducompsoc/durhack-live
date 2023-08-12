@@ -24,27 +24,27 @@ const AnnouncementText = styled.div`
 
 /* eslint-disable react/no-array-index-key */
 const Announcement = React.memo(() => {
-	const { state } = useHackathon();
+  const { state } = useHackathon();
 
-	if (!state || !state.announcement.enabled) {
-		return <></>;
-	}
+  if (!state || !state.announcement.enabled) {
+    return <></>;
+  }
 
-	const { announcement } = state;
+  const { announcement } = state;
 
-	return (
-		<Section>
-			<AnnouncementContainer>
-				<AnnouncementTitle>{state.announcement.title}</AnnouncementTitle>
-				<AnnouncementText>
-					{announcement.text.split('\n').map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
-				</AnnouncementText>
-				{announcement.buttonLink && (
-					<LinkButton href={announcement.buttonLink} target="_blank" rel="noopener" primary>{announcement.buttonText}</LinkButton>
-				)}
-			</AnnouncementContainer>
-		</Section>
-	);
+  return (
+    <Section>
+      <AnnouncementContainer>
+        <AnnouncementTitle>{state.announcement.title}</AnnouncementTitle>
+        <AnnouncementText>
+          {announcement.text.split('\n').map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
+        </AnnouncementText>
+        {announcement.buttonLink && (
+          <LinkButton href={announcement.buttonLink} target="_blank" rel="noopener" primary>{announcement.buttonText}</LinkButton>
+        )}
+      </AnnouncementContainer>
+    </Section>
+  );
 });
 
 export default Announcement;

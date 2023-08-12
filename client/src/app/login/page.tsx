@@ -50,27 +50,27 @@ const LoginCard = styled.div`
 `;
 
 export default React.memo(() => (
-	<LoginWrapper>
-		<LoginInner className="column">
-			<div className="flex" />
+  <LoginWrapper>
+    <LoginInner className="column">
+      <div className="flex" />
 
-			<ContentContainer>
-				<LoginContainer>
-					<LoginTitle>Let&apos;s jump in</LoginTitle>
+      <ContentContainer>
+        <LoginContainer>
+          <LoginTitle>Let&apos;s jump in</LoginTitle>
 
-					<LoginCard>
-						<LoginForm />
-					</LoginCard>
-					<LoginCard>
-						<p>
-							Please use the email you entered when you registered for DurHack.
-						</p>
-						<p>
-							Having trouble? Please chat to a member of the DurHack team.
-						</p>
-					</LoginCard>
-				</LoginContainer>
-			</ContentContainer>
-		</LoginInner>
-	</LoginWrapper>
+          <LoginCard>
+            <LoginForm />
+          </LoginCard>
+          <LoginCard>
+            <p>
+              Please use the email you entered when you registered for DurHack.
+            </p>
+            <p>
+              Having trouble? Please chat to a member of the DurHack team.
+            </p>
+          </LoginCard>
+        </LoginContainer>
+      </ContentContainer>
+    </LoginInner>
+  </LoginWrapper>
 ));

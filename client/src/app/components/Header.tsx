@@ -23,17 +23,17 @@ const Logo = styled.img`
 `;
 
 const Header = React.memo(() => (
-	<HeaderContainer>
-		<HeaderInner>
-			<ContentContainer className="row">
-				<LogoWrapper className="column center">
-					<a href="/"><Logo src="/images/header-logo.png" alt="Logo" /></a>
-				</LogoWrapper>
-				<div className="flex" />
-				<Countdown />
-			</ContentContainer>
-		</HeaderInner>
-	</HeaderContainer>
+  <HeaderContainer>
+    <HeaderInner>
+      <ContentContainer className="row">
+        <LogoWrapper className="column center">
+          <a href="/"><Logo src="/images/header-logo.png" alt="Logo" /></a>
+        </LogoWrapper>
+        <div className="flex" />
+        <Countdown />
+      </ContentContainer>
+    </HeaderInner>
+  </HeaderContainer>
 ));
 
 export default Header;

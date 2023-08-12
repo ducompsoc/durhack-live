@@ -21,20 +21,20 @@ const ExternalLink = styled.a`
 `;
 
 const Footer = React.memo(() => (
-	<FooterContainer>
-		<ContentContainer>
-			<p>
-				DurHack follows the{' '}
-				<ExternalLink
-					href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-					target="_blank"
-					rel="noopener"
-				>
-					MLH Code of Conduct
-				</ExternalLink>. If something goes wrong, please talk to an organiser.
-			</p>
-		</ContentContainer>
-	</FooterContainer>
+  <FooterContainer>
+    <ContentContainer>
+      <p>
+        DurHack follows the{' '}
+        <ExternalLink
+	href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+	target="_blank"
+	rel="noopener"
+        >
+          MLH Code of Conduct
+        </ExternalLink>. If something goes wrong, please talk to an organiser.
+      </p>
+    </ContentContainer>
+  </FooterContainer>
 ));
 
 export default Footer;
