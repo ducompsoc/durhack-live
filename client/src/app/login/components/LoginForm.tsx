@@ -119,7 +119,7 @@ const CheckInForm = React.memo(() => {
 	}
 
 	if (checkedIn) {
-		return redirect("/");
+		return redirect('/');
 	}
 
 	return (
@@ -443,7 +443,7 @@ const LoginForm = React.memo(() => {
 
 	if (loggedIn) {
 		if (localStorage.getItem('checkin')) {
-			return redirect("/");
+			return redirect('/');
 		}
 
 		return <CheckInForm />;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 import ContentContainer from './ContentContainer';
 import Header from './Header';
@@ -16,7 +16,7 @@ const ContentArea = styled.div`
 
 const _Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
 	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
-    return redirect("/login");
+		return redirect('/login');
 	}
 
 	return (
