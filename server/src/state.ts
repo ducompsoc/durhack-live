@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { readFileSync, promises } from 'fs';
 
 import { IHackathonState } from './types';
@@ -225,8 +224,10 @@ let state: IHackathonState = {
     },
 };
 
+const stateFile = new URL("../state.json", import.meta.url);
+
 try {
-    state = JSON.parse(readFileSync(join(__dirname, '../state.json')).toString());
+    state = JSON.parse(readFileSync(stateFile.toString()).toString());
 } catch (err) {
     console.error('Could not read state.');
     console.error(err);
@@ -245,7 +246,7 @@ export function getHackathonState(): IAugmentedHackathonState {
 export function setHackathonState(newState: IHackathonState) {
     state = newState;
 
-    promises.writeFile(join(__dirname, '../state.json'), JSON.stringify(state)).then(() => {
+    promises.writeFile(stateFile.toString(), JSON.stringify(state)).then(() => {
         console.log('Written state to disk.');
     }).catch(err => {
         console.error('Failed to write state to disk.');
