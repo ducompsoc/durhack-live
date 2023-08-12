@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { query } from '@/app/util/api';
-import Page from '@/app/components/_Page';
+import _Page from '@/app/components/_Page';
 
 interface IOAuthResponse {
 	access_token?: string;
@@ -52,4 +52,4 @@ const DiscordContent = React.memo(() => {
 	return <p>{error || 'Redirecting...'}</p>;
 });
 
-export const Page = React.memo(() => <Page><DiscordContent /></Page>);
+export const Page = React.memo(() => <_Page><DiscordContent /></_Page>);

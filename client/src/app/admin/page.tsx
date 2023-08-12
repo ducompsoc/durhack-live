@@ -8,7 +8,7 @@ import styled from 'styled-components';
 
 import { IHackathonState, pushHackathon, useHackathon } from '@/app/util/socket';
 import Card from '@/app/components/Card';
-import Page from '@/app/components/_Page';
+import _Page from '@/app/components/_Page';
 import Section from '@/app/components/Section';
 
 /* eslint-disable react/no-array-index-key */
@@ -532,15 +532,15 @@ export default React.memo(() => {
 	const hackathon = useHackathon();
 
 	if (!hackathon.connected) {
-		return <Page>Not connected.</Page>;
+		return <_Page>Not connected.</_Page>;
 	}
 
 	if (hackathon.role !== 'admin') {
-		return <Page>You do not have permission to go to this page. {hackathon.role}</Page>;
+		return <_Page>You do not have permission to go to this page. {hackathon.role}</_Page>;
 	}
 
 	return (
-		<Page>
+		<_Page>
 			<Section>
 				<div>
 					<Card>
@@ -592,6 +592,6 @@ export default React.memo(() => {
 					</Card>
 				</div>
 			</Section>
-		</Page>
+		</_Page>
 	);
 });
