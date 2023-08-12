@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "gulp serve"
+    "dev": "gulp serve",
+    "build": "gulp build"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
   "license": "UNLICENSED",
