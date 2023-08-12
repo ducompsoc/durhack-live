@@ -1,6 +1,6 @@
 import { badRequest } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import { compare } from 'bcryptjs';
 import { get } from 'config';
 import { sign } from 'jsonwebtoken';

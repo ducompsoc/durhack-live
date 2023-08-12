@@ -1,5 +1,5 @@
 import * as Hapi from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import * as SocketIO from 'socket.io';
 
 import { sequelize } from './database';

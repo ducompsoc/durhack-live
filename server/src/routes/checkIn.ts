@@ -1,5 +1,5 @@
 import { ServerRoute } from '@hapi/hapi';
-import * as Joi from '@hapi/joi';
+import * as Joi from 'joi';
 import { pick } from 'lodash';
 
 import { requireUser } from '../auth';
