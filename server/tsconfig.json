@@ -1,13 +1,15 @@
 {
-    "compilerOptions": {
-      "target": "es2017",
-      "strict": true,
-      "strictNullChecks": true,
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": false
-    },
-    "include": [
-      "src"
-    ]
-  }
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "outDir": "dist"
+  },
+  "include": [
+    "src"
+  ]
+}
   
