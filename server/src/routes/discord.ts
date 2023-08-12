@@ -1,6 +1,6 @@
 import { badGateway } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import fetch from 'node-fetch';
 
 import { requireUser } from '../auth';

@@ -1,6 +1,6 @@
-import * as Hapi from '@hapi/hapi';
-import * as Joi from 'joi';
-import * as SocketIO from 'socket.io';
+import Hapi from '@hapi/hapi';
+import Joi from 'joi';
+import SocketIO from 'socket.io';
 
 import { sequelize } from './database';
 import { loginRoute } from './routes/auth';

@@ -1,11 +1,11 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { get } from 'config';
+import config from 'config';
 
 export const sequelize = new Sequelize({
-    host: get('mysql.host'),
-    database: get('mysql.name'),
-    username: get('mysql.user'),
-    password: get('mysql.pass'),
+    host: config.get('mysql.host'),
+    database: config.get('mysql.name'),
+    username: config.get('mysql.user'),
+    password: config.get('mysql.pass'),
     dialect: 'mysql',
 });
 
