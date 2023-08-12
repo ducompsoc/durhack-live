@@ -1,0 +1,34 @@
+import React from 'react';
+import styled from 'styled-components';
+import { Redirect } from 'react-router-dom';
+
+import { ContentContainer } from './ContentContainer';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { ConnectionBar } from './ConnectionBar';
+
+const ContentArea = styled.div`
+	background-color: ${p => p.theme.dark};
+	padding: 32px 0px;
+`;
+
+export const Page = React.memo(({ requireAuth, children }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
+	if (requireAuth !== false && (!localStorage.getItem('token') || !localStorage.getItem('checkin'))) {
+		return <Redirect to="/login" />;
+	}
+
+	return (
+		<div>
+			<ConnectionBar />
+			<Header />
+
+			<ContentArea>
+				<ContentContainer>
+					{children}
+				</ContentContainer>
+			</ContentArea>
+
+			<Footer />
+		</div>
+	);
+});
