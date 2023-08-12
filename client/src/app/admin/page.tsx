@@ -1,7 +1,7 @@
 'use client';
 
 import {
-	Field, FieldArray, Form, Formik, FormikProps,
+	Field, FieldArray, ArrayHelpers, Form, Formik, FormikProps,
 } from 'formik';
 import React from 'react';
 import styled from 'styled-components';
@@ -217,7 +217,7 @@ const Main = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 
 				<FieldArray
 					name="slides"
-					render={arrayHelpers => (
+					render={(arrayHelpers: ArrayHelpers) => (
 						<Segment>
 							{(props.values.slides as string[]).map((_, index) => (
 								<div className="row" key={index}>
@@ -310,7 +310,7 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 
 				<FieldArray
 					name="queue"
-					render={arrayHelpers => (
+					render={(arrayHelpers: ArrayHelpers) => (
 						<Segment>
 							{(props.values.queue as string[]).map((_, index) => (
 								<div className="row" key={index}>
@@ -379,7 +379,7 @@ const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
 						<tbody>
 							<FieldArray
 								name="schedule"
-								render={arrayHelpers => (
+								render={(arrayHelpers: ArrayHelpers) => (
 									<>
 										{(props.values.schedule as void[]).map((_, index) => (
 											<tr key={index}>
@@ -506,7 +506,7 @@ const Tips = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 
 				<FieldArray
 					name="tips"
-					render={arrayHelpers => (
+					render={(arrayHelpers: ArrayHelpers) => (
 						<Segment>
 							{(props.values.tips as string[]).map((_, index) => (
 								<div className="row" key={index}>
