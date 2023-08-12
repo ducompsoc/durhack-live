@@ -112,7 +112,7 @@ const CheckInForm = React.memo(() => {
 					+ 'member of the DurHack team.',
         );
       });
-  }, ['formik']);
+  }, [formik]);
 
   if (loading) {
     return <div>{errorMessage}<p>Verifying your details...</p></div>;
