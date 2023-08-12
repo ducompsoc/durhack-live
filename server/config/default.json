@@ -1,0 +1,15 @@
+{
+  "mysql": {
+    "host": "127.0.0.1",
+    "name": "durhack",
+    "user": "root",
+    "pass": "strongexamplepassword"
+  },
+  "jwt": "This needs to be overwritten by a random signature in a separate file",
+  "mailgun": {
+    "username": "api",
+    "key": "yourAPIKeyHere",
+    "domain": "live.durhack.com",
+    "host": "api.eu.mailgun.net"
+  }
+}
