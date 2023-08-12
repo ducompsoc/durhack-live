@@ -1,6 +1,7 @@
+import { badGateway } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
 import * as Joi from '@hapi/joi';
-import { get } from 'request-promise-native';
+import fetch from 'node-fetch';
 
 import { requireUser } from '../auth';
 
@@ -17,12 +18,17 @@ export const doDiscordRoute: ServerRoute = {
     async handler(req) {
         const user = await requireUser(req);
 
-        const discordUser = await get('https://discord.com/api/oauth2/@me', {
+        const discordUserResponse = await fetch('https://discord.com/api/oauth2/@me', {
             headers: {
                 'Authorization': `Bearer ${(<{ accessToken: string }>req.payload).accessToken}`,
             },
-            json: true,
         });
+
+        if (!discordUserResponse.ok) {
+            throw badGateway("Discord returned a non-2xx response.");
+        }
+
+        const discordUser = await discordUserResponse.json() as any;
 
         await user.update({
             discordId: discordUser.user.id,
