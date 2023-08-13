@@ -3,7 +3,7 @@ import { ServerRoute } from '@hapi/hapi';
 import Joi from 'joi';
 import config from 'config';
 import * as jsonWebToken from 'jsonwebtoken';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { Op } from 'sequelize';
 
@@ -12,7 +12,6 @@ import { User } from '../database';
 
 const mailgun = new Mailgun(FormData)
 const mailgunClient = mailgun.client(config.get('mailgun')) // will error; mailgun-js init is different to mailgun.js
-
 
 
 interface ILoginPayload {
@@ -53,7 +52,7 @@ export const loginRoute: ServerRoute = {
             throw badRequest('Incorrect email.');
         }
 
-        if (user.password) {
+        if (user.hashed_password) {
             if (password) {
                 const comparison = await checkPassword(user, password);
                 if (!comparison) {
