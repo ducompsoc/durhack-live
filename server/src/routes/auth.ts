@@ -1,4 +1,4 @@
-import { badRequest } from '@hapi/boom';
+import { badGateway, badRequest } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
 import Joi from 'joi';
 import config from 'config';
@@ -73,22 +73,28 @@ export const loginRoute: ServerRoute = {
                     verifyCode: token,
                     verifySentAt: new Date(),
                 });
-
-                await mailgunClient.messages.create((config.get('mailgun') as any).domain,
-                  {
-                    from: 'DurHack <noreply@live.durhack.com>',
-                    'h:Reply-To': 'hello@durhack.com',
-                    to: user.email,
-                    subject: `Your DurHack verification code is ${user.verifyCode}`,
-                    text: [
-                        `Hi ${user.preferredName},`,
-                        `Welcome to DurHack! Your verification code is ${user.verifyCode}`,
-                        'If you have any questions, please chat to one of us.',
-                        'Thanks,',
-                        'The DurHack Team',
-                        '(If you didn\'t request this code, you can safely ignore this email.)',
-                    ].join('\n\n'),
-                });
+                
+                try {
+                    const domain = (config.get('mailgun') as any).domain
+                    await mailgunClient.messages.create(domain, {
+                        from: `DurHack <noreply@${domain}>`,
+                        'h:Reply-To': 'hello@durhack.com',
+                        to: user.email,
+                        subject: `Your DurHack verification code is ${user.verifyCode}`,
+                        text: [
+                            `Hi ${user.preferredName},`,
+                            `Welcome to DurHack! Your verification code is ${user.verifyCode}`,
+                            'If you have any questions, please chat to one of us.',
+                            'Thanks,',
+                            'The DurHack Team',
+                            '(If you didn\'t request this code, you can safely ignore this email.)',
+                        ].join('\n\n'),
+                    });
+                } catch (error) {
+                    Error.captureStackTrace(error);
+                    console.log(error.stack);
+                    throw badGateway('Failed to send verification email.');
+                }
                 
                 throw badRequest('Verification code required.');
             }
