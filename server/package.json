@@ -25,6 +25,7 @@
   "dependencies": {
     "@hapi/boom": "^10.0.1",
     "@hapi/hapi": "^21.3.2",
+    "@node-oauth/oauth2-server": "^4.3.0",
     "config": "^3.3.2",
     "form-data": "^4.0.0",
     "joi": "^17.9.2",
