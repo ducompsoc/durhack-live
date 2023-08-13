@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
 import Joi from 'joi';
-import SocketIO from 'socket.io';
+import { Server as SocketIO } from 'socket.io';
 
 import { sequelize } from './database';
 import { loginRoute } from './routes/auth';
@@ -44,7 +44,7 @@ async function init() {
     server.route(doCheckInRoute);
     server.route(doDiscordRoute);
 
-    const io = SocketIO(server.listener);
+    const io = new SocketIO(server.listener);
     setServer(io);
 
     await server.start();
