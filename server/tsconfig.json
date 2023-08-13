@@ -5,7 +5,7 @@
     "strict": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "outDir": "dist"
   },
