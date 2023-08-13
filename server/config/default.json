@@ -9,7 +9,7 @@
   "mailgun": {
     "username": "api",
     "key": "yourAPIKeyHere",
-    "domain": "live.durhack.com",
+    "domain": "mailgun.durhack.com",
     "host": "api.eu.mailgun.net"
   }
 }
