@@ -156,6 +156,6 @@ export function useHackathon(): THackathonConnection {
   return connection;
 }
 
-if (localStorage.getItem('token')) {
+if (typeof window !== 'undefined' && localStorage.getItem('token')) {
   connect();
 }
