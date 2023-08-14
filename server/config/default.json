@@ -6,15 +6,17 @@
   "mysql": {
     "data": {
       "host": "127.0.0.1",
-      "name": "durhack",
+      "port": 3306,
+      "database": "durhack",
       "user": "root",
-      "pass": "strongexamplepassword"
+      "password": "strongexamplepassword"
     },
     "session": {
       "host": "127.0.0.1",
-      "name": "durhack-session",
+      "port": 3306,
+      "database": "durhack-session",
       "user": "root",
-      "pass": "strongexamplepassword"
+      "password": "strongexamplepassword"
     }
   },
   "secret": {
@@ -27,5 +29,12 @@
     "key": "yourAPIKeyHere",
     "domain": "mailgun.durhack.com",
     "host": "api.eu.mailgun.net"
+  },
+  "session": {
+    "name": "session_cookie_name",
+    "secret": "session_cookie_secret",
+    "resave": false,
+    "saveUninitialized": false,
+    "cookie": { "secure": false }
   }
 }
