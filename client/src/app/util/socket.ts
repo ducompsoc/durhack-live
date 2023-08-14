@@ -90,7 +90,7 @@ let lastConnection: THackathonConnection = { connected: false, role: null, state
 let socket: Socket | null = null;
 
 export function connect() {
-  socket = IO(window.location.host.includes('live.durhack.com') ? '/' : 'http://127.0.0.1:3001');
+  socket = IO(window.location.origin);
 
   let userRole: string | null = null;
 
