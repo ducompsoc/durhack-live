@@ -112,7 +112,7 @@ const CheckInForm = React.memo(() => {
 					+ 'member of the DurHack team.',
         );
       });
-  }, [formik]);
+  }, []);
 
   if (loading) {
     return <div>{errorMessage}<p>Verifying your details...</p></div>;
@@ -126,7 +126,7 @@ const CheckInForm = React.memo(() => {
     <div>
       <form onSubmit={formik.handleSubmit}>
         <p>
-          Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any w&rsquo;re missing.
+          Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any we&rsquo;re missing.
         </p>
 
         <FormSection>
