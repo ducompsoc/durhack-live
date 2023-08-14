@@ -2,7 +2,7 @@ import { badGateway, badRequest } from '@hapi/boom';
 import { ServerRoute } from '@hapi/hapi';
 import Joi from 'joi';
 import config from 'config';
-import * as jsonWebToken from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
 import FormData from 'form-data';
 import Mailgun from 'mailgun.js';
 import { Op } from 'sequelize';
@@ -107,7 +107,7 @@ export const loginRoute: ServerRoute = {
         await user.update(update);
 
         return {
-            token: jsonWebToken.sign(JSON.stringify(user.toJSON()), config.get('jwt'), { algorithm: 'HS256' }),
+            token: jsonwebtoken.sign(JSON.stringify(user.toJSON()), config.get('jwt'), { algorithm: 'HS256' }),
         };
     },
 };

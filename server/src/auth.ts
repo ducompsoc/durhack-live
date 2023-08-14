@@ -1,4 +1,4 @@
-import * as jsonWebToken from 'jsonwebtoken';
+import jsonWebToken from 'jsonwebtoken';
 import config from 'config';
 import { Request } from '@hapi/hapi';
 import { forbidden, unauthorized } from '@hapi/boom';
