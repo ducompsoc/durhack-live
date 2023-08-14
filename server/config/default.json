@@ -1,11 +1,27 @@
 {
-  "mysql": {
-    "host": "127.0.0.1",
-    "name": "durhack",
-    "user": "root",
-    "pass": "strongexamplepassword"
+  "listen": {
+    "host": "localhost",
+    "port": 3001
   },
-  "jwt": "This needs to be overwritten by a random signature in a separate file",
+  "mysql": {
+    "data": {
+      "host": "127.0.0.1",
+      "name": "durhack",
+      "user": "root",
+      "pass": "strongexamplepassword"
+    },
+    "session": {
+      "host": "127.0.0.1",
+      "name": "durhack-session",
+      "user": "root",
+      "pass": "strongexamplepassword"
+    }
+  },
+  "secret": {
+    "session": "verysecuresecretforsessions",
+    "cookie": "thebestsecretforcookies",
+    "csrf": "csrfisoverrated"
+  },
   "mailgun": {
     "username": "api",
     "key": "yourAPIKeyHere",
