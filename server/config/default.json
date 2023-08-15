@@ -3,6 +3,9 @@
     "host": "localhost",
     "port": 3001
   },
+  "auth": {
+    "skipEmailVerification": false
+  },
   "mysql": {
     "data": {
       "host": "127.0.0.1",
@@ -19,10 +22,20 @@
       "password": "strongexamplepassword"
     }
   },
-  "secret": {
-    "session": "verysecuresecretforsessions",
-    "cookie": "thebestsecretforcookies",
-    "csrf": "csrfisoverrated"
+  "csrf": {
+    "enabled": true,
+    "secret": "csrfisoverrated",
+    "options": {
+      "cookieName": "psifi.x-csrf-token",
+      "cookieOptions": {
+        "sameSite": "strict",
+        "path": "/",
+        "secure": false
+      }
+    }
+  },
+  "cookie-parser": {
+    "secret": "thebestsecretforcookies"
   },
   "mailgun": {
     "username": "api",
