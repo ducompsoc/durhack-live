@@ -4,6 +4,7 @@ import { UserRole } from "@/common/model_enums";
 type ICondition = (request: Request, response: Response) => boolean;
 
 export function requireCondition(condition: ICondition) {
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   return function (target: any, property_key: string, descriptor: PropertyDescriptor) {
     const old_function = descriptor.value;
 
@@ -15,13 +16,13 @@ export function requireCondition(condition: ICondition) {
     }
 
     descriptor.value = wrapped_function;
-  }
+  };
 }
 
 export function userIsRole(role: UserRole) {
   return function(request: Request, response: Response) {
     return request.user?.role === role;
-  }
+  };
 }
 
-export const requireUserIsAdmin = requireCondition(userIsRole(UserRole.admin))
+export const requireUserIsAdmin = requireCondition(userIsRole(UserRole.admin));

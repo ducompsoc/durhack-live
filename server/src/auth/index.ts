@@ -7,6 +7,7 @@ import "./strategy/local";
 import "./strategy/bearer";
 
 declare global {
+  /* eslint-disable @typescript-eslint/no-namespace */
   namespace Express {
     interface User extends SequelizeUser {}
   }

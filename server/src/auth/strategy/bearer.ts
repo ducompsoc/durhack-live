@@ -7,7 +7,7 @@ import { NullError } from "@/common/errors";
 
 const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
   throw createHttpError.NotImplemented();
-}
+};
 
 const bearer_strategy = new Bearer.Strategy(bearerVerifyFunction);
 

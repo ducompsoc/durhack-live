@@ -15,4 +15,4 @@ export function userIsSelf(request: Request, response: Response): boolean {
   return (!!request.user && request.user.id === response.locals.user_id);
 }
 
-export const requireSelf = requireCondition(userIsSelf)
+export const requireSelf = requireCondition(userIsSelf);

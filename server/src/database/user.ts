@@ -16,127 +16,127 @@ export default class User extends Model {
     allowNull: false,
     unique: true,
   })
-  email!: string;
+    email!: string;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  hashed_password!: Buffer | null;
+    hashed_password!: Buffer | null;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  password_salt!: Buffer | null;
+    password_salt!: Buffer | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  preferredName!: string;
+    preferredName!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  fullName!: string;
+    fullName!: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(UserRole)),
     defaultValue: UserRole.hacker,
     allowNull: false,
   })
-  role!: string | null;
+    role!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  verify_code!: string | null;
+    verify_code!: string | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  verify_sent_at!: Date | null;
+    verify_sent_at!: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  initially_logged_in_at!: Date | null;
+    initially_logged_in_at!: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  last_logged_in_at!: Date | null;
+    last_logged_in_at!: Date | null;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  age!: number | null;
+    age!: number | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  phoneNumber!: string | null;
+    phoneNumber!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  university!: string | null;
+    university!: string | null;
 
   @Column({
     type: DataType.CHAR(4),
     allowNull: true,
   })
-  graduationYear!: string | null;
+    graduationYear!: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Ethnicity)),
     allowNull: true,
   })
-  ethnicity!: string | null;
+    ethnicity!: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Gender)),
     allowNull: true,
   })
-  gender!: string | null;
+    gender!: string | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-  hUKMarketing!: boolean | null;
+    hUKMarketing!: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-  hUKConsent!: boolean | null;
+    hUKConsent!: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })
-  checkedIn!: boolean;
+    checkedIn!: boolean;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  discordId!: string | null;
+    discordId!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  discordName!: string | null;
+    discordName!: string | null;
 }

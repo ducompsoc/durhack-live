@@ -1,14 +1,14 @@
 import config from "config";
 import express, { Express } from "express";
 import { createServer } from "http";
-import { Server as SocketIO } from 'socket.io';
+import { Server as SocketIO } from "socket.io";
 import passport from "passport";
 
 import "./auth";
 import session from "./auth/session";
-import sequelize, { ensureDatabaseExists } from './database';
+import sequelize, { ensureDatabaseExists } from "./database";
 import api_router from "./routes";
-import { setServer } from './socket';
+import { setServer } from "./socket";
 
 const environment = process.env.NODE_ENV;
 const dev = environment !== "production";
@@ -44,7 +44,7 @@ async function main() {
   const listen = config.get("listen");
 
   if (typeof listen.port !== "number" || typeof listen.host !== "string") {
-    throw new Error("Listen host/port are incorrectly configured.")
+    throw new Error("Listen host/port are incorrectly configured.");
   }
 
   server.listen(listen.port, listen.host, () => {
