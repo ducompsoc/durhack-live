@@ -1,5 +1,5 @@
 import { Model, DataType, Table, Column } from "sequelize-typescript";
-import { Ethnicity, Gender, UserRole } from "../common/model_enums";
+import { Ethnicity, Gender, UserRole } from "@/common/model_enums";
 
 @Table
 export default class User extends Model {
@@ -9,134 +9,134 @@ export default class User extends Model {
     autoIncrement: true,
     primaryKey: true,
   })
-  declare id!: number;
+  declare id: number;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
     unique: true,
   })
-  declare email!: string;
+  email!: string;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare hashed_password!: Buffer | null;
+  hashed_password!: Buffer | null;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare password_salt!: Buffer | null;
+  password_salt!: Buffer | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  declare preferredName!: string;
+  preferredName!: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  declare fullName!: string;
+  fullName!: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(UserRole)),
     defaultValue: UserRole.hacker,
     allowNull: false,
   })
-  declare role!: string | null;
+  role!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  declare verifyCode!: string | null;
+  verify_code!: string | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  declare verifySentAt!: Date | null;
+  verify_sent_at!: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  declare initiallyLoggedInAt!: Date | null;
+  initially_logged_in_at!: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-  declare lastLoggedInAt!: Date | null;
+  last_logged_in_at!: Date | null;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  declare age!: number | null;
+  age!: number | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  declare phoneNumber!: string | null;
+  phoneNumber!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  declare university!: string | null;
+  university!: string | null;
 
   @Column({
     type: DataType.CHAR(4),
     allowNull: true,
   })
-  declare graduationYear!: string | null;
+  graduationYear!: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Ethnicity)),
     allowNull: true,
   })
-  declare ethnicity!: string | null;
+  ethnicity!: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Gender)),
     allowNull: true,
   })
-  declare gender!: string | null;
+  gender!: string | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-  declare hUKMarketing!: boolean | null;
+  hUKMarketing!: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-  declare hUKConsent!: boolean | null;
+  hUKConsent!: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })
-  declare checkedIn!: boolean;
+  checkedIn!: boolean;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  declare discordId!: string | null;
+  discordId!: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-  declare discordName!: string | null;
+  discordName!: string | null;
 }
