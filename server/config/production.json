@@ -1,4 +1,10 @@
 {
+  "csrf": {
+    "cookieName": "__Host-psifi.x-csrf-token",
+    "cookieOptions": {
+      "secure": true
+    }
+  },
   "session": {
     "cookie": { "secure": true }
   }
