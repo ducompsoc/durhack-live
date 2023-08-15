@@ -1,8 +1,8 @@
-import { Server, Socket } from 'socket.io';
+import { Server, Socket } from "socket.io";
 
-import User from '@/database/user';
-import { getHackathonState, setHackathonState } from './state';
-import { IHackathonState } from './types';
+import User from "@/database/user";
+import { getHackathonState, setHackathonState } from "./state";
+import { IHackathonState } from "@/common/types";
 
 export let io: Server | null = null;
 
