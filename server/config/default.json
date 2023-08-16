@@ -67,6 +67,6 @@
     "apiEndpoint": "https://discord.com/api/v10",
     "clientId": "yourDiscordAppClientIdHere",
     "clientSecret": "yourDiscordAppClientSecretHere",
-    "redirectUri": "http://localhost:3001/auth/discord"
+    "redirectUri": "http://localhost:3001/auth/discord/redirect"
   }
 }
