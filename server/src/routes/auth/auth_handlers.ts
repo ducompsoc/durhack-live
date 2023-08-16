@@ -1,18 +1,18 @@
+import config from "config";
+import { z } from "zod";
 import { Request, Response } from "express";
 import createHttpError from "http-errors";
-import * as EmailValidator from "email-validator";
 
+import { hashPasswordText, randomBytesAsync } from "@/auth/strategy/local/util";
 import { NullError } from "@/common/errors";
-import User from "@/database/user";
-
-import { hashPasswordText, validatePassword, randomBytesAsync } from "@/auth/auth_util";
-import * as process from "process";
+import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";
+import User from "@/database/user";
 
 
 export default class AuthHandlers {
   private static ensureCorrectVerifyCode(user: User, verify_code_attempt: string): void {
-    if (process.env.MEGATEAMS_SKIP_EMAIL_VERIFICATION === "true") {
+    if (config.get("auth.skipEmailVerification") === "true") {
       return;
     }
 
@@ -20,8 +20,8 @@ export default class AuthHandlers {
       throw new createHttpError.BadRequest("Verify code not set.");
     }
 
-    // verification codes are valid for 5 minutes (in milliseconds)
-    if ((Date.now() - user.verify_sent_at) > 300_000) {
+    // verification codes are valid for 15 minutes (in milliseconds)
+    if ((new Date() - user.verify_sent_at) > 900_000) {
       throw new createHttpError.BadRequest("Verify code expired.");
     }
 
@@ -34,41 +34,67 @@ export default class AuthHandlers {
     throw new createHttpError.NotImplemented("Login success handler not implemented");
   }
 
+  static sign_up_payload_schema = z.object({
+    email: z.string().email(),
+  });
+
   static async handleSignUp(request: Request, response: Response) {
-    throw new createHttpError.NotImplemented("Sign up handler not implemented");
+    const { email } = AuthHandlers.sign_up_payload_schema.parse(request.body);
+
+    const user = await User.findOneByEmail(email, new NullError("Email address not recognised."));
+
+    const token = (await randomBytesAsync(3)).toString("hex").toUpperCase();
+
+    await user.update({
+      verifyCode: token,
+      verifySentAt: new Date(),
+    });
+
+    const domain = config.get("mailgun.domain");
+
+    if (typeof domain !== "string") {
+      throw new Error("Mailgun domain incorrectly configured");
+    }
+
+    try {
+      await MailgunClient.messages.create(domain, {
+        from: `DurHack <noreply@${domain}>`,
+        "h:Reply-To": "hello@durhack.com",
+        to: user.email,
+        subject: `Your DurHack verification code is ${user.verify_code}`,
+        text: [
+          `Hi ${user.preferredName},`,
+          `Welcome to DurHack! Your verification code is ${user.verify_code}`,
+          "If you have any questions, please chat to one of us.",
+          "Thanks,",
+          "The DurHack Team",
+          "(If you didn't request this code, you can safely ignore this email.)",
+        ].join("\n\n"),
+      });
+    } catch (error) {
+      Error.captureStackTrace(error);
+      console.error(error.stack);
+      throw createHttpError.BadGateway("Failed to send verification email.");
+    }
+
+    return sendStandardResponse(response, 200, "Verification email sent.");
   }
 
+  static set_password_schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(6),
+    verify_code: z.string().length(6)
+  });
+
   static async handleSetPassword(request: Request, response: Response) {
-    if (request.user) {
-      throw new createHttpError.BadRequest("You are already logged in!");
-    }
+    const { email, password, verify_code } = AuthHandlers.set_password_schema.parse(request.body);
 
-    let email: unknown;
-    let password: unknown;
-    let verify_code: unknown;
-    ({ email, password, verify_code } = request.body);
+    const found_user = await User.findOneByEmail(email, new NullError(
+      `It looks like you didn't fill in the sign-up form - try another email \
+      address, or speak to a DurHack volunteer if you believe this is an error!`
+    ));
 
-    if (typeof email !== "string" || !EmailValidator.validate(email)) {
-      throw new createHttpError.BadRequest("Email address needs to be mailable.");
-    }
-
-    if (typeof password !== "string" || !validatePassword(password)) {
-      throw new createHttpError.BadRequest("Password should be a string containing no illegal characters.");
-    }
-
-    if (typeof verify_code !== "string") {
-      throw new createHttpError.BadRequest("Verify code should be a string.");
-    }
-
-    let found_user: User;
-    try {
-      found_user = await User.findOne({ where: { email }, rejectOnEmpty: new NullError() });
-    } catch (error) {
-      if (error instanceof NullError) throw new createHttpError.NotFound("It looks like you didn't fill in the sign-up form - try another email address, or speak to a DurHack volunteer if you believe this is an error!");
-      throw error;
-    }
-
-    this.ensureCorrectVerifyCode(found_user, verify_code);
+    AuthHandlers.ensureCorrectVerifyCode(found_user, verify_code);
 
     const password_salt = await randomBytesAsync(16);
     found_user.hashed_password = await hashPasswordText(password, password_salt);
