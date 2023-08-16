@@ -141,7 +141,7 @@ export default class User extends Model {
   })
     discordName!: string | null;
   
-  static async findByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
+  static async findOneByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
     let augmentedEmail = [email];
 
     if (email.endsWith("@dur.ac.uk") || email.endsWith("@durham.ac.uk")) {
