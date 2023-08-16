@@ -31,7 +31,13 @@ export default class AuthHandlers {
   }
 
   static async handleLoginSuccess(request: Request, response: Response) {
-    throw new createHttpError.NotImplemented("Login success handler not implemented");
+    if (!request.user) throw new Error();
+
+    if (!request.user.checkedIn) {
+      return response.redirect("/login/check-in");
+    }
+
+    return response.redirect("/event");
   }
 
   static sign_up_payload_schema = z.object({
