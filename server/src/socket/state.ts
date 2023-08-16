@@ -1,4 +1,5 @@
-import { readFileSync, promises } from "fs";
+import { readFile, writeFile } from "fs/promises";
+import { fileURLToPath } from "url";
 
 import { IHackathonState } from "@/common/types";
 
@@ -6,16 +7,17 @@ interface IAugmentedHackathonState extends IHackathonState {
     milestoneMillis: number | null;
 }
 
-const stateFile = new URL("../../state/cache.json", import.meta.url);
-const defaultStateFile = new URL("../../state/default.json", import.meta.url);
+const stateFile = fileURLToPath(new URL("../../state/cache.json", import.meta.url));
+const defaultStateFile = fileURLToPath(new URL("../../state/default.json", import.meta.url));
 
-function loadStateFromFile(file: URL): IHackathonState {
-  return JSON.parse(readFileSync(file.toString()).toString()) as IHackathonState;
+async function loadStateFromFile(file: URL): Promise<IHackathonState> {
+  const file_contents = await readFile(file.toString());
+  return JSON.parse(file_contents.toString()) as IHackathonState;
 }
 
-function loadState(): IHackathonState {
+async function loadState(): Promise<IHackathonState> {
   try {
-    return loadStateFromFile(stateFile);
+    return await loadStateFromFile(stateFile);
   } catch (err) {
     console.error("Could not read state.");
     console.error(err);
@@ -23,7 +25,7 @@ function loadState(): IHackathonState {
 
   console.info("Loading state from default...");
   try {
-    return loadStateFromFile(defaultStateFile);
+    return await loadStateFromFile(defaultStateFile);
   } catch (err) {
     console.error("Could not read default state.");
     console.error(err);
@@ -31,8 +33,6 @@ function loadState(): IHackathonState {
 
   process.exit(1);
 }
-
-let state: IHackathonState = loadState();
 
 export function getHackathonState(): IAugmentedHackathonState {
   const milestone = state.overlay.milestone.when;
@@ -44,13 +44,18 @@ export function getHackathonState(): IAugmentedHackathonState {
   };
 }
 
-export function setHackathonState(newState: IHackathonState) {
+export async function setHackathonState(newState: IHackathonState) {
   state = newState;
 
-  promises.writeFile(stateFile.toString(), JSON.stringify(state)).then(() => {
-    console.log("Written state to disk.");
-  }).catch(err => {
+  try {
+    await writeFile(stateFile.toString(), JSON.stringify(state));
+  } catch (error) {
     console.error("Failed to write state to disk.");
-    console.error(err);
-  });
+    console.error(error);
+    return;
+  }
+
+  console.log("Written state to disk.");
 }
+
+let state: IHackathonState = await loadState();
