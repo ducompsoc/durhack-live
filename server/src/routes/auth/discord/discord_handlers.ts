@@ -67,6 +67,8 @@ export default class DiscordHandlers {
 
     const discord_profile = await discord_profile_response.json() as any;
 
+    if (!request.user) throw new Error(); // should never occur due to decorator
+
     // this is out of date - most discord names now have no discriminator
     await request.user.update({
       discordId: discord_profile.user.id,

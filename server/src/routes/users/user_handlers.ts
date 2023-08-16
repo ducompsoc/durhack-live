@@ -4,15 +4,17 @@ import { z } from "zod";
 
 import { requireSelf } from "@/routes/users/user_util";
 import { Ethnicity, Gender } from "@/common/model_enums";
+import User from "@/database/user";
 
 export default class UserHandlers {
-  private pickPayloadFields(user: User) {
+  private static pickPayloadFields(user: User) {
     return pick(user, "age", "phoneNumber", "university", "graduationYear", "ethnicity", "gender", "hUKConsent", "hUKMarketing", "checkedIn")
   }
 
   @requireSelf
   static async getSelfDetails(request: Request, response: Response) {
-    const payload = pickPayloadFields(request.user);
+    if (!request.user) throw new Error();
+    const payload = UserHandlers.pickPayloadFields(request.user);
     response.status(200);
     response.json({ status: response.statusCode, message: "OK", data: payload });
   }
@@ -32,14 +34,15 @@ export default class UserHandlers {
   });
   static check_in_payload = UserHandlers.abstract_patch_payload.merge(UserHandlers.abstract_checkin_flag);
   static update_details_payload = UserHandlers.abstract_patch_payload.partial();
-  static patch_payload = z.union(UserHandlers.check_in_payload, UserHandlers.update_details_payload);
+  static patch_payload = z.union([UserHandlers.check_in_payload, UserHandlers.update_details_payload]);
 
   @requireSelf
   static async patchSelfDetails(request: Request, response: Response) {
-    const payload = UserHandlers.patch_payload.parse(request.body);
-    await request.user.update(payload);
+    if (!request.user) throw new Error();
+    const fields_to_update = UserHandlers.patch_payload.parse(request.body);
+    await request.user.update(fields_to_update);
 
-    const payload = pickPayloadFields(request.user);
+    const payload = UserHandlers.pickPayloadFields(request.user);
     response.status(200);
     response.json({ status: response.statusCode, message: "OK", data: payload });
   }

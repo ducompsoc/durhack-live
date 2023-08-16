@@ -21,7 +21,7 @@ export default class AuthHandlers {
     }
 
     // verification codes are valid for 15 minutes (in milliseconds)
-    if ((new Date() - user.verify_sent_at) > 900_000) {
+    if ((new Date().valueOf() - user.verify_sent_at.valueOf()) > 900_000) {
       throw new createHttpError.BadRequest("Verify code expired.");
     }
 
@@ -72,8 +72,10 @@ export default class AuthHandlers {
         ].join("\n\n"),
       });
     } catch (error) {
-      Error.captureStackTrace(error);
-      console.error(error.stack);
+      if (error instanceof Error) {
+        Error.captureStackTrace(error);
+        console.error(error.stack);
+      }
       throw createHttpError.BadGateway("Failed to send verification email.");
     }
 

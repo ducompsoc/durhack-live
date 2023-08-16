@@ -23,7 +23,9 @@ export function setServer(server: Server) {
       if (token === "___durhack_stream_token_tA1qI0wB5pZ9oU0k") {
         socket.join("stream");
       } else {
-        const jwtUser = await resolveJWT(token);
+        //todo
+        const jwtUser = null;
+        //const jwtUser = await resolveJWT(token);
         if (!jwtUser) {
           cb("Auth failed.");
           return;
