@@ -12,7 +12,7 @@ const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
   throw createHttpError.NotImplemented();
 };
 
-const strategy_options = passport_bearer_options_schema.parse(config.get("auth.bearer")) as IStrategyOptions;
+const strategy_options = passport_bearer_options_schema.parse(config.get("passport.bearer")) as IStrategyOptions;
 const bearer_strategy = new Bearer.Strategy(strategy_options, bearerVerifyFunction);
 
 passport.use("bearer", bearer_strategy);
