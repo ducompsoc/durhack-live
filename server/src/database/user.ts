@@ -1,4 +1,5 @@
 import { Model, DataType, Table, Column } from "sequelize-typescript";
+import { Op } from "sequelize";
 import { Ethnicity, Gender, UserRole } from "@/common/model_enums";
 
 @Table
@@ -139,4 +140,21 @@ export default class User extends Model {
     allowNull: true,
   })
     discordName!: string | null;
+  
+  static async findByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
+    let augmentedEmail = [email];
+
+    if (email.endsWith("@dur.ac.uk") || email.endsWith("@durham.ac.uk")) {
+      const [prefix] = email.split("@");
+
+      augmentedEmail = [`${prefix}@dur.ac.uk`, `${prefix}@durham.ac.uk`];
+    }
+
+    return await User.findOne({
+      where: {
+        email: { [Op.or]: augmentedEmail },
+      },
+      rejectOnEmpty: rejectOnEmpty,
+    });
+  }
 }
