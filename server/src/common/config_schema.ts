@@ -26,6 +26,17 @@ export const mysql_options_schema = z.object({
   password: z.string(),
 });
 
+export const sequelize_options_schema = mysql_options_schema.extend({
+  dialect: z.string().default("mysql"),
+}).transform((options) => ({
+  host: options.host,
+  port: options.port,
+  database: options.database,
+  username: options.user,
+  password: options.password,
+  dialect: options.dialect,
+}));
+
 export const cookie_options_schema = z.object({
   sameSite: z.union([z.literal("none"), z.literal("lax"), z.literal("strict")]).optional(),
   path: z.string().optional(),
