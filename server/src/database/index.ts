@@ -1,12 +1,16 @@
 import config from "config";
-import mysql, { ConnectionOptions } from "mysql2/promise";
-import {Sequelize, SequelizeOptions} from "sequelize-typescript";
+import mysql, { ConnectionOptions as MySqlConnectionOptions } from "mysql2/promise";
+import { Sequelize, SequelizeOptions } from "sequelize-typescript";
+
+import { mysql_options_schema } from "@/common/config_schema";
 
 import User from "./user";
 
 
+const databaseConnectOptions = mysql_options_schema.parse(config.get("mysql.data"));
+
 export async function ensureDatabaseExists() {
-  const initialConnectOptions = config.get("mysql.data") as ConnectionOptions;
+  const initialConnectOptions = databaseConnectOptions as MySqlConnectionOptions;
   const database_name = initialConnectOptions.database;
 
   if (!database_name) {
@@ -24,7 +28,7 @@ export async function ensureDatabaseExists() {
   console.log(otherConnectOptions);
 }
 
-const sequelizeConnectOptions = config.get("mysql.data") as SequelizeOptions;
+const sequelizeConnectOptions = databaseConnectOptions as SequelizeOptions;
 sequelizeConnectOptions.dialect = "mysql";
 
 const sequelize = new Sequelize(sequelizeConnectOptions);
