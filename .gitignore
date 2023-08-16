@@ -23,5 +23,5 @@ yarn-debug.log*
 yarn-error.log*
 
 config
-state.json
+cache.json
 dist
