@@ -1,9 +1,11 @@
 import config from "config";
 import { Request, Response } from "express";
-import { doubleCsrf } from "csrf-csrf";
+import { doubleCsrf, DoubleCsrfConfig } from "csrf-csrf";
+
+import { double_csrf_options_schema } from "@/common/config_schema";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const options = config.get("csrf.options") as any;
+const options = double_csrf_options_schema.parse(config.get("csrf.options")) as DoubleCsrfConfig;
 options.getSecret = () => config.get("csrf.secret");
 
 export const { generateToken, doubleCsrfProtection } = doubleCsrf(options);
