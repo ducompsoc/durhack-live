@@ -62,5 +62,11 @@
     "resave": false,
     "saveUninitialized": false,
     "cookie": { "secure": false }
+  },
+  "discord": {
+    "apiEndpoint": "https://discord.com/api/v10",
+    "clientId": "yourDiscordAppClientIdHere",
+    "clientSecret": "yourDiscordAppClientSecretHere",
+    "redirectUri": "http://localhost:3001/auth/discord"
   }
 }
