@@ -12,7 +12,7 @@ import User from "@/database/user";
 
 export default class AuthHandlers {
   private static ensureCorrectVerifyCode(user: User, verify_code_attempt: string): void {
-    if (config.get("auth.skipEmailVerification") === "true") {
+    if (config.get("flags.skipEmailVerification") === "true") {
       return;
     }
 
