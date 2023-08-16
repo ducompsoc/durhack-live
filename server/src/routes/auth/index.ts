@@ -4,9 +4,12 @@ import passport from "passport";
 import { handleMethodNotAllowed } from "@/common/middleware";
 import { handleGetCsrfToken } from "@/auth/csrf";
 
+import discord_router from "./discord";
 import handlers from "./auth_handlers";
 
 const auth_router = ExpressRouter();
+
+auth_router.use("/discord", discord_router);
 
 auth_router.route("/login")
   .post(
