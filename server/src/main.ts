@@ -4,6 +4,8 @@ import { createServer } from "http";
 import { Server as SocketIO } from "socket.io";
 import passport from "passport";
 
+import { listen_options_schema } from "@/common/config_schema";
+
 import "./auth";
 import session from "./auth/session";
 import sequelize, { ensureDatabaseExists } from "./database";
@@ -41,11 +43,7 @@ async function main() {
   const app = getExpressApp();
   const server = getServer(app);
 
-  const listen = config.get("listen");
-
-  if (typeof listen.port !== "number" || typeof listen.host !== "string") {
-    throw new Error("Listen host/port are incorrectly configured.");
-  }
+  const listen = listen_options_schema.parse(config.get("listen"));
 
   server.listen(listen.port, listen.host, () => {
     console.log(`> Server listening on http://${listen.host}:${listen.port} as ${dev ? "development" : environment}`);
