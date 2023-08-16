@@ -20,9 +20,14 @@ export function requireCondition(condition: ICondition) {
 }
 
 export function userIsRole(role: UserRole) {
-  return function(request: Request, response: Response) {
+  return function(request: Request) {
     return request.user?.role === role;
   };
 }
 
+export function userIsLoggedIn(request: Request) {
+  return !!request.user;
+}
+
 export const requireUserIsAdmin = requireCondition(userIsRole(UserRole.admin));
+export const requireLoggedIn = requireCondition(userIsLoggedIn);
