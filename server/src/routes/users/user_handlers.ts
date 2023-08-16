@@ -32,9 +32,9 @@ export default class UserHandlers {
   static abstract_checkin_flag = z.object({
     checkedIn: z.literal(true)
   });
-  static check_in_payload = UserHandlers.abstract_patch_payload.merge(UserHandlers.abstract_checkin_flag);
-  static update_details_payload = UserHandlers.abstract_patch_payload.partial();
-  static patch_payload = z.union([UserHandlers.check_in_payload, UserHandlers.update_details_payload]);
+  static check_in_payload = this.abstract_patch_payload.merge(this.abstract_checkin_flag);
+  static update_details_payload = this.abstract_patch_payload.partial();
+  static patch_payload = z.union([this.check_in_payload, this.update_details_payload]);
 
   @requireSelf
   static async patchSelfDetails(request: Request, response: Response) {
