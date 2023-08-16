@@ -37,7 +37,7 @@ const localVerifyFunction: VerifyFunction = async function(username, password, c
   return callback(null, user);
 };
 
-const strategy_options = passport_local_options_schema.parse(config.get("auth.local")) as IStrategyOptions;
+const strategy_options = passport_local_options_schema.parse(config.get("passport.local")) as IStrategyOptions;
 const local_strategy = new Local.Strategy(strategy_options, localVerifyFunction);
 
 passport.use("local", local_strategy);
