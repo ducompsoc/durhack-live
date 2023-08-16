@@ -8,16 +8,6 @@ import { NullError } from "@/common/errors";
 export const pbkdf2Async = promisify(pbkdf2);
 export const randomBytesAsync = promisify(randomBytes);
 
-export function validatePassword(password: string): boolean {
-  /**
-   * Returns whether the password is permitted - it contains no illegal characters
-   *
-   * @param password - the password to validate
-   * @returns whether or not the password is valid
-   */
-  return true;
-}
-
 export async function hashPasswordText(password: string, salt: Buffer): Promise<Buffer> {
   /**
    * Returns hashed text for password storage/comparison.

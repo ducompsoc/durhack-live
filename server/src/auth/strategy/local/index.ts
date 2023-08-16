@@ -1,10 +1,12 @@
-import Local, { VerifyFunction } from "passport-local";
+import config from "config";
+import Local, {IStrategyOptions, VerifyFunction} from "passport-local";
 import passport from "passport";
 
 import User from "@/database/user";
+import { passport_local_options_schema } from "@/common/config_schema";
 import { NullError } from "@/common/errors";
 
-import { checkPassword } from "../auth_util";
+import { checkPassword } from "./util";
 
 const localVerifyFunction: VerifyFunction = async function(username, password, callback) {
   /**
@@ -35,6 +37,7 @@ const localVerifyFunction: VerifyFunction = async function(username, password, c
   return callback(null, user);
 };
 
-const local_strategy = new Local.Strategy(localVerifyFunction);
+const strategy_options = passport_local_options_schema.parse(config.get("auth.local")) as IStrategyOptions;
+const local_strategy = new Local.Strategy(strategy_options, localVerifyFunction);
 
 passport.use("local", local_strategy);
