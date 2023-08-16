@@ -62,12 +62,12 @@ function validateID(value: unknown): number {
  * Attempts to parse a given route parameter (key) as a number to use as an ID
  * @param key - The key of the route parameter to parse as an ID
  * @returns A middleware function that takes a request, response, and next function.
- * The key is extracted from the request's params and set in the local.ts key of the response.
+ * The key is extracted from the request's params and set in the local key of the response.
  */
 export function parseRouteId(key: string) {
   return mutateRequestValue(
     getRouteParameter(key),  // returns a function that takes a request and returns the value key from the request's params
     validateID,              // function validates whether input value is a valid ID (i.e. number >= 0) & returns number in this case
-    setLocalValue(key)       // returns a function that takes a response and a value and sets the response's local.ts key to the value
+    setLocalValue(key)       // returns a function that takes a response and a value and sets the response's local key to the value
   );
 }
