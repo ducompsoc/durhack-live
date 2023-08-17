@@ -11,9 +11,13 @@ import { doubleCsrfProtection } from "@/auth/csrf";
 import auth_router from "./auth";
 import users_router from "./users";
 import api_error_handler from "./error_handling";
+import passport from "passport";
 
 
 const api_router = ExpressRouter();
+
+api_router.use(passport.authenticate("session"));
+api_router.use(passport.authenticate("bearer"));
 
 api_router.use(cookie_parser(config.get("cookie-parser.secret")));
 api_router.use(bodyParser.json());
