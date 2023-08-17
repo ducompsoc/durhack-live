@@ -49,11 +49,7 @@ export default class AuthHandlers {
   static async handleLoginSuccess(request: Request, response: Response) {
     if (!request.user) throw new Error();
 
-    if (!request.user.checked_in) {
-      return response.redirect("/login/check-in");
-    }
-
-    return response.redirect("/event");
+    return sendStandardResponse(response, 200);
   }
 
   private static async sendVerifyCode(user: User) {
