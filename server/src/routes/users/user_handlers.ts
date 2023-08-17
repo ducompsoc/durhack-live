@@ -8,7 +8,7 @@ import User from "@/database/user";
 
 export default class UserHandlers {
   private static pickPayloadFields(user: User) {
-    return pick(user, "age", "phoneNumber", "university", "graduationYear", "ethnicity", "gender", "hUKConsent", "hUKMarketing", "checkedIn");
+    return pick(user, "age", "phone_number", "university", "graduation_year", "ethnicity", "gender", "h_UK_consent", "h_UK_marketing", "checked_in");
   }
 
   @requireSelf

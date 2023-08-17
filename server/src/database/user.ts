@@ -17,129 +17,129 @@ export default class User extends Model {
     allowNull: false,
     unique: true,
   })
-    email!: string;
+  declare email: string;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-    hashed_password!: Buffer | null;
+  declare hashed_password: Buffer | null;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-    password_salt!: Buffer | null;
+  declare password_salt: Buffer | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-    preferredName!: string;
+  declare preferred_name: string;
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-    fullName!: string;
+  declare full_name: string;
 
   @Column({
     type: DataType.ENUM(...Object.values(UserRole)),
     defaultValue: UserRole.hacker,
     allowNull: false,
   })
-    role!: string | null;
+  declare role: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-    verify_code!: string | null;
+  declare verify_code: string | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-    verify_sent_at!: Date | null;
+  declare verify_sent_at: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-    initially_logged_in_at!: Date | null;
+  declare initially_logged_in_at: Date | null;
 
   @Column({
     type: DataType.DATE,
     allowNull: true,
   })
-    last_logged_in_at!: Date | null;
+  declare last_logged_in_at: Date | null;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-    age!: number | null;
+  declare age: number | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-    phoneNumber!: string | null;
+  declare phone_number: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-    university!: string | null;
+  declare university: string | null;
 
   @Column({
     type: DataType.CHAR(4),
     allowNull: true,
   })
-    graduationYear!: string | null;
+  declare graduation_year: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Ethnicity)),
     allowNull: true,
   })
-    ethnicity!: string | null;
+  declare ethnicity: string | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Gender)),
     allowNull: true,
   })
-    gender!: string | null;
+  declare gender: string | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-    hUKMarketing!: boolean | null;
+  declare h_UK_marketing: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: true,
   })
-    hUKConsent!: boolean | null;
+  declare h_UK_consent: boolean | null;
 
   @Column({
     type: DataType.BOOLEAN,
     allowNull: false,
     defaultValue: false,
   })
-    checkedIn!: boolean;
+  declare checked_in: boolean;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-    discordId!: string | null;
+  declare discord_id: string | null;
 
   @Column({
     type: DataType.STRING,
     allowNull: true,
   })
-    discordName!: string | null;
+  declare discord_name: string | null;
   
   static async findOneByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
     let augmentedEmail = [email];

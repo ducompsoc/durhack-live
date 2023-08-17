@@ -28,12 +28,12 @@ export default class AuthHandlers {
       return;
     }
 
-    if (user.verify_code === null || user.verify_sent_at === null) {
+    if (!user.verify_code || !user.verify_sent_at) {
       throw new createHttpError.BadRequest("Verify code not set.");
     }
 
     // verification codes are valid for 15 minutes (in milliseconds)
-    if ((new Date().valueOf() - user.verify_sent_at.valueOf()) > 900_000) {
+    if ((new Date().valueOf() - user.verify_sent_at?.valueOf()) > 900_000) {
       throw new createHttpError.BadRequest("Verify code expired.");
     }
 
@@ -45,7 +45,7 @@ export default class AuthHandlers {
   static async handleLoginSuccess(request: Request, response: Response) {
     if (!request.user) throw new Error();
 
-    if (!request.user.checkedIn) {
+    if (!request.user.checked_in) {
       return response.redirect("/login/check-in");
     }
 
@@ -81,7 +81,7 @@ export default class AuthHandlers {
         to: user.email,
         subject: `Your DurHack verification code is ${user.verify_code}`,
         text: [
-          `Hi ${user.preferredName},`,
+          `Hi ${user.preferred_name},`,
           `Welcome to DurHack! Your verification code is ${user.verify_code}`,
           "If you have any questions, please chat to one of us.",
           "Thanks,",
