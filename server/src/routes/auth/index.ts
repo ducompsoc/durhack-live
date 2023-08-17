@@ -14,8 +14,7 @@ auth_router.use("/discord", discord_router);
 auth_router.route("/login")
   .post(
     passport.authenticate("local", {
-      failureRedirect: "/login",
-      failureMessage: true
+      failWithError: true,
     }),
     handlers.handleLoginSuccess
   )
