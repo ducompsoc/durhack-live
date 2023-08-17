@@ -23,6 +23,10 @@ export default class AuthHandlers {
     response.json({ status: response.statusCode, message: "OK", data: payload });
   }
 
+  private static verifyCodeExpired(user: User): boolean {
+    return (new Date().valueOf() - user.verify_sent_at?.valueOf()) > 900_000;
+  }
+
   private static ensureCorrectVerifyCode(user: User, verify_code_attempt: string): void {
     if (config.get("flags.skipEmailVerification") === true) {
       return;
@@ -33,7 +37,7 @@ export default class AuthHandlers {
     }
 
     // verification codes are valid for 15 minutes (in milliseconds)
-    if ((new Date().valueOf() - user.verify_sent_at?.valueOf()) > 900_000) {
+    if (AuthHandlers.verifyCodeExpired(user)) {
       throw new createHttpError.BadRequest("Verify code expired.");
     }
 
@@ -52,15 +56,7 @@ export default class AuthHandlers {
     return response.redirect("/event");
   }
 
-  static sign_up_payload_schema = z.object({
-    email: z.string().email(),
-  });
-
-  static async handleSignUp(request: Request, response: Response) {
-    const { email } = AuthHandlers.sign_up_payload_schema.parse(request.body);
-
-    const user = await User.findOneByEmail(email, new NullError("Email address not recognised."));
-
+  private static async sendVerifyCode(user: User) {
     const token = (await randomBytesAsync(3)).toString("hex").toUpperCase();
 
     await user.update({
@@ -74,26 +70,39 @@ export default class AuthHandlers {
       throw new Error("Mailgun domain incorrectly configured");
     }
 
+    await MailgunClient.messages.create(domain, {
+      from: `DurHack <noreply@${domain}>`,
+      "h:Reply-To": "hello@durhack.com",
+      to: user.email,
+      subject: `Your DurHack verification code is ${user.verify_code}`,
+      text: [
+        `Hi ${user.preferred_name},`,
+        `Welcome to DurHack! Your verification code is ${user.verify_code}`,
+        "If you have any questions, please chat to one of us.",
+        "Thanks,",
+        "The DurHack Team",
+        "(If you didn't request this code, you can safely ignore this email.)",
+      ].join("\n\n"),
+    });
+  }
+
+  static sign_up_payload_schema = z.object({
+    email: z.string().email(),
+    send_again: z.boolean().default(false),
+  });
+
+  static async handleSignUp(request: Request, response: Response) {
+    const { email, send_again } = AuthHandlers.sign_up_payload_schema.parse(request.body);
+
+    const user = await User.findOneByEmail(email, new NullError("Email address not recognised."));
+
+    if (!send_again && user.verify_code && !AuthHandlers.verifyCodeExpired(user)) {
+      return sendStandardResponse(response, 304, "Verification email already sent");
+    }
+
     try {
-      await MailgunClient.messages.create(domain, {
-        from: `DurHack <noreply@${domain}>`,
-        "h:Reply-To": "hello@durhack.com",
-        to: user.email,
-        subject: `Your DurHack verification code is ${user.verify_code}`,
-        text: [
-          `Hi ${user.preferred_name},`,
-          `Welcome to DurHack! Your verification code is ${user.verify_code}`,
-          "If you have any questions, please chat to one of us.",
-          "Thanks,",
-          "The DurHack Team",
-          "(If you didn't request this code, you can safely ignore this email.)",
-        ].join("\n\n"),
-      });
+      await AuthHandlers.sendVerifyCode(user);
     } catch (error) {
-      if (error instanceof Error) {
-        Error.captureStackTrace(error);
-        console.error(error.stack);
-      }
       throw createHttpError.BadGateway("Failed to send verification email.");
     }
 
