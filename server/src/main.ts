@@ -19,8 +19,8 @@ function getExpressApp(): Express {
   const app = express();
 
   app.use(session);
-  app.use(passport.authenticate("session"));
-  app.use(passport.authenticate("bearer", { session: false }));
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.use("/api", api_router);
 
