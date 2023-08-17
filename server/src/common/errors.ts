@@ -19,3 +19,10 @@ export class ValueError extends CustomError {
     this.name = "ValueError";
   }
 }
+
+export class ConflictError extends CustomError {
+  constructor(message?: string) {
+    super(message);
+    this.name = "ConflictError";
+  }
+}
