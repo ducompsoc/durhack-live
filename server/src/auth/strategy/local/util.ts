@@ -2,7 +2,7 @@ import { promisify } from "util";
 import { randomBytes, pbkdf2, timingSafeEqual } from "crypto";
 
 import User from "@/database/user";
-import { NullError } from "@/common/errors";
+import { ConflictError } from "@/common/errors";
 
 
 export const pbkdf2Async = promisify(pbkdf2);
@@ -30,7 +30,7 @@ export async function checkPassword(user: User, password_attempt: string): Promi
    * @returns whether the password attempt matches the user's password hash
    */
   if (!(user.password_salt instanceof Buffer && user.hashed_password instanceof Buffer)) {
-    throw new NullError("Password has not been set");
+    throw new ConflictError("Password has not been set");
   }
 
   const hashed_password_attempt = await hashPasswordText(password_attempt, user.password_salt);
