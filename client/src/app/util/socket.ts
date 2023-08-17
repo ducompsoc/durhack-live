@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { connect, Socket } from 'socket.io-client';
+import { connect as socketConnect, Socket } from 'socket.io-client';
 import { EventEmitter } from 'events';
 
 export interface IScheduledEvent {
@@ -90,7 +90,7 @@ let lastConnection: THackathonConnection = { connected: false, role: null, state
 let socket: Socket | null = null;
 
 export function connect() {
-  socket = connect(window.location.origin);
+  socket = socketConnect(window.location.origin);
 
   let userRole: string | null = null;
 
