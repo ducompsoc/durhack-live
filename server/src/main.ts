@@ -38,7 +38,7 @@ function getServer(app: Express) {
 
 async function main() {
   await ensureDatabaseExists();
-  await sequelize.sync();
+  await sequelize.sync({ force: false });
 
   const app = getExpressApp();
   const server = getServer(app);
