@@ -11,6 +11,18 @@ import User from "@/database/user";
 
 
 export default class AuthHandlers {
+  static check_email_schema = z.object({
+    email: z.string().email(),
+  });
+
+  static async handleCheckEmail(request: Request, response: Response) {
+    const { email } = AuthHandlers.check_email_schema.parse(request.body);
+    const result = await User.findOneByEmail(email, new NullError("Email isn't associated with any user."));
+    const payload = { exists: true, checked_in: result.checked_in, password_set: result.hashed_password !== null };
+    response.status(200);
+    response.json({ status: response.statusCode, message: "OK", data: payload });
+  }
+
   private static ensureCorrectVerifyCode(user: User, verify_code_attempt: string): void {
     if (config.get("flags.skipEmailVerification") === "true") {
       return;
