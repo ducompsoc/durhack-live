@@ -18,9 +18,9 @@ export default function SetPasswordPage() {
       if (!query_email) return router.push('/login');
       setEmail(query_email);
 
-      await requestVerifyCode();
+      await requestVerifyCode(query_email);
     })();
-  });
+  }, []);
 
   function setUnknownError() {
     setError(`An unknown error occurred. Please try a refresh, and if you\'re still having problems,
@@ -28,7 +28,9 @@ export default function SetPasswordPage() {
     );
   }
 
-  async function requestVerifyCode(send_again = false) {
+  async function requestVerifyCode(verify_email: string, send_again = false) {
+    setError(undefined);
+
     const send_verify_request = await makeLiveApiRequest('/auth/verify-email', {
       method: 'POST',
       headers: {
@@ -70,6 +72,7 @@ export default function SetPasswordPage() {
 
     setVerifyCode(submission_verify_code);
   }
+  const callbackHandleVerifyCodeSubmit = React.useCallback(handleVerifyCodeSubmit, [email, router]);
 
   async function handleSetPasswordSubmit(submission_password: string): Promise<void> {
     const set_password_request = await makeLiveApiRequest('/auth/set-password', {
@@ -100,27 +103,27 @@ export default function SetPasswordPage() {
       return setUnknownError();
     }
 
-    const profile = await profile_response.json();
+    const profile = (await profile_response.json()).data;
     if (!profile.checked_in) {
       return router.push('/login/check-in');
     }
     return router.push('/');
   }
+  const callbackHandleSetPasswordSubmit = React.useCallback(handleSetPasswordSubmit, [email, router, verifyCode]);
 
   const handleSubmit = React.useCallback(async (submission: { verify_code?: string, password?: string }) => {
     setError(undefined);
-    console.log(submission);
 
     if (submission.password) {
-      return await handleSetPasswordSubmit(submission.password);
+      return await callbackHandleVerifyCodeSubmit(submission.password);
     }
 
     if (submission.verify_code) {
-      return await handleVerifyCodeSubmit(submission.verify_code);
+      return await callbackHandleSetPasswordSubmit(submission.verify_code);
     }
 
     throw new Error('Validation failed.');
-  }, []);
+  }, [callbackHandleSetPasswordSubmit, callbackHandleVerifyCodeSubmit]);
 
   function VerifyCodeFormSection() {
     if (verifyCode) return <></>;
