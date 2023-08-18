@@ -1,8 +1,9 @@
 import AuthenticationError from "passport/lib/errors/authenticationerror.js";
+import { ZodError } from "zod";
 import createHttpError, { isHttpError } from "http-errors";
 import { Request, Response, NextFunction } from "express";
 
-import { sendHttpErrorResponse } from "@/common/response";
+import { sendHttpErrorResponse, sendZodErrorResponse } from "@/common/response";
 import { ConflictError, NullError, ValueError } from "@/common/errors";
 
 
@@ -13,6 +14,10 @@ export default function api_error_handler(error: Error, request: Request, respon
 
   if (isHttpError(error)) {
     return sendHttpErrorResponse(response, error);
+  }
+
+  if (error instanceof ZodError) {
+    return sendZodErrorResponse(response, error);
   }
 
   if (error instanceof AuthenticationError) {

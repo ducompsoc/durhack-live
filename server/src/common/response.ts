@@ -1,11 +1,12 @@
-import { Response } from "express";
-import { HttpError } from "http-errors";
-import { STATUS_CODES } from "http";
+import {Response} from "express";
+import {HttpError} from "http-errors";
+import {STATUS_CODES} from "http";
+import {ZodError} from "zod";
 
 interface ResponseBody {
   status: number
   message: string
-  detail?: string
+  detail?: string | object
 }
 
 function makeHttpErrorResponseBody(error: HttpError): ResponseBody {
@@ -24,6 +25,19 @@ function makeHttpErrorResponseBody(error: HttpError): ResponseBody {
 export function sendHttpErrorResponse(response: Response, error: HttpError): void {
   const response_body = makeHttpErrorResponseBody(error);
   response.status(error.statusCode).json(response_body);
+}
+
+function makeZodErrorResponseBody(error: ZodError): ResponseBody {
+  return {
+    status: 400,
+    message: STATUS_CODES[400],
+    detail: error //todo: check this stringifies correctly
+  };
+}
+
+export function sendZodErrorResponse(response: Response, error: ZodError): void {
+  const response_body = makeZodErrorResponseBody(error);
+  response.status(400).json(response_body);
 }
 
 export function makeStandardResponseBody(status: number, message?: string): ResponseBody {
