@@ -31,7 +31,10 @@ export default function SetPasswordPage() {
   async function requestVerifyCode(send_again = false) {
     const send_verify_request = await makeLiveApiRequest('/auth/verify-email', {
       method: 'POST',
-      body: new URLSearchParams({ email: email, send_again: send_again }),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({ email: verify_email, send_again: send_again }),
     });
 
     let send_verify_response: Response;
