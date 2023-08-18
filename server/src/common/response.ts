@@ -31,7 +31,7 @@ function makeZodErrorResponseBody(error: ZodError): ResponseBody {
   return {
     status: 400,
     message: STATUS_CODES[400],
-    detail: error //todo: check this stringifies correctly
+    detail: { issues: error.issues }
   };
 }
 
