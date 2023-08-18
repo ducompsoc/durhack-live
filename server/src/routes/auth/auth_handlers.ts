@@ -33,7 +33,7 @@ export default class AuthHandlers {
     }
 
     if (!user.verify_code || !user.verify_sent_at) {
-      throw new createHttpError.BadRequest("Verify code not set.");
+      throw new createHttpError.Conflict("Verify code not set.");
     }
 
     // verification codes are valid for 15 minutes (in milliseconds)
