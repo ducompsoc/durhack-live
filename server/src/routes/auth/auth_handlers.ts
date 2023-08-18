@@ -68,8 +68,8 @@ export default class AuthHandlers {
     const token = (await randomBytesAsync(3)).toString("hex").toUpperCase();
 
     await user.update({
-      verifyCode: token,
-      verifySentAt: new Date(),
+      verify_code: token,
+      verify_sent_at: new Date(),
     });
 
     const domain = config.get("mailgun.domain");
