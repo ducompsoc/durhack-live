@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Field } from "formik";
+import { Field } from 'formik';
 
 export const FormSection = styled.div`
 	padding: 16px 0;
@@ -10,6 +10,7 @@ export const ErrorAlert = styled.p`
 `;
 
 export const Textbox = styled(Field)`
+  display: block;
 	width: 100%;
 	max-width: 480px;
 	background: none;
