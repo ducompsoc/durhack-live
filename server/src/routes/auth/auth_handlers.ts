@@ -1,6 +1,6 @@
 import config from "config";
 import { z } from "zod";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 
 import { hashPasswordText, randomBytesAsync } from "@/auth/strategy/local/util";
@@ -21,6 +21,18 @@ export default class AuthHandlers {
     const payload = { exists: true, password_set: result.hashed_password !== null };
     response.status(200);
     response.json({ status: response.statusCode, message: "OK", data: payload });
+  }
+
+  static check_verify_code_schema = z.object({
+    email: z.string().email(),
+    verify_code: z.string().length(6),
+  });
+
+  static async handleCheckVerifyCode(request: Request, response: Response) {
+    const { email, verify_code } = AuthHandlers.check_verify_code_schema.parse(request.body);
+    const found_user = await User.findOneByEmail(email, new NullError());
+    AuthHandlers.ensureCorrectVerifyCode(found_user, verify_code);
+    sendStandardResponse(response, 200);
   }
 
   private static verifyCodeExpired(user: User): boolean {
@@ -87,7 +99,7 @@ export default class AuthHandlers {
     send_again: z.boolean().default(false),
   });
 
-  static async handleSignUp(request: Request, response: Response) {
+  static async handleVerifyEmail(request: Request, response: Response) {
     const { email, send_again } = AuthHandlers.sign_up_payload_schema.parse(request.body);
 
     const user = await User.findOneByEmail(email, new NullError("Email address not recognised."));
@@ -111,7 +123,7 @@ export default class AuthHandlers {
     verify_code: z.string().length(6)
   });
 
-  static async handleSetPassword(request: Request, response: Response) {
+  static async handleSetPassword(request: Request, response: Response, next: NextFunction) {
     const { email, password, verify_code } = AuthHandlers.set_password_schema.parse(request.body);
 
     const found_user = await User.findOneByEmail(email, new NullError(
@@ -127,6 +139,6 @@ export default class AuthHandlers {
 
     await found_user.save();
 
-    sendStandardResponse(response, 200);
+    return next();
   }
 }
