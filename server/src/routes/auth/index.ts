@@ -24,8 +24,8 @@ auth_router.route("/check-email")
   .post(handlers.handleCheckEmail)
   .all(handleMethodNotAllowed);
 
-auth_router.route("/sign-up")
-  .post(handlers.handleSignUp)
+auth_router.route("/verify-email")
+  .post(handlers.handleVerifyEmail)
   .all(handleMethodNotAllowed);
 
 auth_router.route("/set-password")
