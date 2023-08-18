@@ -20,6 +20,10 @@ auth_router.route("/login")
   )
   .all(handleMethodNotAllowed);
 
+auth_router.route("/check-verify")
+  .post(handlers.handleCheckVerifyCode)
+  .all(handleMethodNotAllowed);
+
 auth_router.route("/check-email")
   .post(handlers.handleCheckEmail)
   .all(handleMethodNotAllowed);
