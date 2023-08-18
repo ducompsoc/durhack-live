@@ -44,7 +44,7 @@ export default function LoginPage() {
       return setUnknownError();
     }
 
-    const user_details = await check_email_response.json();
+    const user_details = (await check_email_response.json()).data;
 
     if (!user_details.password_set) {
       const redirect_to = new URL('/login/set-password', window.location);
@@ -54,6 +54,7 @@ export default function LoginPage() {
 
     setEmail(submissionEmail);
   }
+  const callbackHandleEmailSubmit = React.useCallback(handleEmailSubmit, [router]);
 
   async function handlePasswordSubmit(submissionPassword: string): Promise<void> {
     const login_request = await makeLiveApiRequest('/auth/login', {
@@ -88,26 +89,27 @@ export default function LoginPage() {
       return setUnknownError();
     }
 
-    const profile = await profile_response.json();
+    const profile = (await profile_response.json()).data;
     if (!profile.checked_in) {
       return router.push('/login/check-in');
     }
     return router.push('/');
   }
+  const callbackHandlePasswordSubmit = React.useCallback(handlePasswordSubmit, [email, router]);
 
   const handleSubmit = React.useCallback(async (submission: { email?: string, password?: string }) => {
     setError(undefined);
 
     if (submission.password) {
-      return await handlePasswordSubmit(submission.password);
+      return await callbackHandlePasswordSubmit(submission.password);
     }
 
     if (submission.email) {
-      return await handleEmailSubmit(submission.email);
+      return await callbackHandleEmailSubmit(submission.email);
     }
 
     throw new Error('Validation failed.');
-  }, []);
+  }, [callbackHandlePasswordSubmit, callbackHandleEmailSubmit]);
 
   function PasswordFormSection() {
     if (!email) return <></>;
