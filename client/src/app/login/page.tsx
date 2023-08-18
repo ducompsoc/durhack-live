@@ -92,6 +92,7 @@ export default function LoginPage() {
     if (!profile.checked_in) {
       return router.push('/login/check-in');
     }
+    return router.push('/');
   }
 
   const handleSubmit = React.useCallback(async (submission: { email?: string, password?: string }) => {
