@@ -29,7 +29,11 @@ auth_router.route("/sign-up")
   .all(handleMethodNotAllowed);
 
 auth_router.route("/set-password")
-  .post(handlers.handleSetPassword)
+  .post(handlers.handleSetPassword,
+    passport.authenticate("local", {
+      failWithError: true,
+    }),
+    handlers.handleLoginSuccess)
   .all(handleMethodNotAllowed);
 
 auth_router.route("/csrf-token")
