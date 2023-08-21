@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 export interface ICardProps {
 	colour?: string;
-	noPadding?: boolean;
+	$noPadding?: boolean;
 	highlight?: boolean;
 }
 
@@ -17,7 +17,7 @@ const Card = styled.div<ICardProps>`
 		border-left: solid 1px ${p.theme.secondaryA};
 	`}
 
-	${p => !p.noPadding && css`
+	${p => !p.$noPadding && css`
 		padding: 24px;
 	`}
 `;

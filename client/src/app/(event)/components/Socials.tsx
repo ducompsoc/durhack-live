@@ -77,33 +77,33 @@ const SocialOption = React.memo(({
 const Socials = React.memo(() => (
   <Section>
     <div>
-      <Card className="row" noPadding>
+      <Card className="row" $noPadding>
         <SocialOption
-	href="/discord"
-	icon="fab fa-discord"
-	pretext="Chat to others on"
-	text="Discord"
+          href="/discord"
+          icon="fab fa-discord"
+          pretext="Chat to others on"
+          text="Discord"
         />
 
         <SocialOption
-	href="https://facebook.com/DurHackEvent"
-	icon="fab fa-facebook"
-	pretext="Like us on Facebook"
-	text="/DurHackEvent"
+          href="https://facebook.com/DurHackEvent"
+          icon="fab fa-facebook"
+          pretext="Like us on Facebook"
+          text="/DurHackEvent"
         />
 
         <SocialOption
-	href="https://instagram.com/DurHackEvent"
-	icon="fab fa-instagram"
-	pretext="Tag us on Instagram"
-	text="@DurHackEvent"
+          href="https://instagram.com/DurHackEvent"
+          icon="fab fa-instagram"
+          pretext="Tag us on Instagram"
+          text="@DurHackEvent"
         />
 
         <SocialOption
-	href="https://twitter.com/DurHackEvent"
-	icon="fab fa-twitter"
-	pretext="Mention us on Twitter"
-	text="@DurHackEvent"
+          href="https://twitter.com/DurHackEvent"
+          icon="fab fa-twitter"
+          pretext="Mention us on Twitter"
+          text="@DurHackEvent"
         />
       </Card>
     </div>
