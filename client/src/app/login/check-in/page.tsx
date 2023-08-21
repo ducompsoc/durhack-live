@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Button, ErrorAlert, FormSection, Textbox } from '@/app/login/components';
-import { Formik, ErrorMessage, Form, Field, useFormikContext } from 'formik';
+import { Formik, ErrorMessage as FormikErrorMessage, Form, Field, useFormikContext } from 'formik';
 import { useRouter } from 'next/navigation';
 import { makeLiveApiRequest } from '@/app/util/api';
 
@@ -20,6 +20,30 @@ export default function CheckInPage() {
   const handleSubmit = React.useCallback(async (submission: any) => {
     setError(undefined);
 
+    const check_in_request = await makeLiveApiRequest('/users/me', {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: JSON.stringify({
+        checked_in: true,
+        ...submission,
+      }),
+    });
+
+    let check_in_response: Response;
+    try {
+      check_in_response = await fetch(check_in_request);
+    } catch (error) {
+      return setUnknownError();
+    }
+
+    if (check_in_response.status === 400) return setError('Form contains invalid input.');
+    if (check_in_response.status === 401) return router.push('/login');
+
+    if (!check_in_response.ok) return setUnknownError();
+
+    return router.push('/');
   }, []);
 
   function ErrorMessage() {
@@ -93,7 +117,7 @@ export default function CheckInPage() {
             placeholder="Age"
             required
           />
-          <ErrorMessage name="age"/>
+          <FormikErrorMessage name="age"/>
         </FormSection>
 
         <FormSection>
@@ -104,7 +128,7 @@ export default function CheckInPage() {
             placeholder="Phone number"
             required
           />
-          <ErrorMessage name="phone_number"/>
+          <FormikErrorMessage name="phone_number"/>
         </FormSection>
 
         <FormSection>
@@ -115,18 +139,20 @@ export default function CheckInPage() {
             placeholder="University"
             required
           />
-          <ErrorMessage name="university"/>
+          <FormikErrorMessage name="university"/>
         </FormSection>
 
         <FormSection>
           <label htmlFor="graduation_year">Graduation Year:</label>
           <Textbox
             name="graduation_year"
-            type="text"
+            type="number"
+            min={2020}
+            max={2030}
             placeholder="Graduation Year"
             required
           />
-          <ErrorMessage name="graduation_year"/>
+          <FormikErrorMessage name="graduation_year"/>
         </FormSection>
 
         <FormSection>
@@ -144,7 +170,7 @@ export default function CheckInPage() {
             <option value="multiple">Multiple ethnicity / Other</option>
             <option value="pnts">Prefer not to say</option>
           </Field>
-          <ErrorMessage name="ethnicity"/>
+          <FormikErrorMessage name="ethnicity"/>
         </FormSection>
 
         <FormSection>
@@ -160,7 +186,7 @@ export default function CheckInPage() {
             <option value="other">Other</option>
             <option value="pnts">Prefer not to say</option>
           </Field>
-          <ErrorMessage name="gender"/>
+          <FormikErrorMessage name="gender"/>
         </FormSection>
 
         <FormSection>
@@ -168,7 +194,7 @@ export default function CheckInPage() {
           <label htmlFor="h_UK_consent" style={{ textTransform: 'none' }}> (required){' '}
             <span style={{ fontWeight: 'normal' }}>I authorise you to share my application/registration information with Hackathons UK Limited for event administration, Hackathons UK Limited administration, and with my authorisation email in-line with the Hackathons UK Limited Privacy Policy.</span>
           </label>
-          <ErrorMessage name="h_UK_consent"/>
+          <FormikErrorMessage name="h_UK_consent"/>
         </FormSection>
 
         <FormSection>
@@ -176,7 +202,7 @@ export default function CheckInPage() {
           <label htmlFor="h_UK_marketing" style={{ textTransform: 'none' }}> (optional){' '}
             <span style={{ fontWeight: 'normal' }}>I authorise Hackathons UK Limited to send me occasional messages about hackathons and their activities.
             </span></label>
-          <ErrorMessage name="h_UK_marketing"/>
+          <FormikErrorMessage name="h_UK_marketing"/>
         </FormSection>
 
         <p>
