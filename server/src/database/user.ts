@@ -93,10 +93,10 @@ export default class User extends Model {
   declare university: string | null;
 
   @Column({
-    type: DataType.CHAR(4),
+    type: DataType.INTEGER,
     allowNull: true,
   })
-  declare graduation_year: string | null;
+  declare graduation_year: number | null;
 
   @Column({
     type: DataType.ENUM(...Object.values(Ethnicity)),
