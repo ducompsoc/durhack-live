@@ -21,16 +21,16 @@ export default class UserHandlers {
 
   static abstract_patch_payload = z.object({
     age: z.number().min(18),
-    phoneNumber: z.string().regex(/^\+?(\d|\s)+$/),
+    phone_number: z.string().regex(/^\+?(\d|\s)+$/),
     university: z.string(),
-    graduationYear: z.number().min(2020).max(2030),
+    graduation_year: z.number().min(2020).max(2030),
     ethnicity: z.nativeEnum(Ethnicity).optional(),
     gender: z.nativeEnum(Gender).optional(),
-    hUKConsent: z.boolean(),
-    hUKMarketing: z.boolean(),
+    h_UK_consent: z.boolean(),
+    h_UK_marketing: z.boolean(),
   });
   static abstract_checkin_flag = z.object({
-    checkedIn: z.literal(true)
+    checked_in: z.literal(true)
   });
   static check_in_payload = this.abstract_patch_payload.merge(this.abstract_checkin_flag);
   static update_details_payload = this.abstract_patch_payload.partial();
