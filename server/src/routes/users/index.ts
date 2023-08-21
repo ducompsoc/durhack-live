@@ -19,8 +19,8 @@ users_router.route("/")
 
 users_router.route("/me")
   .all(useSelfId)
-  .get(handlers.getSelfDetails)
-  .patch(handlers.patchSelfDetails)
+  .get(handlers.getSelfDetails, handleFailedAuthentication)
+  .patch(handlers.patchSelfDetails, handleFailedAuthentication)
   .all(handleMethodNotAllowed);
 
 users_router.route("/:user_id")
