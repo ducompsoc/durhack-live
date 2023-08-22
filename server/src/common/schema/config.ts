@@ -99,7 +99,7 @@ export const oauth_options_schema = z.object({
   refreshTokenLifetime: z.number().positive(),
 });
 
-export const config_schema = z.object({
+export const config = z.object({
   listen: listen_options_schema,
   flags: z.object({
     skipEmailVerification: z.boolean(),
