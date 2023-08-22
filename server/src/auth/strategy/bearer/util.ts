@@ -1,7 +1,7 @@
 import { z } from "zod";
 import config from "config";
 import { KeyObject } from "crypto";
-import { SignJWT, jwtVerify, generateKeyPair, importPKCS8, importSPKI, JWTVerifyResult } from "jose";
+import { SignJWT, jwtVerify, generateKeyPair, importPKCS8, importSPKI, JWTVerifyResult, JWTPayload } from "jose";
 import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -9,6 +9,9 @@ import { fileURLToPath } from "url";
 import User from "@/database/user";
 import { jwt_options_schema, oauth_options_schema } from "@/common/schema/config";
 import { epoch } from "@/common/time";
+import { NullError } from "@/common/errors";
+
+import { TokenError } from "./jwt_error";
 
 
 const jwt_options = jwt_options_schema.parse(config.get("jsonwebtoken"));
@@ -133,8 +136,11 @@ class TokenVault {
     this.refreshTokenAuthority = refreshTokenAuthority;
   }
 
-  public async createToken(type: BearerTokenType, user: User): Promise<string> {
-    const token = new SignJWT({ "user_id": user.id })
+  public async createToken(type: BearerTokenType, user: User, scope: string[] = undefined): Promise<string> {
+    if (!scope) {
+      scope = this.getDefaultTokenScope(type);
+    }
+    const token = new SignJWT({ user_id: user.id, scope: scope })
       .setIssuedAt()
       .setExpirationTime(this.getTokenExpiry(type));
     return await this.getTokenAuthority(type).signToken(token);
@@ -148,12 +154,40 @@ class TokenVault {
     return await this.refreshTokenAuthority.verifyToken(payload);
   }
 
+  public async getUserAndScopeClaims(payload: JWTPayload): Promise<{ user: User, scope: string[] }> {
+    const user_id = payload["user_id"];
+    const scope = payload["scope"];
+
+    if (typeof user_id !== "number") {
+      throw new TokenError("Invalid user ID");
+    }
+
+    if (!(Array.isArray(scope) && scope.every((e) => typeof e === "string"))) {
+      throw new TokenError("Invalid scope");
+    }
+
+    const user = await User.findByPk(user_id, { rejectOnEmpty: new NullError("User not found") });
+    return { user, scope };
+  }
+
   public async createAccessToken(user: User): Promise<string> {
     return await this.createToken(BearerTokenType.accessToken, user);
   }
 
   public async createRefreshToken(user: User): Promise<string> {
     return await this.createToken(BearerTokenType.refreshToken, user);
+  }
+
+  private getDefaultTokenScope(type: BearerTokenType): string[] {
+    if (type === BearerTokenType.accessToken) {
+      return [ "api" ];
+    }
+
+    if (type === BearerTokenType.refreshToken) {
+      return [ "refresh" ];
+    }
+
+    throw new Error("Unknown token type.");
   }
 
   private getTokenLifetime(type: BearerTokenType): number {
@@ -192,7 +226,7 @@ function resolveFilePathFromProjectRoot(path_to_resolve: string) {
 
 async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promise<TokenVault> {
   if (options.algorithm === "rsa") {
-    console.debug("Making RSA key vault");
+    console.debug("Instantiating RSA key vault...");
     const accessTokenAuthorityOptions = {
       publicKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPublicKeyFilePath),
       privateKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPrivateKeyFilePath),
@@ -208,7 +242,7 @@ async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promi
   }
 
   if (options.algorithm === "hsa") {
-    console.debug("Making HSA key vault");
+    console.debug("Instantiating HSA key vault...");
     return new TokenVault(
       new HSATokenAuthority({ secret: options.accessTokenSecret }),
       new HSATokenAuthority({ secret: options.refreshTokenSecret }),
