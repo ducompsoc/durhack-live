@@ -10,7 +10,7 @@ import "./auth";
 import session from "./auth/session";
 import sequelize, { ensureDatabaseExists } from "./database";
 import api_router from "./routes";
-import { setServer } from "./socket";
+import HackathonStateSocketManager from "./socket";
 
 const environment = process.env.NODE_ENV;
 const dev = environment !== "production";
@@ -31,7 +31,7 @@ function getServer(app: Express) {
   const server = createServer(app);
 
   const io = new SocketIO(server);
-  setServer(io);
+  HackathonStateSocketManager.initialise(io);
 
   return server;
 }
