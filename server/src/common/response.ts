@@ -30,7 +30,7 @@ export function sendHttpErrorResponse(response: Response, error: HttpError): voi
 function makeZodErrorResponseBody(error: ZodError): ResponseBody {
   return {
     status: 400,
-    message: STATUS_CODES[400],
+    message: STATUS_CODES[400] as string,
     detail: { issues: error.issues }
   };
 }
