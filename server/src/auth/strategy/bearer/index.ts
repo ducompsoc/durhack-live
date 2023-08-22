@@ -8,6 +8,7 @@ import { NullError } from "@/common/errors";
 
 import BearerStrategy from "./strategy";
 import TokenVault from "./util";
+import { TokenError } from "./jwt_error";
 
 
 const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
@@ -18,26 +19,28 @@ const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
    * @param callback - function to call with (error, user) when done
    */
 
-  let user_id: unknown;
+  let decodedPayload;
   try {
-    user_id = (await TokenVault.decodeAccessToken(token)).payload["user_id"];
+    decodedPayload = (await TokenVault.decodeAccessToken(token)).payload;
   } catch (error) {
     return callback(null, false, { message: "Token validation failure", scope: [] });
   }
 
-  if (typeof user_id !== "number") return callback(null, false, { message: "Invalid user ID", scope: [] });
-
-  let user;
+  let user: User;
+  let scope: string[];
   try {
-    user = await User.findByPk(user_id, { rejectOnEmpty: new NullError() });
+    ({ user, scope } = await TokenVault.getUserAndScopeClaims(decodedPayload));
   } catch (error) {
+    if (error instanceof TokenError) {
+      return callback(null, false, { message: error.message, scope: [] });
+    }
     if (error instanceof NullError) {
       return callback(null, false, { message: "User not found", scope: [] });
     }
     return callback(error);
   }
 
-  return callback(null, user, { scope: [ "api" ] });
+  return callback(null, user, { scope: scope });
 };
 
 const strategy_options = passport_bearer_options_schema.parse(config.get("passport.bearer")) as IStrategyOptions;
