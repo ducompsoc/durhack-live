@@ -7,7 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import User from "@/database/user";
-import { jwt_options_schema, oauth_options_schema } from "@/common/config_schema";
+import { jwt_options_schema, oauth_options_schema } from "@/common/schema/config";
 import { epoch } from "@/common/time";
 
 

@@ -3,7 +3,7 @@ import session, { MemoryStore, Store, SessionOptions } from "express-session";
 import * as constructor_session from "express-session";
 import MySQLStoreMeta, { MySQLStore as MySQLStoreType, Options as MySqlStoreOptions } from "express-mysql-session";
 
-import { session_options_schema } from "@/common/config_schema";
+import { session_options_schema } from "@/common/schema/config";
 
 function get_mysql_session_store(): MySQLStoreType {
   const MySQLStore = MySQLStoreMeta(constructor_session);

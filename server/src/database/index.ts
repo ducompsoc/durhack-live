@@ -2,7 +2,7 @@ import config from "config";
 import mysql, { ConnectionOptions as MySqlConnectionOptions } from "mysql2/promise";
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
 
-import {mysql_options_schema, sequelize_options_schema} from "@/common/config_schema";
+import { mysql_options_schema, sequelize_options_schema } from "@/common/schema/config";
 
 import User from "./user";
 

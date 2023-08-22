@@ -2,7 +2,7 @@ import config from "config";
 import { VerifyFunction, IStrategyOptions } from "passport-http-bearer";
 import passport from "passport";
 
-import { passport_bearer_options_schema } from "@/common/config_schema";
+import { passport_bearer_options_schema } from "@/common/schema/config";
 import User from "@/database/user";
 import { NullError } from "@/common/errors";
 

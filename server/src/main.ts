@@ -4,7 +4,7 @@ import { createServer } from "http";
 import { Server as SocketIO } from "socket.io";
 import passport from "passport";
 
-import { listen_options_schema } from "@/common/config_schema";
+import { listen_options_schema } from "@/common/schema/config";
 
 import "./auth";
 import session from "./auth/session";

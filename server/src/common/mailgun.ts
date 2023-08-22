@@ -2,7 +2,7 @@ import config from "config";
 import FormData from "form-data";
 import Mailgun from "mailgun.js";
 
-import { mailgun_options_schema } from "@/common/config_schema";
+import { mailgun_options_schema } from "@/common/schema/config";
 
 const mailgun = new Mailgun(FormData);
 

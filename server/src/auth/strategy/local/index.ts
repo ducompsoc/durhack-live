@@ -3,7 +3,7 @@ import Local, {IStrategyOptions, VerifyFunction} from "passport-local";
 import passport from "passport";
 
 import User from "@/database/user";
-import { passport_local_options_schema } from "@/common/config_schema";
+import { passport_local_options_schema } from "@/common/schema/config";
 import { NullError } from "@/common/errors";
 
 import { checkPassword } from "./util";
