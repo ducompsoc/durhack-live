@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import { fileURLToPath } from "url";
 
-import { IHackathonState } from "@/common/types";
+import { IHackathonState } from "@/common/schema/hackathon_state";
 
 interface IAugmentedHackathonState extends IHackathonState {
     milestoneMillis: number | null;
