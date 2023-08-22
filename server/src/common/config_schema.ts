@@ -70,6 +70,32 @@ export const discord_options_schema = z.object({
   redirectUri: z.string().url(),
 });
 
+const abstract_jwt_schema = z.object({
+  issuer: z.string().url(),
+  audience: z.string().url(),
+});
+
+const jwt_rsa_schema = abstract_jwt_schema.extend({
+  algorithm: z.literal("rsa"),
+  publicKeyFilePath: z.string(),
+  privateKeyFilePath: z.string(),
+});
+
+const jwt_hsa_schema = abstract_jwt_schema.extend({
+  algorithm: z.literal("hsa"),
+  secret: z.string(),
+});
+
+export const jwt_options_schema = z.union([jwt_rsa_schema, jwt_hsa_schema]);
+
+export const oauth_options_schema = z.object({
+  model: z.any().optional(),
+  grants: z.array(z.string()),
+  debug: z.boolean(),
+  accessTokenLifetime: z.number().positive(),
+  refreshTokenLifetime: z.number().positive(),
+});
+
 export const config_schema = z.object({
   listen: listen_options_schema,
   flags: z.object({
@@ -91,6 +117,8 @@ export const config_schema = z.object({
   "cookie-parser": z.object({
     secret: z.string(),
   }),
+  jsonwebtoken: jwt_options_schema,
+  oauth: oauth_options_schema,
   mailgun: mailgun_options_schema,
   session: session_options_schema,
   discord: discord_options_schema,
