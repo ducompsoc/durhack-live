@@ -36,7 +36,7 @@ export default class AuthHandlers {
   }
 
   private static verifyCodeExpired(user: User): boolean {
-    return (new Date().valueOf() - user.verify_sent_at?.valueOf()) > 900_000;
+    return (new Date().valueOf() - user.verify_sent_at!.valueOf()) > 900_000;
   }
 
   private static ensureCorrectVerifyCode(user: User, verify_code_attempt: string): void {
