@@ -10,7 +10,7 @@ interface IAugmentedHackathonState extends IHackathonState {
 const stateFile = fileURLToPath(new URL("../../state/cache.json", import.meta.url));
 const defaultStateFile = fileURLToPath(new URL("../../state/default.json", import.meta.url));
 
-async function loadStateFromFile(file: URL): Promise<IHackathonState> {
+async function loadStateFromFile(file: string): Promise<IHackathonState> {
   const file_contents = await readFile(file.toString());
   return JSON.parse(file_contents.toString()) as IHackathonState;
 }
