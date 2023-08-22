@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import AuthenticationError from "passport/lib/errors/authenticationerror.js";
 import { ZodError } from "zod";
 import createHttpError, { isHttpError } from "http-errors";
@@ -21,7 +23,7 @@ export default function api_error_handler(error: Error, request: Request, respon
   }
 
   if (error instanceof AuthenticationError) {
-    return sendHttpErrorResponse(response, createHttpError(error.status, "Authentication failed"));
+    return sendHttpErrorResponse(response, createHttpError((error as AuthenticationError).status, "Authentication failed"));
   }
 
   if (error instanceof ValueError) {
