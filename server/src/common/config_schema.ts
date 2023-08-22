@@ -77,13 +77,16 @@ const abstract_jwt_schema = z.object({
 
 const jwt_rsa_schema = abstract_jwt_schema.extend({
   algorithm: z.literal("rsa"),
-  publicKeyFilePath: z.string(),
-  privateKeyFilePath: z.string(),
+  accessTokenPublicKeyFilePath: z.string(),
+  accessTokenPrivateKeyFilePath: z.string(),
+  refreshTokenPublicKeyFilePath: z.string(),
+  refreshTokenPrivateKeyFilePath: z.string(),
 });
 
 const jwt_hsa_schema = abstract_jwt_schema.extend({
   algorithm: z.literal("hsa"),
-  secret: z.string(),
+  accessTokenSecret: z.string(),
+  refreshTokenSecret: z.string(),
 });
 
 export const jwt_options_schema = z.union([jwt_rsa_schema, jwt_hsa_schema]);
