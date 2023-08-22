@@ -57,21 +57,28 @@ class RSATokenAuthority implements TokenAuthority {
   }
 
   static async fromNewKeyPair(options: { publicKeyFilePath: string, privateKeyFilePath: string }) {
+    console.debug("Generating key pair...");
     const { publicKey, privateKey } = await generateKeyPair<KeyObject>("RS256");
+    console.debug("Generated key pair.");
+    console.debug("Writing key pair to filesystem...");
     await Promise.all([
-      async () => {
+      async function () {
         await writeFile(options.publicKeyFilePath, await publicKey.export({
           type: "spki",
           format: "pem",
         }));
-      },
-      async () => {
+        console.debug(`Written public key to ${options.publicKeyFilePath}`);
+      }(),
+      async function() {
         await writeFile(options.privateKeyFilePath, await privateKey.export({
           type: "pkcs8",
           format: "pem",
         }));
-      },
+        console.debug(`Written private key to ${options.privateKeyFilePath}`);
+      }(),
     ]);
+
+    console.log("Written key pair to filesystem.");
     return new RSATokenAuthority({ publicKey, privateKey });
   }
 
@@ -118,17 +125,27 @@ class HSATokenAuthority implements TokenAuthority {
 }
 
 class TokenVault {
-  declare authority: TokenAuthority;
+  declare accessTokenAuthority: TokenAuthority;
+  declare refreshTokenAuthority: TokenAuthority;
 
-  constructor(authority: TokenAuthority) {
-    this.authority = authority;
+  constructor(accessTokenAuthority: TokenAuthority, refreshTokenAuthority: TokenAuthority) {
+    this.accessTokenAuthority = accessTokenAuthority;
+    this.refreshTokenAuthority = refreshTokenAuthority;
   }
 
   public async createToken(type: BearerTokenType, user: User): Promise<string> {
     const token = new SignJWT({ "user_id": user.id })
       .setIssuedAt()
       .setExpirationTime(this.getTokenExpiry(type));
-    return await this.authority.signToken(token);
+    return await this.getTokenAuthority(type).signToken(token);
+  }
+
+  public async decodeAccessToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
+    return await this.accessTokenAuthority.verifyToken(payload);
+  }
+
+  public async decodeRefreshToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
+    return await this.refreshTokenAuthority.verifyToken(payload);
   }
 
   public async createAccessToken(user: User): Promise<string> {
@@ -139,7 +156,7 @@ class TokenVault {
     return await this.createToken(BearerTokenType.refreshToken, user);
   }
 
-  public getTokenLifetime(type: BearerTokenType): number {
+  private getTokenLifetime(type: BearerTokenType): number {
     if (type === BearerTokenType.accessToken) {
       return accessTokenLifetime;
     }
@@ -151,25 +168,51 @@ class TokenVault {
     throw new Error("Unknown token type.");
   }
 
-  public getTokenExpiry(type: BearerTokenType): number {
+  private getTokenExpiry(type: BearerTokenType): number {
     const lifetime = this.getTokenLifetime(type);
     return epoch(new Date()) + lifetime;
   }
+
+  private getTokenAuthority(type: BearerTokenType): TokenAuthority {
+    if (type === BearerTokenType.accessToken) {
+      return this.accessTokenAuthority;
+    }
+
+    if (type === BearerTokenType.refreshToken) {
+      return this.refreshTokenAuthority;
+    }
+
+    throw new Error("Unknown token type.");
+  }
+}
+
+function resolveFilePathFromProjectRoot(path_to_resolve: string) {
+  return fileURLToPath(new URL(path.join("..", "..", "..", "..", path_to_resolve), import.meta.url));
 }
 
 async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promise<TokenVault> {
   if (options.algorithm === "rsa") {
-    console.log("Making RSA key vault");
-    const resolvedOptions = {
-      publicKeyFilePath: fileURLToPath(new URL(path.join("..", "..", "..", "..", options.publicKeyFilePath), import.meta.url)),
-      privateKeyFilePath: fileURLToPath(new URL(path.join("..", "..", "..", "..", options.privateKeyFilePath), import.meta.url)),
+    console.debug("Making RSA key vault");
+    const accessTokenAuthorityOptions = {
+      publicKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPublicKeyFilePath),
+      privateKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPrivateKeyFilePath),
     };
-    return new TokenVault(await RSATokenAuthority.fromFilePaths(resolvedOptions));
+    const refreshTokenAuthorityOptions = {
+      publicKeyFilePath: resolveFilePathFromProjectRoot(options.refreshTokenPublicKeyFilePath),
+      privateKeyFilePath: resolveFilePathFromProjectRoot(options.refreshTokenPrivateKeyFilePath),
+    };
+    return new TokenVault(
+      await RSATokenAuthority.fromFilePaths(accessTokenAuthorityOptions),
+      await RSATokenAuthority.fromFilePaths(refreshTokenAuthorityOptions),
+    );
   }
 
   if (options.algorithm === "hsa") {
-    console.log("Making HSA key vault");
-    return new TokenVault(new HSATokenAuthority(options));
+    console.debug("Making HSA key vault");
+    return new TokenVault(
+      new HSATokenAuthority({ secret: options.accessTokenSecret }),
+      new HSATokenAuthority({ secret: options.refreshTokenSecret }),
+    );
   }
 
   throw new Error("Jsonwebtoken is misconfigured.");
