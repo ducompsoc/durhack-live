@@ -5,6 +5,8 @@ import passport from "passport";
 import { passport_bearer_options_schema } from "@/common/config_schema";
 
 import BearerStrategy from "./strategy";
+import TokenVault from "./util";
+
 
 const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
   return callback(null, false);
