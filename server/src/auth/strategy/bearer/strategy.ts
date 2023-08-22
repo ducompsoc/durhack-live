@@ -1,7 +1,11 @@
-import Bearer, { IStrategyOptions, VerifyFunction } from "passport-http-bearer";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 
-export default class SometimesBearer<T extends VerifyFunction> extends Bearer<T> {
-  constructor(strategy_options: IStrategyOptions, bearerVerifyFunction: VerifyFunction) {
+import { IStrategyOptions, VerifyFunctions, Strategy as BearerStrategy } from "passport-http-bearer";
+import { Request } from "express";
+
+export default class SometimesBearer<T extends VerifyFunctions> extends BearerStrategy<T> {
+  constructor(strategy_options: IStrategyOptions, bearerVerifyFunction: T) {
     super(strategy_options, bearerVerifyFunction);
   }
 
@@ -13,7 +17,7 @@ export default class SometimesBearer<T extends VerifyFunction> extends Bearer<T>
     return matches && { scheme: matches[1], credentials: matches[2] };
   }
 
-  public override authenticate(req) {
+  public override authenticate(req: Request) {
 
     if (!req.headers || !req.headers.authorization) { return this.pass(); }
 
