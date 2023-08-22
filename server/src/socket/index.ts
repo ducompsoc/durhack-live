@@ -2,58 +2,100 @@ import { Server, Socket } from "socket.io";
 
 import User from "@/database/user";
 import { getHackathonState, setHackathonState } from "./state";
-import { IHackathonState } from "@/common/types";
+import { HackathonStateSchema } from "@/common/schema/hackathon_state";
+import TokenVault from "@/auth/strategy/bearer/util";
 
-export let io: Server | null = null;
 
-export function getServer() {
-  return io!;
+class HackathonStateSocketConnection {
+  declare connectedUser?: User;
+  declare manager: HackathonStateSocketManager;
+  declare socket: Socket;
+
+  constructor(manager: HackathonStateSocketManager, socket: Socket) {
+    this.manager = manager;
+    this.socket = socket;
+    this.addSocketEventListeners();
+  }
+
+  private addSocketEventListeners() {
+    this.socket.on("authenticate", this.onAuthenticate.bind(this));
+    this.socket.on("pushState", this.onPushState.bind(this));
+    this.socket.on("disconnect", this.onDisconnect.bind(this));
+  }
+
+  private async onAuthenticate(token: unknown, cb: (err: string | null, role?: string | null) => void) {
+    if (this.connectedUser) return;
+    if (typeof token !== "string" || typeof cb !== "function") return;
+
+    let decodedPayload;
+    try {
+      decodedPayload = (await TokenVault.decodeAccessToken(token)).payload;
+    } catch (error) {
+      return cb("Auth failed.");
+    }
+
+    let user: User;
+    let scope: string[];
+    try {
+      ({ user, scope } = await TokenVault.getUserAndScopeClaims(decodedPayload));
+    } catch (error) {
+      return cb("Auth failed.");
+    }
+
+    if (!scope.includes("socket:state")) return cb("Auth failed.");
+
+    this.connectedUser = user;
+
+    this.socket.join("state:global");
+    this.socket.join(`state:user:${this.connectedUser.id}`);
+    this.socket.emit("userState", {});
+
+    cb(null, this.connectedUser ? this.connectedUser.role : null);
+    this.socket.emit("globalState", getHackathonState());
+  }
+
+  private async onPushState(state: unknown) {
+    if (!this.connectedUser || this.connectedUser.role !== "admin") {
+      return;
+    }
+
+    const parsed_state = HackathonStateSchema.parse(state);
+    await setHackathonState(parsed_state);
+    this.manager.server!.to("state:global").emit("globalState", getHackathonState());
+  }
+
+  private onDisconnect() {
+    this.manager.connections.delete(this);
+  }
 }
 
-export function setServer(server: Server) {
-  io = server;
-  io.on("connection", (socket: Socket) => {
-    let connUser: User | null = null;
+class HackathonStateSocketManager {
+  declare server?: Server;
+  declare connections: Set<HackathonStateSocketConnection>;
 
-    socket.on("authenticate", async (token: string, cb: (err: string | null, role?: string | null) => void) => {
-      if ((typeof token !== "string" && typeof cb !== "function") || connUser) {
-        return;
-      }
+  constructor() {
+    this.connections = new Set();
+  }
 
-      if (token === "___durhack_stream_token_tA1qI0wB5pZ9oU0k") {
-        socket.join("stream");
-      } else {
-        //todo
-        const jwtUser = null;
-        //const jwtUser = await resolveJWT(token);
-        if (!jwtUser) {
-          cb("Auth failed.");
-          return;
-        }
+  public initialise(server: Server): void {
+    this.server = server;
+    this.addServerEventListeners();
+  }
 
-        connUser = await User.findOne({ where: { id: (<{ id: number }>jwtUser).id } });
-        if (!connUser) {
-          cb("Auth failed.");
-          return;
-        }
+  public getServer(): Server | undefined {
+    return this.server;
+  }
 
-        socket.join(`state:user:${connUser.id}`);
-        socket.emit("userState", {});
-      }
+  private addServerEventListeners(): void {
+    if (!this.server) throw new Error("Manager not initialized.");
 
-      socket.join("state:global");
+    this.server.on("connection", this.onConnection.bind(this));
+  }
 
-      cb(null, connUser ? connUser.role : null);
-      socket.emit("globalState", getHackathonState());
-    });
-
-    socket.on("pushState", (state: IHackathonState) => {
-      if (!connUser || connUser.role !== "admin") {
-        return;
-      }
-
-      setHackathonState(state);
-      io!.to("state:global").emit("globalState", getHackathonState());
-    });
-  });
+  private onConnection(socket: Socket) {
+    if (!this.server) return;
+    this.connections.add(new HackathonStateSocketConnection(this, socket));
+  }
 }
+
+export default new HackathonStateSocketManager();
