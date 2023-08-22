@@ -11,7 +11,7 @@ export interface IScheduledEvent {
 	recordingLink: string | null;
 	start: string;
 	end: string;
-	state: 'scheduled' | 'in-progress' | 'done';
+	state: 'scheduled' | 'in_progress' | 'done';
 	onStream: boolean;
 }
 

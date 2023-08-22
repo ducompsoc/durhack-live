@@ -217,7 +217,7 @@ const Schedule = React.memo(() => {
                   </div>
                   <EventContent>
                     <div className="title">{event.name}</div>
-                    {event.state === 'in-progress' && event.liveLink && !event.liveLink.startsWith('#') && (
+                    {event.state === 'in_progress' && event.liveLink && !event.liveLink.startsWith('#') && (
                       <PlayButton href={event.liveLink} target="_blank">
                         <span className="fas fa-play" />
                         Join Zoom

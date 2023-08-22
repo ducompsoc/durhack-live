@@ -404,7 +404,7 @@ const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
         <td className="flex">
           <Field as="select" name={`schedule.${index}.state`}>
             <option value="scheduled">Scheduled</option>
-            <option value="in-progress">In progress</option>
+            <option value="in_progress">In progress</option>
             <option value="done">Done</option>
           </Field>
         </td>

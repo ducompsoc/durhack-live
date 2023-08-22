@@ -108,7 +108,7 @@ const Stage = React.memo(() => {
 
     const reversedSchedule = [...state.schedule].reverse();
 
-    const inProgressEventIndex = reversedSchedule.findIndex(item => item.state === 'in-progress' && item.onStream);
+    const inProgressEventIndex = reversedSchedule.findIndex(item => item.state === 'in_progress' && item.onStream);
     setInProgressEvent(inProgressEventIndex === -1 ? null : reversedSchedule[inProgressEventIndex]);
 
     let scheduleAfterInProgress = state.schedule;
@@ -117,7 +117,7 @@ const Stage = React.memo(() => {
     }
 
     setUpNext(scheduleAfterInProgress.find(item => item.state === 'scheduled') || null);
-    setOnTheSide(state.schedule.find(item => item.state === 'in-progress' && !item.onStream) || null);
+    setOnTheSide(state.schedule.find(item => item.state === 'in_progress' && !item.onStream) || null);
   }, [state]);
 
   React.useEffect(() => {

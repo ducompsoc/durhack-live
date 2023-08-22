@@ -31,7 +31,7 @@ const Interaction = React.memo(() => {
   const hackathon = useHackathon();
 
   if (hackathon.state) {
-    const liveLink = hackathon.state.schedule.find(event => event.state === 'in-progress' && event.onStream)?.liveLink;
+    const liveLink = hackathon.state.schedule.find(event => event.state === 'in_progress' && event.onStream)?.liveLink;
 
     if (liveLink) {
       if (liveLink.startsWith('#')) {
