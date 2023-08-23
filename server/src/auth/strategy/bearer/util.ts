@@ -170,12 +170,12 @@ class TokenVault {
     return { user, scope };
   }
 
-  public async createAccessToken(user: User): Promise<string> {
-    return await this.createToken(BearerTokenType.accessToken, user);
+  public async createAccessToken(user: User, scope: string[]): Promise<string> {
+    return await this.createToken(BearerTokenType.accessToken, user, scope);
   }
 
-  public async createRefreshToken(user: User): Promise<string> {
-    return await this.createToken(BearerTokenType.refreshToken, user);
+  public async createRefreshToken(user: User, scope: string[]): Promise<string> {
+    return await this.createToken(BearerTokenType.refreshToken, user, scope);
   }
 
   private getDefaultTokenScope(type: BearerTokenType): string[] {
