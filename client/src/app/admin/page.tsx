@@ -68,21 +68,21 @@ interface IOverlayFormProps {
 const OverlayForm = React.memo(({
   hackathon, category, kind, children,
 }: IOverlayFormProps) => {
-  const cat = category || 'overlay';
+  category = category || 'overlay';
 
   const handleSubmit = React.useCallback((values: any) => {
     if (kind) {
-      pushHackathon({ ...hackathon, [cat]: { ...(hackathon as any)[cat], [kind]: values } });
+      pushHackathon({ ...hackathon, [category]: { ...(hackathon as any)[category], [kind]: values } });
     } else {
       pushHackathon({ ...hackathon, ...values });
     }
-  }, [hackathon, cat, kind]);
+  }, [hackathon, category, kind]);
 
   return (
     <Formik
-	initialValues={kind ? (hackathon as any)[cat][kind] : hackathon}
-	onSubmit={handleSubmit}
-	enableReinitialize
+      initialValues={kind ? (hackathon as any)[category][kind] : hackathon}
+      onSubmit={handleSubmit}
+      enableReinitialize
     >
       {props => (
         <Form>
@@ -216,22 +216,22 @@ const Main = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
         <p>New lines and paragraphs are permitted. Any blank slides will be ignored.</p>
 
         <FieldArray
-	name="slides"
-	render={(arrayHelpers: ArrayHelpers) => (
-  <Segment>
-    {(props.values.slides as string[]).map((_, index) => (
-      <div className="row" key={index}>
-        <div className="flex">
-          <Field as="textarea" name={`slides.${index}`} rows="5" />
-        </div>
-        <div>
-          <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-          <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
-        </div>
-      </div>
+          name="slides"
+          render={(arrayHelpers: ArrayHelpers) => (
+            <Segment>
+              {(props.values.slides as string[]).map((_, index) => (
+                <div className="row" key={index}>
+                  <div className="flex">
+                    <Field as="textarea" name={`slides.${index}`} rows="5" />
+                  </div>
+                  <div>
+                    <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
+                  </div>
+                </div>
               ))}
-    <button type="button" onClick={() => arrayHelpers.insert(props.values.slides.length, '')}>+ Add Slide</button>
-  </Segment>
+              <button type="button" onClick={() => arrayHelpers.insert(props.values.slides.length, '')}>+ Add Slide</button>
+            </Segment>
           )}
         />
       </>
@@ -309,32 +309,32 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
         </Segment>
 
         <FieldArray
-	name="queue"
-	render={(arrayHelpers: ArrayHelpers) => (
-  <Segment>
-    {(props.values.queue as string[]).map((_, index) => (
-      <div className="row" key={index}>
-        <div className="flex">
-          <Field type="text" name={`queue.${index}.id`} placeholder="YouTube ID (not the full URL)" />
-        </div>
-        <div className="flex">
-          <Field type="text" name={`queue.${index}.lowerThird`} placeholder="Lower third" />
-        </div>
-        <div>
-          <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-          <button type="button" onClick={() => arrayHelpers.insert(index, { id: '', lowerThird: '' })}>
-            +
-          </button>
-        </div>
-      </div>
+          name="queue"
+          render={(arrayHelpers: ArrayHelpers) => (
+            <Segment>
+              {(props.values.queue as string[]).map((_, index) => (
+                <div className="row" key={index}>
+                  <div className="flex">
+                    <Field type="text" name={`queue.${index}.id`} placeholder="YouTube ID (not the full URL)" />
+                  </div>
+                  <div className="flex">
+                    <Field type="text" name={`queue.${index}.lowerThird`} placeholder="Lower third" />
+                  </div>
+                  <div>
+                    <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, { id: '', lowerThird: '' })}>
+                      +
+                    </button>
+                  </div>
+                </div>
               ))}
-    <button
-	type="button"
-	onClick={() => arrayHelpers.insert(props.values.queue.length, { id: '', lowerThird: '' })}
+              <button
+                type="button"
+                onClick={() => arrayHelpers.insert(props.values.queue.length, { id: '', lowerThird: '' })}
               >
-      + Add Video
-    </button>
-  </Segment>
+                + Add Video
+              </button>
+            </Segment>
           )}
         />
       </>
@@ -378,78 +378,78 @@ const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
 
             <tbody>
               <FieldArray
-	name="schedule"
-	render={(arrayHelpers: ArrayHelpers) => (
-  <>
-    {(props.values.schedule as void[]).map((_, index) => (
-      <tr key={index}>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.name`} />
-        </td>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.icon`} style={{ width: 90 }} />
-        </td>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.start`} />
-        </td>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.end`} />
-        </td>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.liveLink`} style={{ width: 90 }} />
-        </td>
-        <td className="flex">
-          <Field type="text" name={`schedule.${index}.recordingLink`} style={{ width: 90 }} />
-        </td>
-        <td className="flex">
-          <Field as="select" name={`schedule.${index}.state`}>
-            <option value="scheduled">Scheduled</option>
-            <option value="in_progress">In progress</option>
-            <option value="done">Done</option>
-          </Field>
-        </td>
-        <td className="flex">
-          <Field type="checkbox" name={`schedule.${index}.onStream`} />
-        </td>
-        <td>
-          <button
-	type="button"
-	onClick={() => arrayHelpers.remove(index)}
+                name="schedule"
+                render={(arrayHelpers: ArrayHelpers) => (
+                  <>
+                    {(props.values.schedule as void[]).map((_, index) => (
+                      <tr key={index}>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.name`} />
+                        </td>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.icon`} style={{ width: 90 }} />
+                        </td>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.start`} />
+                        </td>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.end`} />
+                        </td>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.liveLink`} style={{ width: 90 }} />
+                        </td>
+                        <td className="flex">
+                          <Field type="text" name={`schedule.${index}.recordingLink`} style={{ width: 90 }} />
+                        </td>
+                        <td className="flex">
+                          <Field as="select" name={`schedule.${index}.state`}>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="in_progress">In progress</option>
+                            <option value="done">Done</option>
+                          </Field>
+                        </td>
+                        <td className="flex">
+                          <Field type="checkbox" name={`schedule.${index}.onStream`} />
+                        </td>
+                        <td>
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.remove(index)}
                           >
-            -
-          </button>
-          <button
-	type="button"
-	onClick={() => arrayHelpers.insert(index, { ...newItem })}
+                            -
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.insert(index, { ...newItem })}
                           >
-            +
-          </button>
-          <button
-	type="button"
-	onClick={() => arrayHelpers.move(index, Math.max(0, index - 1))}
+                            +
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.move(index, Math.max(0, index - 1))}
                           >
-            &uarr;
-          </button>
-          <button
-	type="button"
-	onClick={() => arrayHelpers.move(index, index + 1)}
+                            &uarr;
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => arrayHelpers.move(index, index + 1)}
                           >
-            &darr;
-          </button>
-        </td>
-      </tr>
+                            &darr;
+                          </button>
+                        </td>
+                      </tr>
                     ))}
-    <tr>
-      <td>
-        <button
-	type="button"
-	onClick={() => arrayHelpers.insert(props.values.schedule.length, { ...newItem })}
+                    <tr>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={() => arrayHelpers.insert(props.values.schedule.length, { ...newItem })}
                         >
-          + Add Schedule item
-        </button>
-      </td>
-    </tr>
-  </>
+                          + Add Schedule item
+                        </button>
+                      </td>
+                    </tr>
+                  </>
                 )}
               />
             </tbody>
@@ -505,22 +505,22 @@ const Tips = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
         </p>
 
         <FieldArray
-	name="tips"
-	render={(arrayHelpers: ArrayHelpers) => (
-  <Segment>
-    {(props.values.tips as string[]).map((_, index) => (
-      <div className="row" key={index}>
-        <div className="flex">
-          <Field as="textarea" name={`tips.${index}`} rows="5" />
-        </div>
-        <div>
-          <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-          <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
-        </div>
-      </div>
+          name="tips"
+          render={(arrayHelpers: ArrayHelpers) => (
+            <Segment>
+              {(props.values.tips as string[]).map((_, index) => (
+                <div className="row" key={index}>
+                  <div className="flex">
+                    <Field as="textarea" name={`tips.${index}`} rows="5" />
+                  </div>
+                  <div>
+                    <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
+                  </div>
+                </div>
               ))}
-    <button type="button" onClick={() => arrayHelpers.insert(props.values.tips.length, '')}>+ Add Tip</button>
-  </Segment>
+              <button type="button" onClick={() => arrayHelpers.insert(props.values.tips.length, '')}>+ Add Tip</button>
+            </Segment>
           )}
         />
       </>
@@ -536,7 +536,7 @@ export default React.memo(() => {
   }
 
   if (hackathon.role !== 'admin') {
-    return <_Page>You do not have permission to go to this page. {hackathon.role}</_Page>;
+    return <_Page>You do not have permission to view this page.</_Page>;
   }
 
   return (
