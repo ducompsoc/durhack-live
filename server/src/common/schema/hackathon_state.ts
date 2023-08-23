@@ -11,8 +11,8 @@ const ScheduledEventSchema = z.object({
   icon: z.string(),
   liveLink: z.string().nullable(),
   recordingLink: z.string().nullable(),
-  start: z.string(),
-  end: z.string(),
+  start: z.string().datetime(),
+  end: z.string().datetime().or(z.literal("")),
   state: z.nativeEnum(ScheduledEventState),
   onStream: z.boolean(),
 });
@@ -73,7 +73,7 @@ export const HackathonStateSchema = z.object({
     buttonLink: z.string(),
   }),
   tips: z.array(z.string()),
-  startedAt: z.date(),
+  startedAt: z.string().datetime(),
   overlay: OverlayStateSchema,
 });
 
