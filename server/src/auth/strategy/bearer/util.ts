@@ -127,6 +127,11 @@ class HSATokenAuthority implements TokenAuthority {
   }
 }
 
+interface TokenOptions {
+  scope?: string[];
+  lifetime?: string | number;
+}
+
 class TokenVault {
   declare accessTokenAuthority: TokenAuthority;
   declare refreshTokenAuthority: TokenAuthority;
@@ -136,13 +141,18 @@ class TokenVault {
     this.refreshTokenAuthority = refreshTokenAuthority;
   }
 
-  public async createToken(type: BearerTokenType, user: User, scope: string[] = undefined): Promise<string> {
+  public async createToken(type: BearerTokenType, user: User, options: TokenOptions): Promise<string> {
+    let { scope, lifetime } = options;
     if (!scope) {
       scope = this.getDefaultTokenScope(type);
     }
+    if (!lifetime) {
+      lifetime = this.getDefaultTokenLifetime(type);
+    }
+    const expiry = this.lifetimeToExpiry(lifetime);
     const token = new SignJWT({ user_id: user.id, scope: scope })
       .setIssuedAt()
-      .setExpirationTime(this.getTokenExpiry(type));
+      .setExpirationTime(expiry);
     return await this.getTokenAuthority(type).signToken(token);
   }
 
@@ -170,12 +180,12 @@ class TokenVault {
     return { user, scope };
   }
 
-  public async createAccessToken(user: User, scope: string[]): Promise<string> {
-    return await this.createToken(BearerTokenType.accessToken, user, scope);
+  public async createAccessToken(user: User, options: TokenOptions): Promise<string> {
+    return await this.createToken(BearerTokenType.accessToken, user, options);
   }
 
-  public async createRefreshToken(user: User, scope: string[]): Promise<string> {
-    return await this.createToken(BearerTokenType.refreshToken, user, scope);
+  public async createRefreshToken(user: User, options: TokenOptions): Promise<string> {
+    return await this.createToken(BearerTokenType.refreshToken, user, options);
   }
 
   private getDefaultTokenScope(type: BearerTokenType): string[] {
@@ -190,7 +200,7 @@ class TokenVault {
     throw new Error("Unknown token type.");
   }
 
-  private getTokenLifetime(type: BearerTokenType): number {
+  private getDefaultTokenLifetime(type: BearerTokenType): number {
     if (type === BearerTokenType.accessToken) {
       return accessTokenLifetime;
     }
@@ -202,8 +212,8 @@ class TokenVault {
     throw new Error("Unknown token type.");
   }
 
-  private getTokenExpiry(type: BearerTokenType): number {
-    const lifetime = this.getTokenLifetime(type);
+  private lifetimeToExpiry(lifetime: number | string): number | string {
+    if (typeof lifetime === "string") return lifetime;
     return epoch(new Date()) + lifetime;
   }
 
