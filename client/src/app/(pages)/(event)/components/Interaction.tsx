@@ -3,7 +3,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useHackathon } from '@/app/util/socket';
-import LinkButton from '@/app/components/LinkButton';
+import LinkButton from '@/app/(pages)/components/LinkButton';
 
 const InteractionContainer = styled.div`
 	height: 68px;

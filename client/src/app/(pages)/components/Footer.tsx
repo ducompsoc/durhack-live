@@ -2,7 +2,9 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import ContentContainer from './ContentContainer';
+
+import ContentContainer from '@/app/components/ContentContainer';
+
 
 const FooterContainer = styled.div`
 	text-align: center;

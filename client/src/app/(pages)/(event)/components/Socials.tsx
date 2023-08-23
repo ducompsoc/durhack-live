@@ -3,8 +3,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Card from '@/app/components/Card';
-import Section from '@/app/components/Section';
+import Card from '@/app/(pages)/components/Card';
+import Section from '@/app/(pages)/components/Section';
 
 const SocialOptionButton = styled.a`
 	position: relative;

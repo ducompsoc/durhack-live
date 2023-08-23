@@ -2,8 +2,11 @@
 
 import React from 'react';
 import styled from 'styled-components';
-import ContentContainer from './ContentContainer';
+
+import ContentContainer from '@/app/components/ContentContainer';
+
 import Countdown from './Countdown';
+
 
 const HeaderContainer = styled.div`
 	background-image: linear-gradient(45deg, #52216b, #ff0040);

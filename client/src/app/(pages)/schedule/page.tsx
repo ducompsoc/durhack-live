@@ -3,7 +3,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import Schedule from './components/Schedule';
+import Schedule from '@/app/(pages)/components/Schedule';
 
 const PageContainer = styled.div`
 	width: 100vw;

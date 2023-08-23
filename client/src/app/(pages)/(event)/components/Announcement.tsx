@@ -3,10 +3,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-import { useHackathon } from '../../util/socket';
-import Card from '@/app/components/Card';
-import LinkButton from '@/app//components/LinkButton';
-import Section from '@/app//components/Section';
+import { useHackathon } from '@/app/util/socket';
+import Card from '@/app/(pages)/components/Card';
+import LinkButton from '@/app/(pages)/components/LinkButton';
+import Section from '@/app/(pages)/components/Section';
 
 const AnnouncementContainer = styled(Card)`
 	border-left: solid 4px ${p => p.theme.secondaryA};

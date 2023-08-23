@@ -4,11 +4,12 @@ import React from 'react';
 import styled from 'styled-components';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 
-import { useHackathon, IScheduledEvent } from '../../util/socket';
-import Card from '@/app/components/Card';
-import Section from '@/app/components/Section';
+import { useHackathon, IScheduledEvent } from '@/app/util/socket';
+import Card from '@/app/(pages)/components/Card';
+import Section from '@/app/(pages)/components/Section';
+import LinkButton from '@/app/(pages)/components/LinkButton';
+
 import Interaction from './Interaction';
-import LinkButton from '@/app/components/LinkButton';
 
 const LiveCard = styled(Card)`
 	width: 66%;

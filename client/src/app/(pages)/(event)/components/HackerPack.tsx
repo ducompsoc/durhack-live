@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 
-import Card from '@/app/components/Card';
-import Section from '@/app/components/Section';
-import Schedule from '@/app/schedule/components/Schedule';
+import Card from '@/app/(pages)/components/Card';
+import Section from '@/app/(pages)/components/Section';
+import Schedule from '@/app/(pages)/components/Schedule';
 
 const HackerPack = React.memo(() => (
   <Section>
