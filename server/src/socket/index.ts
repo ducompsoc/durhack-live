@@ -4,6 +4,7 @@ import User from "@/database/user";
 import { getHackathonState, setHackathonState } from "./state";
 import { HackathonStateSchema } from "@/common/schema/hackathon_state";
 import TokenVault from "@/auth/strategy/bearer/util";
+import { ZodError } from "zod";
 
 
 class HackathonStateSocketConnection {
@@ -54,14 +55,20 @@ class HackathonStateSocketConnection {
     this.socket.emit("globalState", getHackathonState());
   }
 
-  private async onPushState(state: unknown) {
+  private async onPushState(state: unknown, cb: (error: Error | null) => void) {
     if (!this.connectedUser || this.connectedUser.role !== "admin") {
       return;
     }
-
-    const parsed_state = HackathonStateSchema.parse(state);
+    let parsed_state;
+    try {
+      parsed_state = HackathonStateSchema.parse(state);
+    } catch (error) {
+      if (!(error instanceof ZodError)) return console.error(error);
+      return cb(error);
+    }
     await setHackathonState(parsed_state);
     this.manager.server!.to("state:global").emit("globalState", getHackathonState());
+    return cb(null);
   }
 
   private onDisconnect() {
