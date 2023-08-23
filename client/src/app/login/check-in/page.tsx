@@ -5,7 +5,7 @@ import { Button, ErrorAlert, FormSection, Textbox } from '@/app/login/components
 import { Formik, ErrorMessage as FormikErrorMessage, Form, Field, useFormikContext } from 'formik';
 import { useRouter } from 'next/navigation';
 import { makeLiveApiRequest } from '@/app/util/api';
-import { connectStateSocket } from '@/app/util/socket';
+import { attemptStateSocketAuth } from '@/app/util/socket';
 
 export default function CheckInPage() {
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -44,7 +44,7 @@ export default function CheckInPage() {
 
     if (!check_in_response.ok) return setUnknownError();
 
-    connectStateSocket();
+    void attemptStateSocketAuth();
     return router.push('/');
   }, []);
 

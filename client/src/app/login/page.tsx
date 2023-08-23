@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 
 import { makeLiveApiRequest } from '@/app/util/api';
-import { connectStateSocket } from '@/app/util/socket';
+import { attemptStateSocketAuth } from '@/app/util/socket';
 
 import { ErrorAlert, FormSection, Button, Textbox } from './components';
 
@@ -95,7 +95,7 @@ export default function LoginPage() {
     if (!profile.checked_in) {
       return router.push('/login/check-in');
     }
-    connectStateSocket();
+    void attemptStateSocketAuth();
     return router.push('/');
   }
   const callbackHandlePasswordSubmit = React.useCallback(handlePasswordSubmit, [email, router]);
