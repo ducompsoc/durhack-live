@@ -146,7 +146,7 @@ export default class AuthHandlers {
 
   @requireLoggedIn
   static async handleGetSocketToken(request: Request, response: Response): Promise<void> {
-    const auth_token = await TokenVault.createAccessToken(request.user!, [ "socket:state" ]);
+    const auth_token = await TokenVault.createAccessToken(request.user!, { scope: [ "socket:state" ], lifetime: "3 days"});
     response.status(200);
     response.json({ "status": 200, "message": "Token generation OK", "token": auth_token });
   }
