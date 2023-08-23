@@ -3,7 +3,9 @@ import { z } from "zod";
 import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 
+import { requireLoggedIn } from "@/auth/decorators";
 import { hashPasswordText, randomBytesAsync } from "@/auth/strategy/local/util";
+import TokenVault from "@/auth/strategy/bearer/util";
 import { NullError } from "@/common/errors";
 import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";
@@ -140,5 +142,12 @@ export default class AuthHandlers {
     await found_user.save();
 
     return next();
+  }
+
+  @requireLoggedIn
+  static async handleGetSocketToken(request: Request, response: Response): Promise<void> {
+    const auth_token = await TokenVault.createAccessToken(request.user!, [ "socket:state" ]);
+    response.status(200);
+    response.json({ "status": 200, "message": "Token generation OK", "token": auth_token });
   }
 }
