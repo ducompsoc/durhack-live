@@ -89,49 +89,70 @@ export type THackathonConnection = IHackathonConnectedConnection | { connected: 
 const events = new EventEmitter();
 let lastConnection: THackathonConnection = { connected: false, role: null, state: null };
 let socket: Socket | null = null;
+let userRole: string | null = null;
 
 async function getBearerToken(): Promise<string> {
   const request = await makeLiveApiRequest('/auth/socket-token');
   const response = await fetch(request);
-  if (!response.ok) throw new Error('Couldn\'t get token.');
+  if (!response.ok) throw new Error('Couldn\'t get socket token.');
   const payload = await response.json();
   const { token } = payload;
-  if (!token) throw new Error('Couldn\'t get token.');
+  if (!token) throw new Error('Couldn\'t get socket token.');
   return token;
 }
 
-export function connectStateSocket() {
-  socket = io(window.location.origin);
+export async function attemptStateSocketAuth() {
+  if (!socket) return;
 
-  let userRole: string | null = null;
-
-  socket.on('connect', async () => {
-    console.log('Connected. Authenticating...');
-
-    if (!sessionStorage.getItem('durhack-live-socket-token-2023')) {
+  if (!sessionStorage.getItem('durhack-live-socket-token-2023')) {
+    try {
       sessionStorage.setItem('durhack-live-socket-token-2023', await getBearerToken());
+    } catch (error) {
+      console.error(error);
+     return;
+    }
+  }
+
+  const retrieveRole = new Promise<string>((resolve, reject) => {
+    if (!socket) return;
+
+    function authenticateCallback(err: Error | string | null, role: string | null): void {
+      if (err) {
+        if (err === 'Auth failed.') {
+          sessionStorage.removeItem('durhack-live-socket-token-2023');
+          console.error('Couldn\'t authenticate socket connection - bad socket token');
+          return reject(err);
+        }
+
+        console.error(err);
+        return reject(err);
+      }
+
+      userRole = role;
+      if (lastConnection.connected) {
+        lastConnection.role = role;
+        events.emit('connection', lastConnection);
+      }
+
+      console.info('Authenticated.');
+      resolve(role);
     }
 
-		socket!.emit('authenticate', sessionStorage.getItem('durhack-live-socket-token-2023'), (err: Error | string | null, role: string | null) => {
-		  if (err) {
-		    if (err === 'Auth failed.') {
-		      sessionStorage.removeItem('durhack-live-socket-token-2023');
-          console.error('Couldn\'t authenticate socket connection - bad socket token');
-          return;
-		    }
+    socket.emit('authenticate', sessionStorage.getItem('durhack-live-socket-token-2023'), authenticateCallback);
+  });
 
-		    console.error(err);
-		    return;
-		  }
+  return await retrieveRole;
+}
 
-		  userRole = role;
-		  if (lastConnection.connected) {
-		    lastConnection.role = role;
-		    events.emit('connection', lastConnection);
-		  }
+export function connectStateSocket() {
+  if (socket) return;
 
-		  console.info('Authenticated.');
-		});
+  socket = io(window.location.origin);
+
+  socket.on('connect', async () => {
+    if (!socket) return;
+    console.log('Connected. Authenticating...');
+    void await attemptStateSocketAuth();
   });
 
   socket.on('globalState', (state: IHackathonState) => {
@@ -146,9 +167,11 @@ export function connectStateSocket() {
 }
 
 export function pushHackathon(newState: IHackathonState) {
-  if (socket) {
-    socket.emit('pushState', newState);
-  }
+  if (!socket) return;
+  socket.emit('pushState', newState, (error: Error | undefined) => {
+    if (!error) return;
+    console.error(error);
+  });
 }
 
 export function useHackathon(): THackathonConnection {
@@ -168,6 +191,6 @@ export function useHackathon(): THackathonConnection {
   return connection;
 }
 
-if (typeof window !== 'undefined' && localStorage.getItem('durhack-live-socket-token-2023')) {
+if (typeof window !== 'undefined') {
   connectStateSocket();
 }
