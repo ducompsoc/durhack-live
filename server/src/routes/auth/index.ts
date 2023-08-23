@@ -1,7 +1,7 @@
 import { Router as ExpressRouter } from "express";
 import passport from "passport";
 
-import { handleMethodNotAllowed } from "@/common/middleware";
+import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware";
 import { handleGetCsrfToken } from "@/auth/csrf";
 
 import discord_router from "./discord";
@@ -45,6 +45,10 @@ auth_router.route("/set-password")
 
 auth_router.route("/csrf-token")
   .get(handleGetCsrfToken)
+  .all(handleMethodNotAllowed);
+
+auth_router.route("/socket-token")
+  .get(handlers.handleGetSocketToken, handleFailedAuthentication)
   .all(handleMethodNotAllowed);
 
 export default auth_router;
