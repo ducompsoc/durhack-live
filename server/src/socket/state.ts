@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
 import { fileURLToPath } from "url";
 
-import { IHackathonState } from "@/common/schema/hackathon_state";
+import { IHackathonState, HackathonStateSchema } from "@/common/schema/hackathon_state";
 
 interface IAugmentedHackathonState extends IHackathonState {
     milestoneMillis: number | null;
@@ -12,7 +12,9 @@ const defaultStateFile = fileURLToPath(new URL("../../state/default.json", impor
 
 async function loadStateFromFile(file: string): Promise<IHackathonState> {
   const file_contents = await readFile(file.toString());
-  return JSON.parse(file_contents.toString()) as IHackathonState;
+
+  const parsed_file = JSON.parse(file_contents.toString()) as unknown;
+  return HackathonStateSchema.parse(parsed_file);
 }
 
 async function loadState(): Promise<IHackathonState> {
