@@ -5,6 +5,7 @@ import { Button, ErrorAlert, FormSection, Textbox } from '@/app/login/components
 import { Formik, ErrorMessage, Form } from 'formik';
 import { useRouter } from 'next/navigation';
 import { makeLiveApiRequest } from '@/app/util/api';
+import { connectStateSocket } from '@/app/util/socket';
 
 export default function SetPasswordPage() {
   const [email, setEmail] = React.useState<string>();
@@ -107,6 +108,7 @@ export default function SetPasswordPage() {
     if (!profile.checked_in) {
       return router.push('/login/check-in');
     }
+    connectStateSocket();
     return router.push('/');
   }
   const callbackHandleSetPasswordSubmit = React.useCallback(handleSetPasswordSubmit, [email, router, verifyCode]);
