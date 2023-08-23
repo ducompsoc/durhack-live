@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { io, Socket } from 'socket.io-client';
 import { EventEmitter } from 'events';
+import { makeLiveApiRequest } from '@/app/util/api';
 
 export interface IScheduledEvent {
 	name: string;
@@ -90,10 +91,16 @@ let lastConnection: THackathonConnection = { connected: false, role: null, state
 let socket: Socket | null = null;
 
 async function getBearerToken(): Promise<string> {
-
+  const request = await makeLiveApiRequest('/auth/socket-token');
+  const response = await fetch(request);
+  if (!response.ok) throw new Error('Couldn\'t get token.');
+  const payload = await response.json();
+  const { token } = payload;
+  if (!token) throw new Error('Couldn\'t get token.');
+  return token;
 }
 
-export function connect() {
+export function connectStateSocket() {
   socket = io(window.location.origin);
 
   let userRole: string | null = null;
@@ -101,15 +108,15 @@ export function connect() {
   socket.on('connect', async () => {
     console.log('Connected. Authenticating...');
 
-    if (!sessionStorage.getItem('durhack-live-api-token-2023')) {
-      sessionStorage.setItem('durhack-live-api-token-2023', await getBearerToken());
+    if (!sessionStorage.getItem('durhack-live-socket-token-2023')) {
+      sessionStorage.setItem('durhack-live-socket-token-2023', await getBearerToken());
     }
 
-		socket!.emit('authenticate', sessionStorage.getItem('durhack-live-api-token-2023'), (err: Error | string | null, role: string | null) => {
+		socket!.emit('authenticate', sessionStorage.getItem('durhack-live-socket-token-2023'), (err: Error | string | null, role: string | null) => {
 		  if (err) {
 		    if (err === 'Auth failed.') {
-		      sessionStorage.removeItem('durhack-live-api-token-2023');
-          console.error('Couldn\'t authenticate socket connection - bad API token');
+		      sessionStorage.removeItem('durhack-live-socket-token-2023');
+          console.error('Couldn\'t authenticate socket connection - bad socket token');
           return;
 		    }
 
@@ -161,6 +168,6 @@ export function useHackathon(): THackathonConnection {
   return connection;
 }
 
-if (typeof window !== 'undefined' && localStorage.getItem('token')) {
-  connect();
+if (typeof window !== 'undefined' && localStorage.getItem('durhack-live-socket-token-2023')) {
+  connectStateSocket();
 }
