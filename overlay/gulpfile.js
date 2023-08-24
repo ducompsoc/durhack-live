@@ -1,12 +1,15 @@
 'use strict';
 
-const gulp = require('gulp');
-const sass = require('gulp-sass');
-const browserSync = require('browser-sync').create();
-const ts = require('gulp-typescript');
-const tsProject = ts.createProject('tsconfig.json');
+import gulp from 'gulp';
+import sassMeta from 'gulp-sass';
+import node_sass from 'node-sass';
+import browserSyncMeta from 'browser-sync';
+import ts from 'gulp-typescript';
 
-sass.compiler = require('node-sass');
+
+const sass = sassMeta(node_sass);
+const browserSync = browserSyncMeta.create();
+const tsProject = ts.createProject('tsconfig.json');
 
 gulp.task('assets', () => {
     return gulp.src('./src/**/*.{html,js,svg,png,jpg,jpeg,gif,ico,woff}')
