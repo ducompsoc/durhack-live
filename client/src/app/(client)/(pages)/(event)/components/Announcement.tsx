@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { useHackathon } from '@/app/(client)/util/socket';
-import Card from '@/app/(client)/(pages)/components/Card';
-import LinkButton from '@/app/(client)/(pages)/components/LinkButton';
-import Section from '@/app/(client)/(pages)/components/Section';
+import { useHackathon } from "@/app/(client)/util/socket";
+import Card from "@/app/(client)/(pages)/components/Card";
+import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
+import Section from "@/app/(client)/(pages)/components/Section";
 
 const AnnouncementContainer = styled(Card)`
 	border-left: solid 4px ${p => p.theme.secondaryA};
@@ -37,7 +37,7 @@ const Announcement = React.memo(() => {
       <AnnouncementContainer>
         <AnnouncementTitle>{state.announcement.title}</AnnouncementTitle>
         <AnnouncementText>
-          {announcement.text.split('\n').map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
+          {announcement.text.split("\n").map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
         </AnnouncementText>
         {announcement.buttonLink && (
           <LinkButton href={announcement.buttonLink} target="_blank" rel="noopener" primary>{announcement.buttonText}</LinkButton>

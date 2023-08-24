@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Formik, ErrorMessage, Form } from 'formik';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { Formik, ErrorMessage, Form } from "formik";
+import { useRouter } from "next/navigation";
 
-import { Button, ErrorAlert, FormSection, Textbox } from '@/app/(client)/login/components';
-import { makeLiveApiRequest } from '@/app/(client)/util/api';
-import { attemptStateSocketAuth } from '@/app/(client)/util/socket';
+import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
+import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import { attemptStateSocketAuth } from "@/app/(client)/util/socket";
 
 export default function SetPasswordPage() {
   const [email, setEmail] = React.useState<string>();
@@ -16,8 +16,8 @@ export default function SetPasswordPage() {
 
   React.useEffect( () => {
     (async () => {
-      const query_email = new URLSearchParams(window.location.search).get('email');
-      if (!query_email) return router.push('/login');
+      const query_email = new URLSearchParams(window.location.search).get("email");
+      if (!query_email) return router.push("/login");
       setEmail(query_email);
 
       await requestVerifyCode(query_email);
@@ -33,10 +33,10 @@ export default function SetPasswordPage() {
   async function requestVerifyCode(verify_email: string, send_again = false) {
     setError(undefined);
 
-    const send_verify_request = await makeLiveApiRequest('/auth/verify-email', {
-      method: 'POST',
+    const send_verify_request = await makeLiveApiRequest("/auth/verify-email", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
+        "Content-Type": "application/json; charset=UTF-8",
       },
       body: JSON.stringify({ email: verify_email, send_again: send_again }),
     });
@@ -50,14 +50,14 @@ export default function SetPasswordPage() {
 
     if (send_verify_response.status === 304) return;
 
-    if (send_verify_response.status === 404) return router.push('/login');
+    if (send_verify_response.status === 404) return router.push("/login");
 
     if (!send_verify_response.ok) return setUnknownError();
   }
 
   async function handleVerifyCodeSubmit(submission_verify_code: string): Promise<void> {
-    const check_verify_request = await makeLiveApiRequest('/auth/check-verify', {
-      method: 'POST',
+    const check_verify_request = await makeLiveApiRequest("/auth/check-verify", {
+      method: "POST",
       body: new URLSearchParams({ email: email, verify_code: submission_verify_code }),
     });
 
@@ -68,8 +68,8 @@ export default function SetPasswordPage() {
       return setUnknownError();
     }
 
-    if (check_verify_response.status === 400) return setError('That\'s not the right code, or it\'s expired - try again.');
-    if (check_verify_response.status === 404) return router.push('/login');
+    if (check_verify_response.status === 400) return setError("That's not the right code, or it's expired - try again.");
+    if (check_verify_response.status === 404) return router.push("/login");
     if (!check_verify_response.ok) return setUnknownError();
 
     setVerifyCode(submission_verify_code);
@@ -77,8 +77,8 @@ export default function SetPasswordPage() {
   const callbackHandleVerifyCodeSubmit = React.useCallback(handleVerifyCodeSubmit, [email, router]);
 
   async function handleSetPasswordSubmit(submission_password: string): Promise<void> {
-    const set_password_request = await makeLiveApiRequest('/auth/set-password', {
-      method: 'POST',
+    const set_password_request = await makeLiveApiRequest("/auth/set-password", {
+      method: "POST",
       body: new URLSearchParams({ email: email, verify_code: verifyCode, password: submission_password }),
     });
 
@@ -89,11 +89,11 @@ export default function SetPasswordPage() {
       return setUnknownError();
     }
 
-    if (set_password_response.status === 400) return setError('That\'s not the right code, or it\'s expired - try again.');
-    if (set_password_response.status === 404) return router.push('/login');
+    if (set_password_response.status === 400) return setError("That's not the right code, or it's expired - try again.");
+    if (set_password_response.status === 404) return router.push("/login");
     if (!set_password_response.ok) return setUnknownError();
 
-    const profile_request = await makeLiveApiRequest('/users/me');
+    const profile_request = await makeLiveApiRequest("/users/me");
     let profile_response: Response;
     try {
       profile_response = await fetch(profile_request);
@@ -107,10 +107,10 @@ export default function SetPasswordPage() {
 
     const profile = (await profile_response.json()).data;
     if (!profile.checked_in) {
-      return router.push('/login/check-in');
+      return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();
-    return router.push('/');
+    return router.push("/");
   }
   const callbackHandleSetPasswordSubmit = React.useCallback(handleSetPasswordSubmit, [email, router, verifyCode]);
 
@@ -125,7 +125,7 @@ export default function SetPasswordPage() {
       return await callbackHandleSetPasswordSubmit(submission.verify_code);
     }
 
-    throw new Error('Validation failed.');
+    throw new Error("Validation failed.");
   }, [callbackHandleSetPasswordSubmit, callbackHandleVerifyCodeSubmit]);
 
   function VerifyCodeFormSection() {
@@ -136,7 +136,7 @@ export default function SetPasswordPage() {
           Welcome to DurHack! We&apos;ve just emailed you a verification code.
         </p>
         <p>
-          <strong>Please check your email, and type your code in here.</strong> Make sure you double-check your spam folder.{' '}
+          <strong>Please check your email, and type your code in here.</strong> Make sure you double-check your spam folder.{" "}
           If it&apos;s been a while and you still don&apos;t have one, please talk to someone on the DurHack team.
         </p>
 
@@ -162,7 +162,7 @@ export default function SetPasswordPage() {
         <p>Thanks, you&apos;re in!</p>
 
         <p>
-          Next time you log in, we&apos;d like to ask you for a password instead. What{' '}
+          Next time you log in, we&apos;d like to ask you for a password instead. What{" "}
           would you like your password to be?
         </p>
         <FormSection>
@@ -184,7 +184,7 @@ export default function SetPasswordPage() {
   return (
     <main>
       <Formik
-        initialValues={{ verify_code: '', password: '', }}
+        initialValues={{ verify_code: "", password: "", }}
         onSubmit={handleSubmit}
       >
         <Form>
@@ -192,7 +192,7 @@ export default function SetPasswordPage() {
           <VerifyCodeFormSection/>
           <SetPasswordFormSection/>
           <p>
-            <Button type="submit">{verifyCode ? 'Set Password' : 'Submit'}</Button>
+            <Button type="submit">{verifyCode ? "Set Password" : "Submit"}</Button>
           </p>
         </Form>
       </Formik>

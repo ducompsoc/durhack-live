@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 export interface ICardProps {
 	colour?: string;
@@ -9,7 +9,7 @@ export interface ICardProps {
 }
 
 const Card = styled.div<ICardProps>`
-	background-color: ${p => (p.colour ? p.theme[p.colour] : '#141B2F')};
+	background-color: ${p => (p.colour ? p.theme[p.colour] : "#141B2F")};
 	margin: 9px;
 	overflow: hidden;
 

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { useHackathon } from '@/app/(client)/util/socket';
+import { useHackathon } from "@/app/(client)/util/socket";
 
 const Wrapper = styled.div`
 	width: 33%;
@@ -48,7 +48,7 @@ function zeroPad(num: number): string {
 }
 
 function digitise(num: string) {
-  return num.split('').map((char, index) => <CountdownDigit key={index}>{char}</CountdownDigit>);
+  return num.split("").map((char, index) => <CountdownDigit key={index}>{char}</CountdownDigit>);
 }
 
 const Countdown = React.memo(() => {

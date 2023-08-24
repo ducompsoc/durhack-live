@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import styled from 'styled-components';
-import format from 'date-fns/format';
+import * as React from "react";
+import styled from "styled-components";
+import format from "date-fns/format";
 
-import { IScheduledEvent, useHackathon } from '../../util/socket';
+import { IScheduledEvent, useHackathon } from "../../util/socket";
 
 // A lot of this file is brutally copied from the main site.
 
@@ -207,8 +207,8 @@ const Schedule = React.memo(() => {
               {event_group.map((event, event_idx) => (
                 <div className={`event ${event.state}`} key={event_idx}>
                   <div className="time">
-                    {event.startDate ? format(event.startDate, 'p').toLowerCase() : '--:--'}
-                    {event.endDate && <> &ndash; {format(new Date(event.endDate), 'p').toLowerCase()}</>}
+                    {event.startDate ? format(event.startDate, "p").toLowerCase() : "--:--"}
+                    {event.endDate && <> &ndash; {format(new Date(event.endDate), "p").toLowerCase()}</>}
                   </div>
                   <div className="line row center">
                     <div className="icon">
@@ -217,16 +217,16 @@ const Schedule = React.memo(() => {
                   </div>
                   <EventContent>
                     <div className="title">{event.name}</div>
-                    {event.state === 'in_progress' && event.liveLink && !event.liveLink.startsWith('#') && (
+                    {event.state === "in_progress" && event.liveLink && !event.liveLink.startsWith("#") && (
                       <PlayButton href={event.liveLink} target="_blank">
                         <span className="fas fa-play" />
                         Join Zoom
                       </PlayButton>
                     )}
-                    {event.state === 'done' && event.recordingLink && (
+                    {event.state === "done" && event.recordingLink && (
                       <PlayButton href={event.recordingLink} target="_blank">
                         <span className="fas fa-play" />
-                        {event.recordingLink.includes('youtube') ? 'Watch back' : 'Get resources'}
+                        {event.recordingLink.includes("youtube") ? "Watch back" : "Get resources"}
                       </PlayButton>
                     )}
                   </EventContent>

@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
-import { useHackathon } from '@/app/(client)/util/socket';
-import LinkButton from '@/app/(client)/(pages)/components/LinkButton';
+import React from "react";
+import styled from "styled-components";
+import { useHackathon } from "@/app/(client)/util/socket";
+import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
 
 const InteractionContainer = styled.div`
 	height: 68px;
@@ -31,10 +31,10 @@ const Interaction = React.memo(() => {
   const hackathon = useHackathon();
 
   if (hackathon.state) {
-    const liveLink = hackathon.state.schedule.find(event => event.state === 'in_progress' && event.onStream)?.liveLink;
+    const liveLink = hackathon.state.schedule.find(event => event.state === "in_progress" && event.onStream)?.liveLink;
 
     if (liveLink) {
-      if (liveLink.startsWith('#')) {
+      if (liveLink.startsWith("#")) {
         return (
           <InteractionContainer className="row center">
             <div className="flex">

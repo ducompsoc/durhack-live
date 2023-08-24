@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Formik, ErrorMessage as FormikErrorMessage, Form, Field, useFormikContext } from 'formik';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { Formik, ErrorMessage as FormikErrorMessage, Form, Field, useFormikContext } from "formik";
+import { useRouter } from "next/navigation";
 
-import { Button, ErrorAlert, FormSection, Textbox } from '@/app/(client)/login/components';
-import { makeLiveApiRequest } from '@/app/(client)/util/api';
-import { attemptStateSocketAuth } from '@/app/(client)/util/socket';
+import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
+import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import { attemptStateSocketAuth } from "@/app/(client)/util/socket";
 
 export default function CheckInPage() {
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -22,10 +22,10 @@ export default function CheckInPage() {
   const handleSubmit = React.useCallback(async (submission: any) => {
     setError(undefined);
 
-    const check_in_request = await makeLiveApiRequest('/users/me', {
-      method: 'PATCH',
+    const check_in_request = await makeLiveApiRequest("/users/me", {
+      method: "PATCH",
       headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
+        "Content-Type": "application/json; charset=UTF-8",
       },
       body: JSON.stringify({
         checked_in: true,
@@ -40,13 +40,13 @@ export default function CheckInPage() {
       return setUnknownError();
     }
 
-    if (check_in_response.status === 400) return setError('Form contains invalid input.');
-    if (check_in_response.status === 401) return router.push('/login');
+    if (check_in_response.status === 400) return setError("Form contains invalid input.");
+    if (check_in_response.status === 401) return router.push("/login");
 
     if (!check_in_response.ok) return setUnknownError();
 
     void attemptStateSocketAuth();
-    return router.push('/');
+    return router.push("/");
   }, []);
 
   function ErrorMessage() {
@@ -67,7 +67,7 @@ export default function CheckInPage() {
 
     React.useEffect(() => {
       (async () => {
-        const profile_request = await makeLiveApiRequest('/users/me');
+        const profile_request = await makeLiveApiRequest("/users/me");
         let profile_response: Response;
         try {
           profile_response = await fetch(profile_request);
@@ -75,7 +75,7 @@ export default function CheckInPage() {
           return setUnknownError();
         }
 
-        if (profile_response.status === 401) return router.push('/login');
+        if (profile_response.status === 401) return router.push("/login");
 
         if (!profile_response.ok) {
           return setUnknownError();
@@ -83,7 +83,7 @@ export default function CheckInPage() {
 
         const profile = (await profile_response.json()).data;
 
-        if (profile.checked_in) return router.push('/');
+        if (profile.checked_in) return router.push("/");
 
         console.log(profile);
 
@@ -194,16 +194,16 @@ export default function CheckInPage() {
 
         <FormSection>
           <Field type="checkbox" name="h_UK_consent" required />
-          <label htmlFor="h_UK_consent" style={{ textTransform: 'none' }}> (required){' '}
-            <span style={{ fontWeight: 'normal' }}>I authorise you to share my application/registration information with Hackathons UK Limited for event administration, Hackathons UK Limited administration, and with my authorisation email in-line with the Hackathons UK Limited Privacy Policy.</span>
+          <label htmlFor="h_UK_consent" style={{ textTransform: "none" }}> (required){" "}
+            <span style={{ fontWeight: "normal" }}>I authorise you to share my application/registration information with Hackathons UK Limited for event administration, Hackathons UK Limited administration, and with my authorisation email in-line with the Hackathons UK Limited Privacy Policy.</span>
           </label>
           <FormikErrorMessage name="h_UK_consent"/>
         </FormSection>
 
         <FormSection>
           <input type="checkbox" name="h_UK_marketing" />
-          <label htmlFor="h_UK_marketing" style={{ textTransform: 'none' }}> (optional){' '}
-            <span style={{ fontWeight: 'normal' }}>I authorise Hackathons UK Limited to send me occasional messages about hackathons and their activities.
+          <label htmlFor="h_UK_marketing" style={{ textTransform: "none" }}> (optional){" "}
+            <span style={{ fontWeight: "normal" }}>I authorise Hackathons UK Limited to send me occasional messages about hackathons and their activities.
             </span></label>
           <FormikErrorMessage name="h_UK_marketing"/>
         </FormSection>
@@ -219,12 +219,12 @@ export default function CheckInPage() {
     <main>
       <Formik
         initialValues={{
-          age: '',
-          phone_number: '',
-          university: '',
-          graduation_year: '',
-          ethnicity: 'pnts',
-          gender: 'pnts',
+          age: "",
+          phone_number: "",
+          university: "",
+          graduation_year: "",
+          ethnicity: "pnts",
+          gender: "pnts",
           h_UK_consent: false,
           h_UK_marketing: false,
         }}

@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { query } from '@/app/(client)/util/api';
+import * as React from "react";
+import { query } from "@/app/(client)/util/api";
 
 interface IOAuthResponse {
 	access_token?: string;
@@ -20,23 +20,23 @@ const DiscordContent = React.memo(() => {
     }
 
     const hash = new URLSearchParams(window.location.hash.slice(1));
-    if (hash.has('error')) {
-      setError(`We received an error from Discord: "${hash.get('error_description')}". If you\'re having problems, ask a member of the DurHack team.`);
+    if (hash.has("error")) {
+      setError(`We received an error from Discord: "${hash.get("error_description")}". If you\'re having problems, ask a member of the DurHack team.`);
 
       return;
     }
 
-    const accessToken = hash.get('access_token');
+    const accessToken = hash.get("access_token");
     if (!accessToken) {
-      setError('There\'s a problem with the URL. If you\'re having problems, ask a member of the DurHack team.');
+      setError("There's a problem with the URL. If you're having problems, ask a member of the DurHack team.");
 
       return;
     }
 
-    query('POST', 'discord', { accessToken })
+    query("POST", "discord", { accessToken })
       .then(res => {
         if (!res.inviteUrl) {
-          throw new Error('No invite URL provided.');
+          throw new Error("No invite URL provided.");
         }
 
         window.location.href = res.inviteUrl;
@@ -44,11 +44,11 @@ const DiscordContent = React.memo(() => {
       .catch(err => {
         console.error(err);
 
-        setError('An unknown error occurred. If you\'re having problems, ask a member of the DurHack team.');
+        setError("An unknown error occurred. If you're having problems, ask a member of the DurHack team.");
       });
   }, []);
 
-  return <p>{error || 'Redirecting...'}</p>;
+  return <p>{error || "Redirecting..."}</p>;
 });
 
 export default DiscordContent;

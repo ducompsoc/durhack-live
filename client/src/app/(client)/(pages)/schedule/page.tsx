@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import Schedule from '@/app/(client)/(pages)/components/Schedule';
+import Schedule from "@/app/(client)/(pages)/components/Schedule";
 
 const PageContainer = styled.div`
 	width: 100vw;

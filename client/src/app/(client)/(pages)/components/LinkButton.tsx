@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styled, { css } from 'styled-components';
+import styled, { css } from "styled-components";
 
 const LinkButton = styled.a<{ primary?: boolean }>`
 	display: inline-block;

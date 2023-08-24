@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 
-import { useHackathon } from '@/app/(client)/util/socket';
-import ContentContainer from '@/app/(client)/components/ContentContainer';
+import { useHackathon } from "@/app/(client)/util/socket";
+import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const ConnectionBarContainer = styled.div`
 	position: fixed;

@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
-import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import React from "react";
+import styled from "styled-components";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-import { useHackathon, IScheduledEvent } from '@/app/(client)/util/socket';
-import Card from '@/app/(client)/(pages)/components/Card';
-import Section from '@/app/(client)/(pages)/components/Section';
-import LinkButton from '@/app/(client)/(pages)/components/LinkButton';
+import { useHackathon, IScheduledEvent } from "@/app/(client)/util/socket";
+import Card from "@/app/(client)/(pages)/components/Card";
+import Section from "@/app/(client)/(pages)/components/Section";
+import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
 
-import Interaction from './Interaction';
+import Interaction from "./Interaction";
 
 const LiveCard = styled(Card)`
 	width: 66%;
@@ -90,7 +90,7 @@ const TopTip = React.memo(() => {
 
   return (
     <div>
-      {tip.split('\n').map((line, index) => <p key={index}>{line}</p>)}
+      {tip.split("\n").map((line, index) => <p key={index}>{line}</p>)}
     </div>
   );
 });
@@ -100,7 +100,7 @@ const Stage = React.memo(() => {
   const [inProgressEvent, setInProgressEvent] = React.useState<IScheduledEvent | null>(null);
   const [upNext, setUpNext] = React.useState<IScheduledEvent | null>(null);
   const [onTheSide, setOnTheSide] = React.useState<IScheduledEvent | null>(null);
-  const [upNextTimeToGo, setUpNextTimeToGo] = React.useState<string>('');
+  const [upNextTimeToGo, setUpNextTimeToGo] = React.useState<string>("");
 
   React.useEffect(() => {
     if (!state) {
@@ -109,7 +109,7 @@ const Stage = React.memo(() => {
 
     const reversedSchedule = [...state.schedule].reverse();
 
-    const inProgressEventIndex = reversedSchedule.findIndex(item => item.state === 'in_progress' && item.onStream);
+    const inProgressEventIndex = reversedSchedule.findIndex(item => item.state === "in_progress" && item.onStream);
     setInProgressEvent(inProgressEventIndex === -1 ? null : reversedSchedule[inProgressEventIndex]);
 
     let scheduleAfterInProgress = state.schedule;
@@ -117,8 +117,8 @@ const Stage = React.memo(() => {
       scheduleAfterInProgress = state.schedule.slice(state.schedule.length - inProgressEventIndex);
     }
 
-    setUpNext(scheduleAfterInProgress.find(item => item.state === 'scheduled') || null);
-    setOnTheSide(state.schedule.find(item => item.state === 'in_progress' && !item.onStream) || null);
+    setUpNext(scheduleAfterInProgress.find(item => item.state === "scheduled") || null);
+    setOnTheSide(state.schedule.find(item => item.state === "in_progress" && !item.onStream) || null);
   }, [state]);
 
   React.useEffect(() => {
@@ -128,13 +128,13 @@ const Stage = React.memo(() => {
 
     let startDate: Date = new Date(upNext.start);
     if (isNaN(startDate.getTime())) { /* eslint-disable-line no-restricted-globals */
-      setUpNextTimeToGo('');
+      setUpNextTimeToGo("");
       return;
     }
 
-    setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment');
+    setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : "a moment");
     const interval = setInterval(() => {
-      setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : 'a moment');
+      setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : "a moment");
     }, 1000);
 
     return () => {
@@ -149,7 +149,7 @@ const Stage = React.memo(() => {
   let nowPlayingEl: JSX.Element | undefined;
   if (inProgressEvent) {
     nowPlayingEl = (
-      <LiveNowPlaying colour="primaryDark" style={{ color: '#1e1e1e' }}>
+      <LiveNowPlaying colour="primaryDark" style={{ color: "#1e1e1e" }}>
         <LiveNowPlayingInner>
           <h3>Live now</h3>
           <LiveEventName className="row center">
@@ -179,7 +179,7 @@ const Stage = React.memo(() => {
           <LiveEventIcon><span className="far fa-clock" /></LiveEventIcon>
           {startDate && (
             <div className="flex">
-              {upNext.onStream ? 'Live here' : 'Takes place'} in{' '}
+              {upNext.onStream ? "Live here" : "Takes place"} in{" "}
               {upNextTimeToGo}
             </div>
           )}
@@ -215,16 +215,16 @@ const Stage = React.memo(() => {
 
   return (
     <Section className="row" style={{ marginBottom: 0 }}>
-      <LiveCard noPadding colour="primaryDark" style={{ color: '#1e1e1e' }}>
+      <LiveCard noPadding colour="primaryDark" style={{ color: "#1e1e1e" }}>
         <Player>
           <iframe
-	title="DurHack Livestream"
-	src={`https://player.twitch.tv/?channel=durhack&parent=${window.location.host.split(':')[0]}`}
-	height="100%"
-	width="100%"
-	frameBorder="0"
-	scrolling="0"
-	allowFullScreen
+            title="DurHack Livestream"
+            src={`https://player.twitch.tv/?channel=durhack&parent=${window.location.host.split(":")[0]}`}
+            height="100%"
+            width="100%"
+            frameBorder="0"
+            scrolling="0"
+            allowFullScreen
           >
             Your browser does not support iframes.
           </iframe>

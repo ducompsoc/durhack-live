@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import Tippy from '@tippyjs/react';
-import * as React from 'react';
-import styled from 'styled-components';
+import Tippy from "@tippyjs/react";
+import * as React from "react";
+import styled from "styled-components";
 
 import 'tippy.js/dist/tippy.css'; // eslint-disable-line
 

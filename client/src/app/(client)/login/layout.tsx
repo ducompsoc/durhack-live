@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
-import ContentContainer from '@/app/(client)/components/ContentContainer';
+import React from "react";
+import styled, { keyframes } from "styled-components";
+import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const LoginWrapper = styled.div`
 	background-image: url('/images/login-background.jpg');

@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, {useEffect} from 'react';
-import styled from 'styled-components';
-import { useRouter } from 'next/navigation';
+import React, {useEffect} from "react";
+import styled from "styled-components";
+import { useRouter } from "next/navigation";
 
-import { makeLiveApiRequest } from '@/app/(client)/util/api';
-import ContentContainer from '@/app/(client)/components/ContentContainer';
+import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import ContentContainer from "@/app/(client)/components/ContentContainer";
 
-import Header from './components/Header';
-import Footer from './components/Footer';
-import ConnectionBar from './components/ConnectionBar';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import ConnectionBar from "./components/ConnectionBar";
 
 
 const ContentArea = styled.div`
@@ -24,21 +24,21 @@ const PageLayout = React.memo(({ requireAuth, children }: React.PropsWithChildre
     if (requireAuth === false) return;
 
     (async () => {
-      const profile_request = await makeLiveApiRequest('/users/me');
+      const profile_request = await makeLiveApiRequest("/users/me");
       let profile_response: Response;
       try {
         profile_response = await fetch(profile_request);
       } catch (error) {
-        return router.push('/login');
+        return router.push("/login");
       }
 
       if (!profile_response.ok) {
-        return router.push('/login');
+        return router.push("/login");
       }
 
       const profile = (await profile_response.json()).data;
       if (!profile.checked_in) {
-        return router.push('/login/check-in');
+        return router.push("/login/check-in");
       }
     })();
   });

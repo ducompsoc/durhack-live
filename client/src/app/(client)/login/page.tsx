@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { ErrorMessage, Form, Formik } from 'formik';
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import { ErrorMessage, Form, Formik } from "formik";
+import React from "react";
+import { useRouter } from "next/navigation";
 
-import { makeLiveApiRequest } from '@/app/(client)/util/api';
-import { attemptStateSocketAuth } from '@/app/(client)/util/socket';
+import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import { attemptStateSocketAuth } from "@/app/(client)/util/socket";
 
-import { ErrorAlert, FormSection, Button, Textbox } from './components';
+import { ErrorAlert, FormSection, Button, Textbox } from "./components";
 
 
 export default function LoginPage() {
@@ -22,8 +22,8 @@ export default function LoginPage() {
   }
 
   async function handleEmailSubmit(submissionEmail: string): Promise<void> {
-    const request = await makeLiveApiRequest('/auth/check-email', {
-      method: 'POST',
+    const request = await makeLiveApiRequest("/auth/check-email", {
+      method: "POST",
       body: new URLSearchParams({ email: submissionEmail }),
     });
 
@@ -49,8 +49,8 @@ export default function LoginPage() {
     const user_details = (await check_email_response.json()).data;
 
     if (!user_details.password_set) {
-      const redirect_to = new URL('/login/set-password', window.location);
-      redirect_to.searchParams.set('email', submissionEmail);
+      const redirect_to = new URL("/login/set-password", window.location);
+      redirect_to.searchParams.set("email", submissionEmail);
       return router.push(redirect_to.toString());
     }
 
@@ -59,8 +59,8 @@ export default function LoginPage() {
   const callbackHandleEmailSubmit = React.useCallback(handleEmailSubmit, [router]);
 
   async function handlePasswordSubmit(submissionPassword: string): Promise<void> {
-    const login_request = await makeLiveApiRequest('/auth/login', {
-      method: 'POST',
+    const login_request = await makeLiveApiRequest("/auth/login", {
+      method: "POST",
       body: new URLSearchParams({ email: email, password: submissionPassword }),
     });
 
@@ -72,14 +72,14 @@ export default function LoginPage() {
     }
 
     if (login_response.status === 401) {
-      return setError('Incorrect password.');
+      return setError("Incorrect password.");
     }
 
     if (!login_response.ok) {
       return setUnknownError();
     }
 
-    const profile_request = await makeLiveApiRequest('/users/me');
+    const profile_request = await makeLiveApiRequest("/users/me");
     let profile_response: Response;
     try {
       profile_response = await fetch(profile_request);
@@ -93,10 +93,10 @@ export default function LoginPage() {
 
     const profile = (await profile_response.json()).data;
     if (!profile.checked_in) {
-      return router.push('/login/check-in');
+      return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();
-    return router.push('/');
+    return router.push("/");
   }
   const callbackHandlePasswordSubmit = React.useCallback(handlePasswordSubmit, [email, router]);
 
@@ -111,7 +111,7 @@ export default function LoginPage() {
       return await callbackHandleEmailSubmit(submission.email);
     }
 
-    throw new Error('Validation failed.');
+    throw new Error("Validation failed.");
   }, [callbackHandlePasswordSubmit, callbackHandleEmailSubmit]);
 
   function PasswordFormSection() {
@@ -151,7 +151,7 @@ export default function LoginPage() {
   return (
     <main>
       <Formik
-        initialValues={{ email: '', password: '', }}
+        initialValues={{ email: "", password: "", }}
         onSubmit={handleSubmit}
       >
         <Form>

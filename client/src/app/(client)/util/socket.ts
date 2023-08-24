@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-import { io, Socket } from 'socket.io-client';
-import { EventEmitter } from 'events';
-import { makeLiveApiRequest } from '@/app/(client)/util/api';
+import * as React from "react";
+import { io, Socket } from "socket.io-client";
+import { EventEmitter } from "events";
+import { makeLiveApiRequest } from "@/app/(client)/util/api";
 
 export interface IScheduledEvent {
 	name: string;
@@ -12,7 +12,7 @@ export interface IScheduledEvent {
 	recordingLink: string | null;
 	start: string;
 	end: string;
-	state: 'scheduled' | 'in_progress' | 'done';
+	state: "scheduled" | "in_progress" | "done";
 	onStream: boolean;
 }
 
@@ -92,21 +92,21 @@ let socket: Socket | null = null;
 let userRole: string | null = null;
 
 async function getBearerToken(): Promise<string> {
-  const request = await makeLiveApiRequest('/auth/socket-token');
+  const request = await makeLiveApiRequest("/auth/socket-token");
   const response = await fetch(request);
-  if (!response.ok) throw new Error('Couldn\'t get socket token.');
+  if (!response.ok) throw new Error("Couldn't get socket token.");
   const payload = await response.json();
   const { token } = payload;
-  if (!token) throw new Error('Couldn\'t get socket token.');
+  if (!token) throw new Error("Couldn't get socket token.");
   return token;
 }
 
 export async function attemptStateSocketAuth() {
   if (!socket) return;
 
-  if (!sessionStorage.getItem('durhack-live-socket-token-2023')) {
+  if (!sessionStorage.getItem("durhack-live-socket-token-2023")) {
     try {
-      sessionStorage.setItem('durhack-live-socket-token-2023', await getBearerToken());
+      sessionStorage.setItem("durhack-live-socket-token-2023", await getBearerToken());
     } catch (error) {
       console.error(error);
      return;
@@ -118,9 +118,9 @@ export async function attemptStateSocketAuth() {
 
     function authenticateCallback(err: Error | string | null, role: string | null): void {
       if (err) {
-        if (err === 'Auth failed.') {
-          sessionStorage.removeItem('durhack-live-socket-token-2023');
-          console.error('Couldn\'t authenticate socket connection - bad socket token');
+        if (err === "Auth failed.") {
+          sessionStorage.removeItem("durhack-live-socket-token-2023");
+          console.error("Couldn't authenticate socket connection - bad socket token");
           return reject(err);
         }
 
@@ -131,14 +131,14 @@ export async function attemptStateSocketAuth() {
       userRole = role;
       if (lastConnection.connected) {
         lastConnection.role = role;
-        events.emit('connection', lastConnection);
+        events.emit("connection", lastConnection);
       }
 
-      console.info('Authenticated.');
+      console.info("Authenticated.");
       resolve(role);
     }
 
-    socket.emit('authenticate', sessionStorage.getItem('durhack-live-socket-token-2023'), authenticateCallback);
+    socket.emit("authenticate", sessionStorage.getItem("durhack-live-socket-token-2023"), authenticateCallback);
   });
 
   return await retrieveRole;
@@ -149,26 +149,26 @@ export function connectStateSocket() {
 
   socket = io(window.location.origin);
 
-  socket.on('connect', async () => {
+  socket.on("connect", async () => {
     if (!socket) return;
-    console.log('Connected. Authenticating...');
+    console.log("Connected. Authenticating...");
     void await attemptStateSocketAuth();
   });
 
-  socket.on('globalState', (state: IHackathonState) => {
+  socket.on("globalState", (state: IHackathonState) => {
     lastConnection = { connected: true, role: userRole, state };
-    events.emit('connection', lastConnection);
+    events.emit("connection", lastConnection);
   });
 
-  socket.on('disconnect', () => {
-    lastConnection = { connected: false, role: userRole, state: lastConnection ? lastConnection.state : null };
-    events.emit('connection', lastConnection);
+  socket.on("disconnect", () => {
+    lastConnection = { connected: false, role: userRole, state: lastConnection?.state || null };
+    events.emit("connection", lastConnection);
   });
 }
 
 export function pushHackathon(newState: IHackathonState) {
   if (!socket) return;
-  socket.emit('pushState', newState, (error: Error | undefined) => {
+  socket.emit("pushState", newState, (error: Error | undefined) => {
     if (!error) return;
     console.error(error);
   });
@@ -182,15 +182,15 @@ export function useHackathon(): THackathonConnection {
       setConnection(result);
     }
 
-    events.on('connection', handleConnection);
+    events.on("connection", handleConnection);
     return () => {
-      events.removeListener('connection', handleConnection);
+      events.removeListener("connection", handleConnection);
     };
   });
 
   return connection;
 }
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
   connectStateSocket();
 }

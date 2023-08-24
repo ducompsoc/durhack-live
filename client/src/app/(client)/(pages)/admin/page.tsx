@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
 import {
   Field, FieldArray, ArrayHelpers, Form, Formik, FormikProps,
-} from 'formik';
-import React from 'react';
-import styled from 'styled-components';
+} from "formik";
+import React from "react";
+import styled from "styled-components";
 
-import { IHackathonState, pushHackathon, useHackathon } from '@/app/(client)/util/socket';
+import { IHackathonState, pushHackathon, useHackathon } from "@/app/(client)/util/socket";
 
-import Card from '../components/Card';
-import Section from '../components/Section';
+import Card from "../components/Card";
+import Section from "../components/Section";
 
 /* eslint-disable react/no-array-index-key */
 
-const scenes = ['Default', 'Feed A', 'Feed B', 'Feed C', 'Recording A', 'Recording B', 'Recording C'];
+const scenes = ["Default", "Feed A", "Feed B", "Feed C", "Recording A", "Recording B", "Recording C"];
 
 const Segment = styled.div`
 	margin: 12px 0px;
@@ -68,7 +68,7 @@ interface IOverlayFormProps {
 const OverlayForm = React.memo(({
   hackathon, category, kind, children,
 }: IOverlayFormProps) => {
-  category = category || 'overlay';
+  category = category || "overlay";
 
   const handleSubmit = React.useCallback((values: any) => {
     if (kind) {
@@ -86,10 +86,10 @@ const OverlayForm = React.memo(({
     >
       {props => (
         <Form>
-          {typeof children === 'function' ? children(props) : children}
+          {typeof children === "function" ? children(props) : children}
 
           <Buttons>
-            <button type="button" onClick={props.handleReset} disabled={!props.dirty}>Reset</button>{' '}
+            <button type="button" onClick={props.handleReset} disabled={!props.dirty}>Reset</button>{" "}
             <button type="submit" disabled={!props.dirty}>Submit</button>
           </Buttons>
         </Form>
@@ -226,11 +226,11 @@ const Main = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
                   </div>
                   <div>
                     <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                    <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, "")}>+</button>
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={() => arrayHelpers.insert(props.values.slides.length, '')}>+ Add Slide</button>
+              <button type="button" onClick={() => arrayHelpers.insert(props.values.slides.length, "")}>+ Add Slide</button>
             </Segment>
           )}
         />
@@ -322,7 +322,7 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
                   </div>
                   <div>
                     <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                    <button type="button" onClick={() => arrayHelpers.insert(index, { id: '', lowerThird: '' })}>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, { id: "", lowerThird: "" })}>
                       +
                     </button>
                   </div>
@@ -330,7 +330,7 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
               ))}
               <button
                 type="button"
-                onClick={() => arrayHelpers.insert(props.values.queue.length, { id: '', lowerThird: '' })}
+                onClick={() => arrayHelpers.insert(props.values.queue.length, { id: "", lowerThird: "" })}
               >
                 + Add Video
               </button>
@@ -344,13 +344,13 @@ const YouTube = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
 
 const Schedule = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
   const newItem = {
-    name: '',
-    icon: '',
-    start: '',
-    end: '',
-    liveLink: '',
-    recordingLink: '',
-    state: 'scheduled',
+    name: "",
+    icon: "",
+    start: "",
+    end: "",
+    liveLink: "",
+    recordingLink: "",
+    state: "scheduled",
     onStream: false,
   };
 
@@ -515,11 +515,11 @@ const Tips = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
                   </div>
                   <div>
                     <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                    <button type="button" onClick={() => arrayHelpers.insert(index, '')}>+</button>
+                    <button type="button" onClick={() => arrayHelpers.insert(index, "")}>+</button>
                   </div>
                 </div>
               ))}
-              <button type="button" onClick={() => arrayHelpers.insert(props.values.tips.length, '')}>+ Add Tip</button>
+              <button type="button" onClick={() => arrayHelpers.insert(props.values.tips.length, "")}>+ Add Tip</button>
             </Segment>
           )}
         />
@@ -535,7 +535,7 @@ export default React.memo(() => {
     return <main>Not connected.</main>;
   }
 
-  if (hackathon.role !== 'admin') {
+  if (hackathon.role !== "admin") {
     return <main>You do not have permission to view this page.</main>;
   }
 
@@ -544,7 +544,7 @@ export default React.memo(() => {
       <Section>
         <div>
           <Card>
-            This admin page controls both content on this website, and what shows on the livestream.{' '}
+            This admin page controls both content on this website, and what shows on the livestream.{" "}
             Please ask @ethan on Slack if you have any questions. Changes take effect immediately after you hit Submit.
           </Card>
         </div>

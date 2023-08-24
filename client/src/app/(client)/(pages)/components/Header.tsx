@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import ContentContainer from '@/app/(client)/components/ContentContainer';
+import ContentContainer from "@/app/(client)/components/ContentContainer";
 
-import Countdown from './Countdown';
+import Countdown from "./Countdown";
 
 
 const HeaderContainer = styled.div`

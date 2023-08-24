@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Card from '@/app/(client)/(pages)/components/Card';
-import Section from '@/app/(client)/(pages)/components/Section';
+import Card from "@/app/(client)/(pages)/components/Card";
+import Section from "@/app/(client)/(pages)/components/Section";
 
 const SocialOptionButton = styled.a`
 	position: relative;

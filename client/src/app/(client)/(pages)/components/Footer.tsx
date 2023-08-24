@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import ContentContainer from '@/app/(client)/components/ContentContainer';
+import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 
 const FooterContainer = styled.div`
@@ -26,11 +26,11 @@ const Footer = React.memo(() => (
   <FooterContainer>
     <ContentContainer>
       <p>
-        DurHack follows the{' '}
+        DurHack follows the{" "}
         <ExternalLink
-	href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-	target="_blank"
-	rel="noopener"
+          href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+          target="_blank"
+          rel="noopener"
         >
           MLH Code of Conduct
         </ExternalLink>. If something goes wrong, please talk to an organiser.

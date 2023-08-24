@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Field } from 'formik';
+import styled from "styled-components";
+import { Field } from "formik";
 
 export const FormSection = styled.div`
 	padding: 16px 0;
