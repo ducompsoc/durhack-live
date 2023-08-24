@@ -2,6 +2,10 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
+  "contributors": [
+    "Joe Clack <durhack@joeclack.me.uk>"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
