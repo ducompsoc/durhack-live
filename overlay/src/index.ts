@@ -308,7 +308,7 @@ async function startCyclingMain() {
             slide.classList.add('animate-out');
 
             console.log('Slide max delay is', (<any>slide).dataset.maxDelay, 'so will animate out after', (Number((<any>slide).dataset.maxDelay || 1) + 1.5) * 1000);
-            await new Promise(resolve => {
+            await new Promise<void>(resolve => {
                 cycleTimeout = setTimeout(() => {
                     resolve();
                 }, (Number((<any>slide).dataset.maxDelay || 1) + 1.5) * 1000);
@@ -519,7 +519,7 @@ function classList(selector: string) {
 }
 
 async function waitFor(seconds: number) {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
         setTimeout(() => {
             resolve();
         }, seconds * 1000);
@@ -601,7 +601,7 @@ function setAudio(enabled: boolean) {
 
 async function setAudioNow(muted: boolean) {
     const { inputVolumeMul: currentVolume } = await obs.call('GetInputVolume', { inputName: 'Desktop Audio' });
-    const { currentMuted } = await obs.call('GetInputMute', { inputName: 'Desktop Audio' });
+    const { inputMuted: currentMuted } = await obs.call('GetInputMute', { inputName: 'Desktop Audio' });
     // What's the volume now?
     console.info(`Volume is ${currentVolume} and want muted to be ${muted}, currently ${currentMuted}.`);
 
@@ -614,7 +614,7 @@ async function setAudioNow(muted: boolean) {
     if (muted) {
         // Slowly drag the volume down.
         let tweenVolume = currentVolume;
-        await new Promise(resolve => {
+        await new Promise<void>(resolve => {
             let interval = setInterval(() => {
                 tweenVolume -= 0.05;
                 if (tweenVolume <= 0) {
@@ -644,7 +644,7 @@ async function setAudioNow(muted: boolean) {
 
     // Slowly drag the volume up
     let tweenVolume = 0;
-    await new Promise(resolve => {
+    await new Promise<void>(resolve => {
         let interval = setInterval(() => {
             tweenVolume += 0.05;
             if (tweenVolume >= currentVolume) {

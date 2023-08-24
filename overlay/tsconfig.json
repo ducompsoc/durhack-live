@@ -1,9 +1,16 @@
 {
     "compilerOptions": {
-        "target": "es6",
+        "target": "esnext",
+        "module": "esnext",
         "strict": true,
+        "moduleResolution": "nodenext",
+        "skipLibCheck": true,
+        "esModuleInterop": true,
         "strictNullChecks": true,
-        "allowSyntheticDefaultImports": false
+        "allowSyntheticDefaultImports": false,
+        "outDir": "dist",
+        "types": [],
+        "lib": ["esnext", "DOM"]
     },
     "include": [
         "src"
