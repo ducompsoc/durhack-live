@@ -1,9 +1,12 @@
-const obs = new (<any>window).OBSWebSocket();
-obs.connect({ address: '127.0.0.1:4444', password: 'bF5cG8lL8hN4eP7h' }).then(() => {
+import { io, Socket } from "socket.io-client";
+import OBSWebSocket from "obs-websocket-js";
+import { isEqual } from "lodash";
+
+const obs = new OBSWebSocket();
+
+obs.connect('127.0.0.1:4444', 'bF5cG8lL8hN4eP7h').then(() => {
     console.log('Connected to OBS.');
 });
-
-let isEqual: (a: any, b: any) => boolean = (<any>window)._.isEqual;
 
 interface IOverlayState {
     currentScene: {
@@ -53,7 +56,7 @@ interface IOverlayState {
     };
 }
 
-let socket: SocketIOClient.Socket;
+let socket: Socket;
 let currentOverlay: IOverlayState | null = null;
 
 function onYouTubeIframeAPIReady() {
@@ -183,7 +186,7 @@ async function switchScene(sceneName: string, countdown: number) {
     }, 1000);
 }
 
-function switchSceneTo(sceneName: string) {
+async function switchSceneTo(sceneName: string) {
     console.log('now: ' + sceneName);
 
     if (sceneName === 'Default') {
@@ -196,9 +199,7 @@ function switchSceneTo(sceneName: string) {
         classList('.main-wrapper').add('animate-out');
     }
 
-    obs.send('SetCurrentScene', {
-        'scene-name': sceneName,
-    });
+    await obs.call('SetCurrentProgramScene', { sceneName });
 }
 
 let lowerThirdWhen: string | null = null;
@@ -229,8 +230,8 @@ async function updateLowerThird(enabled: boolean, icon: string, pretext: string,
             pretextEl.classList.remove('active');
         }
         document.querySelector('.lower-third .pre-text .text')!.textContent = pretext;
-        
-        document.querySelector('.lower-third .countdown')!.textContent = when ? getNextUpCountdown(when) : '';
+
+        document.querySelector('.lower-third .countdown')!.textContent = getNextUpCountdown(when) || '';
 
         classList('.lower-third').remove('animate-out');
         classList('.lower-third').add('animate-in');
@@ -599,28 +600,29 @@ function setAudio(enabled: boolean) {
 }
 
 async function setAudioNow(muted: boolean) {
+    const { inputVolumeMul: currentVolume } = await obs.call('GetInputVolume', { inputName: 'Desktop Audio' });
+    const { currentMuted } = await obs.call('GetInputMute', { inputName: 'Desktop Audio' });
     // What's the volume now?
-    const current: { volume: number; muted: boolean } = await obs.send('GetVolume', { source: 'Desktop Audio' });
-    console.info(`Volume is ${current.volume} and want muted to be ${muted}, currently ${current.muted}.`);
+    console.info(`Volume is ${currentVolume} and want muted to be ${muted}, currently ${currentMuted}.`);
 
     // If we're already muted... cool! Nothing to do.
-    if (current.muted === muted) {
+    if (currentMuted === muted) {
         return;
     }
 
     // If we want to mute
     if (muted) {
         // Slowly drag the volume down.
-        let currentVolume = current.volume;
+        let tweenVolume = currentVolume;
         await new Promise(resolve => {
             let interval = setInterval(() => {
-                currentVolume -= 0.05;
-                if (currentVolume <= 0) {
+                tweenVolume -= 0.05;
+                if (tweenVolume <= 0) {
                     clearInterval(interval);
                     resolve();
                 } else {
-                    console.info(`Set volume to ${currentVolume}...`);
-                    obs.send('SetVolume', { source: 'Desktop Audio', volume: currentVolume }).catch((err: Error) => {
+                    console.info(`Set volume to ${tweenVolume}...`);
+                    obs.call('SetInputVolume', { inputName: 'Desktop Audio', inputVolumeMul: tweenVolume }).catch((err: Error) => {
                         console.error(err);
                     });
                 }
@@ -628,31 +630,31 @@ async function setAudioNow(muted: boolean) {
         });
 
         // Now mute it altogether.
-        await obs.send('SetMute', { source: 'Desktop Audio', mute: true });
+        await obs.call('SetInputMute', { inputName: 'Desktop Audio', inputMuted: true });
 
         // And set the volume back to whatever it was before.
-        await obs.send('SetVolume', { source: 'Desktop Audio', volume: current.volume });
+        await obs.call('SetInputVolume', { inputName: 'Desktop Audio', inputVolumeMul: currentVolume });
 
         return;
     }
 
     // If we want to unmute, set volume to zero and unmute.
-    await obs.send('SetVolume', { source: 'Desktop Audio', volume: 0 });
-    await obs.send('SetMute', { source: 'Desktop Audio', mute: false });
+    await obs.call('SetInputVolume', { inputName: 'Desktop Audio', inputVolumeMul: 0 });
+    await obs.call('SetInputMute', { inputName: 'Desktop Audio', inputMuted: false });
 
     // Slowly drag the volume up
-    let currentVolume = 0;
+    let tweenVolume = 0;
     await new Promise(resolve => {
         let interval = setInterval(() => {
-            currentVolume += 0.05;
-            if (currentVolume >= current.volume) {
-                currentVolume = current.volume;
+            tweenVolume += 0.05;
+            if (tweenVolume >= currentVolume) {
+                tweenVolume = currentVolume;
             }
-            console.info(`Set volume to ${currentVolume}...`);
-            obs.send('SetVolume', { source: 'Desktop Audio', volume: currentVolume }).catch((err: Error) => {
+            console.info(`Set volume to ${tweenVolume}...`);
+            obs.call("SetInputVolume", { inputName: 'Desktop Audio', inputVolumeMul: tweenVolume }).catch((err: Error) => {
                 console.error(err);
             });
-            if (currentVolume >= current.volume) {
+            if (tweenVolume >= currentVolume) {
                 clearInterval(interval);
                 resolve();
             }
@@ -680,13 +682,13 @@ setInterval(() => {
     // "Next up" tick
     const nextUpCountdown = document.querySelector('.nextup-countdown');
     if (mainNextUpWhen && nextUpCountdown) {
-        nextUpCountdown.textContent = getNextUpCountdown(mainNextUpWhen);
+        nextUpCountdown.textContent = getNextUpCountdown(mainNextUpWhen) || '';
     }
 
     // "Lower third countdown" tick
     const lowerThirdCountdown = document.querySelector('.lower-third .countdown');
     if (lowerThirdWhen && lowerThirdCountdown) {
-        lowerThirdCountdown.textContent = getNextUpCountdown(lowerThirdWhen);
+        lowerThirdCountdown.textContent = getNextUpCountdown(lowerThirdWhen) || '';
     }
 
     // "Milestone" tick

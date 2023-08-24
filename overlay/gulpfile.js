@@ -15,7 +15,7 @@ gulp.task('assets', () => {
 
 gulp.task('sass', () => {
     return gulp.src('./src/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
+        .pipe(sass().on('error', console.error))
         .pipe(gulp.dest('./dist'));
 });
 
@@ -33,6 +33,7 @@ gulp.task('build', gulp.series('assets', 'sass', 'icons', 'ts'));
 gulp.task('serve', gulp.series('build', () => {
     browserSync.init({ server: './dist' });
 
+    gulp.series('icons');
     gulp.watch('./src/**/*.scss', gulp.series('sass'));
     gulp.watch('./src/**/*.ts', gulp.series('ts'));
     gulp.watch('./src', gulp.series('assets')).on('change', browserSync.reload);
