@@ -2,6 +2,13 @@ import { io, Socket } from "socket.io-client";
 import OBSWebSocket from "obs-websocket-js";
 import { isEqual } from "lodash";
 
+
+declare global {
+    interface Window {
+        onYoutubeIframeAPIReady: () => void;
+    }
+}
+
 const obs = new OBSWebSocket();
 
 obs.connect('127.0.0.1:4444', 'bF5cG8lL8hN4eP7h').then(() => {
@@ -59,7 +66,8 @@ interface IOverlayState {
 let socket: Socket;
 let currentOverlay: IOverlayState | null = null;
 
-function onYouTubeIframeAPIReady() {
+
+window.onYoutubeIframeAPIReady = function onYouTubeIframeAPIReady() {
     const url = window.location.host.includes('live.durhack.com') ? '/' : 'http://127.0.0.1:3001';
     socket = io(url, { transports: ['websocket'] });
 
