@@ -3,7 +3,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { useHackathon } from "@/app/(client)/util/socket";
+import { useHackathon } from "@/app/util/socket";
 import Card from "@/app/(client)/(pages)/components/Card";
 import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
 import Section from "@/app/(client)/(pages)/components/Section";

@@ -4,7 +4,7 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 
-import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import { makeLiveApiRequest } from "@/app/util/api";
 import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 import Header from "./components/Header";

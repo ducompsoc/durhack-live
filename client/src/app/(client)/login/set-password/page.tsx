@@ -5,8 +5,8 @@ import { Formik, ErrorMessage, Form } from "formik";
 import { useRouter } from "next/navigation";
 
 import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
-import { makeLiveApiRequest } from "@/app/(client)/util/api";
-import { attemptStateSocketAuth } from "@/app/(client)/util/socket";
+import { makeLiveApiRequest } from "@/app/util/api";
+import { attemptStateSocketAuth } from "@/app/util/socket";
 
 export default function SetPasswordPage() {
   const [email, setEmail] = React.useState<string>();

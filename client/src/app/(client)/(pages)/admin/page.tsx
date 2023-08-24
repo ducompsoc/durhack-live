@@ -6,7 +6,7 @@ import {
 import React from "react";
 import styled from "styled-components";
 
-import { IHackathonState, pushHackathon, useHackathon } from "@/app/(client)/util/socket";
+import { IHackathonState, pushHackathon, useHackathon } from "@/app/util/socket";
 
 import Card from "../components/Card";
 import Section from "../components/Section";

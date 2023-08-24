@@ -4,8 +4,8 @@ import { ErrorMessage, Form, Formik } from "formik";
 import React from "react";
 import { useRouter } from "next/navigation";
 
-import { makeLiveApiRequest } from "@/app/(client)/util/api";
-import { attemptStateSocketAuth } from "@/app/(client)/util/socket";
+import { makeLiveApiRequest } from "@/app/util/api";
+import { attemptStateSocketAuth } from "@/app/util/socket";
 
 import { ErrorAlert, FormSection, Button, Textbox } from "./components";
 

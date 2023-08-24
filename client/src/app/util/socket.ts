@@ -3,7 +3,7 @@
 import * as React from "react";
 import { io, Socket } from "socket.io-client";
 import { EventEmitter } from "events";
-import { makeLiveApiRequest } from "@/app/(client)/util/api";
+import { makeLiveApiRequest } from "@/app/util/api";
 
 export interface IScheduledEvent {
 	name: string;
@@ -16,7 +16,7 @@ export interface IScheduledEvent {
 	onStream: boolean;
 }
 
-interface IOverlayState {
+export interface IOverlayState {
 	currentScene: {
 		scene: string;
 		countdown: number;
@@ -145,6 +145,7 @@ export async function attemptStateSocketAuth() {
 }
 
 export function connectStateSocket() {
+  if (typeof window === "undefined") return;
   if (socket) return;
 
   socket = io(window.location.origin);
@@ -191,6 +192,4 @@ export function useHackathon(): THackathonConnection {
   return connection;
 }
 
-if (typeof window !== "undefined") {
-  connectStateSocket();
-}
+void connectStateSocket();

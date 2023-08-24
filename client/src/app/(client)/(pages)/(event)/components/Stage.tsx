@@ -4,7 +4,7 @@ import React from "react";
 import styled from "styled-components";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
-import { useHackathon, IScheduledEvent } from "@/app/(client)/util/socket";
+import { useHackathon, IScheduledEvent } from "@/app/util/socket";
 import Card from "@/app/(client)/(pages)/components/Card";
 import Section from "@/app/(client)/(pages)/components/Section";
 import LinkButton from "@/app/(client)/(pages)/components/LinkButton";

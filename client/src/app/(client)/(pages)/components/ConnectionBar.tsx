@@ -3,7 +3,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import { useHackathon } from "@/app/(client)/util/socket";
+import { useHackathon } from "@/app/util/socket";
 import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const ConnectionBarContainer = styled.div`

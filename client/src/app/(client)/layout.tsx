@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 
-import StyledComponentsRegistry from "@/app/(client)/util/styledComponentsRegistry";
+import StyledComponentsRegistry from "./styledComponentsRegistry";
 
 
 export const metadata: Metadata = {
