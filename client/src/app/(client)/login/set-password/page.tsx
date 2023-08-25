@@ -58,7 +58,7 @@ export default function SetPasswordPage() {
   async function handleVerifyCodeSubmit(submission_verify_code: string): Promise<void> {
     const check_verify_request = await makeLiveApiRequest("/auth/check-verify", {
       method: "POST",
-      body: new URLSearchParams({ email: email, verify_code: submission_verify_code }),
+      body: new URLSearchParams({ email: email!, verify_code: submission_verify_code! }),
     });
 
     let check_verify_response: Response;
@@ -79,7 +79,7 @@ export default function SetPasswordPage() {
   async function handleSetPasswordSubmit(submission_password: string): Promise<void> {
     const set_password_request = await makeLiveApiRequest("/auth/set-password", {
       method: "POST",
-      body: new URLSearchParams({ email: email, verify_code: verifyCode, password: submission_password }),
+      body: new URLSearchParams({ email: email!, verify_code: verifyCode!, password: submission_password! }),
     });
 
     let set_password_response: Response;
