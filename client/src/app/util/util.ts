@@ -9,3 +9,11 @@ export async function waitFor(seconds: number) {
     }, seconds * 1000);
   });
 }
+
+export function zeroPad(num: number) {
+  if (num < 10) {
+    return `0${num}`;
+  }
+
+  return num;
+}
