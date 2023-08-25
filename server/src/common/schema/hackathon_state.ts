@@ -6,13 +6,15 @@ enum ScheduledEventState {
   done = "done"
 }
 
+const optionalDatetimeString = z.string().datetime().or(z.literal(""));
+
 const ScheduledEventSchema = z.object({
   name: z.string(),
   icon: z.string(),
   liveLink: z.string().nullable(),
   recordingLink: z.string().nullable(),
   start: z.string().datetime(),
-  end: z.string().datetime().or(z.literal("")),
+  end: optionalDatetimeString,
   state: z.nativeEnum(ScheduledEventState),
   onStream: z.boolean(),
 });
@@ -29,7 +31,7 @@ const OverlayStateSchema = z.object({
       enabled: z.boolean(),
       pretext: z.string(),
       text: z.string(),
-      when: z.string(),
+      when: optionalDatetimeString,
     }),
     slides: z.array(z.string()),
   }),
@@ -45,11 +47,15 @@ const OverlayStateSchema = z.object({
   }),
   lowerThird: z.object({
     enabled: z.boolean(),
+    icon: z.string(),
+    pretext: z.string(),
+    text: z.string(),
+    when: optionalDatetimeString,
   }),
   milestone: z.object({
     enabled: z.boolean(),
     text: z.string(),
-    when: z.string(),
+    when: z.string().datetime(),
   }),
   youtube: z.object({
     enabled: z.boolean(),
