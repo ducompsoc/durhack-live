@@ -4,7 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import format from "date-fns/format";
 
-import { IScheduledEvent, useHackathon } from "../../util/socket";
+import { IScheduledEvent, useHackathon } from "@/app/util/socket";
 
 // A lot of this file is brutally copied from the main site.
 
