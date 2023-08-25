@@ -116,13 +116,12 @@ export default function SetPasswordPage() {
 
   const handleSubmit = React.useCallback(async (submission: { verify_code?: string, password?: string }) => {
     setError(undefined);
-
     if (submission.password) {
-      return await callbackHandleVerifyCodeSubmit(submission.password);
+      return await callbackHandleSetPasswordSubmit(submission.password);
     }
 
     if (submission.verify_code) {
-      return await callbackHandleSetPasswordSubmit(submission.verify_code);
+      return await callbackHandleVerifyCodeSubmit(submission.verify_code);
     }
 
     throw new Error("Validation failed.");
