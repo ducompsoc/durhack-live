@@ -27,12 +27,12 @@ function MilestoneCountdown(props: { hours: number, minutes: number, seconds: nu
 
 export default function OverlayMilestone() {
   const { state } = useHackathon();
-  const [lastMilestone, setLastMilestone] = React.useState<IOverlayState["milestone"]>(state?.overlay.milestone || null);
+  const [lastMilestone, setLastMilestone] = React.useState<IOverlayState["milestone"] | null>(state?.overlay.milestone || null);
   const [milestoneWhen, setMilestoneWhen] = React.useState<Date>(() => {
     if (!state?.overlay.milestone.when) return new Date();
     return new Date(state.overlay.milestone.when);
   });
-  const [milestoneText, setMilestoneText] = React.useState<string>(null);
+  const [milestoneText, setMilestoneText] = React.useState<string | null>(null);
   let milestoneCountdownValues = useCountdown(milestoneWhen);
   const milestoneContainerRef = React.useRef<HTMLDivElement | null>(null);
 
