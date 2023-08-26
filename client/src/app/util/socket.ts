@@ -48,6 +48,7 @@ export interface IOverlayState {
 		pretext: string;
 		text: string;
 		when: string;
+    managedBy: "admin" | "youtube";
 	};
 	milestone: {
 		enabled: boolean;
