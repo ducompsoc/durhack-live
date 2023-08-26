@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Field, FieldArray, ArrayHelpers, Form, Formik, FormikProps,
+  Field, FieldArray, ArrayHelpers, Form, Formik, FormikProps, useFormikContext, FormikValues,
 } from "formik";
 import React from "react";
 import styled from "styled-components";
 
-import { IHackathonState, pushHackathon, useHackathon } from "@/app/util/socket";
+import {IHackathonState, IOverlayState, pushHackathon, useHackathon} from "@/app/util/socket";
 
 import Card from "../components/Card";
 import Section from "../components/Section";
@@ -60,70 +60,90 @@ const Table = styled.table`
 
 interface IOverlayFormProps {
 	hackathon: IHackathonState;
-	category?: string;
-	kind?: string;
+  initialValues: FormikValues;
 	children: ((props: FormikProps<any>) => React.ReactNode) | React.ReactNode
+  defaultButtons?: boolean
 }
 
-const OverlayForm = React.memo(({
-  hackathon, category, kind, children,
-}: IOverlayFormProps) => {
-  category = category || "overlay";
+const DefaultOverlayFormButtons = React.memo(() => {
+  const formik = useFormikContext();
 
-  const handleSubmit = React.useCallback((values: any) => {
-    if (kind) {
-      pushHackathon({ ...hackathon, [category]: { ...(hackathon as any)[category], [kind]: values } });
-    } else {
-      pushHackathon({ ...hackathon, ...values });
-    }
-  }, [hackathon, category, kind]);
+  return (
+    <Buttons>
+      <button type="button" onClick={formik.handleReset} disabled={!formik.dirty}>Reset</button>{" "}
+      <button type="submit" disabled={!formik.dirty}>Submit</button>
+    </Buttons>
+  );
+});
+
+const OverlayLowerThirdFormButtons = React.memo(({ managedBy }: { managedBy: "admin" | "youtube" }) => {
+  const formik = useFormikContext();
+
+  console.log(`managedBy: ${managedBy}`);
+  const disableSubmit = managedBy === "admin" && !formik.dirty;
+
+  return (
+    <Buttons>
+      <button type="button" onClick={formik.handleReset} disabled={!formik.dirty}>Reset</button>{" "}
+      <button type="submit" disabled={disableSubmit}>Submit</button>
+    </Buttons>
+  );
+});
+
+
+const OverlayForm = React.memo(({
+  initialValues, handleSubmit, children
+}: IOverlayFormProps) => {
 
   return (
     <Formik
-      initialValues={kind ? (hackathon as any)[category][kind] : hackathon}
+      initialValues={initialValues}
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {props => (
-        <Form>
-          {typeof children === "function" ? children(props) : children}
-
-          <Buttons>
-            <button type="button" onClick={props.handleReset} disabled={!props.dirty}>Reset</button>{" "}
-            <button type="submit" disabled={!props.dirty}>Submit</button>
-          </Buttons>
-        </Form>
-      )}
+      {props => {
+        return (
+          <Form>
+            {typeof children === "function" ? children(props) : children}
+          </Form>
+        );
+      }}
     </Formik>
   );
 });
 
-const SwitchScene = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
-  <OverlayForm hackathon={hackathon} kind="currentScene">
-    <h3>Switch Scene</h3>
+const SwitchScene = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
+  function handleSubmit(values: IOverlayState["currentScene"]) {
+    pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, currentScene: values } });
+  }
 
-    <p>You should check the feed is healthy before you switch to one. Specifying no countdown results in an instant transition.</p>
+  return (
+    <OverlayForm hackathon={hackathon} initialValues={hackathon.overlay.currentScene} >
+      <h3>Switch Scene</h3>
 
-    <Segment className="row">
-      <Label>Scene:</Label>
-      <div>
-        <Field as="select" name="scene">
-          {scenes.map(value => <option value={value} key={value}>{value}</option>)}
-        </Field>
-      </div>
-    </Segment>
+      <p>You should check the feed is healthy before you switch to one. Specifying no countdown results in an instant transition.</p>
 
-    <Segment className="row">
-      <Label>Seconds:</Label>
-      <div><Field type="number" name="countdown" min="0" step="1" /></div>
-    </Segment>
+      <Segment className="row">
+        <Label>Scene:</Label>
+        <div>
+          <Field as="select" name="scene">
+            {scenes.map(value => <option value={value} key={value}>{value}</option>)}
+          </Field>
+        </div>
+      </Segment>
 
-    <Segment className="row">
-      <Label>Music on:</Label>
-      <div><Field type="checkbox" name="music" /></div>
-    </Segment>
-  </OverlayForm>
-));
+      <Segment className="row">
+        <Label>Seconds:</Label>
+        <div><Field type="number" name="countdown" min="0" step="1" /></div>
+      </Segment>
+
+      <Segment className="row">
+        <Label>Music on:</Label>
+        <div><Field type="checkbox" name="music" /></div>
+      </Segment>
+    </OverlayForm>
+  )
+});
 
 const Milestone = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
   <OverlayForm hackathon={hackathon} kind="milestone">
@@ -239,38 +259,45 @@ const Main = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
   </OverlayForm>
 ));
 
-const LowerThird = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
-  <OverlayForm hackathon={hackathon} kind="lowerThird">
-    <h3>Lower Third</h3>
+const LowerThird = React.memo(({ hackathon }: { hackathon: IHackathonState }) => {
+  return (
+    <OverlayForm hackathon={hackathon} kind="lowerThird" defaultButtons={false}>
+      <h3>Lower Third</h3>
 
-    <p>This is a message that shows at the bottom of a feed. This will never show on the Default scene. Icon is optional.</p>
+      <p>This is a message that shows at the bottom of a feed. This will never show on the Default scene. Icon is optional.</p>
 
-    <Segment className="row">
-      <Label>Enabled:</Label>
-      <div><Field type="checkbox" name="enabled" /></div>
-    </Segment>
+      <Segment className="row">
+        <Label>Enabled:</Label>
+        <div><Field type="checkbox" name="enabled" /></div>
+      </Segment>
 
-    <Segment className="row">
-      <Label>Icon:</Label>
-      <div><Field type="text" name="icon" placeholder="e.g. fab fa-slack-hash" /></div>
-    </Segment>
+      <Segment className="row">
+        <Label>Icon:</Label>
+        <div><Field type="text" name="icon" placeholder="e.g. fab fa-slack-hash" /></div>
+      </Segment>
 
-    <Segment className="row">
-      <Label>Pre-text:</Label>
-      <div><Field type="text" name="pretext" /></div>
-    </Segment>
+      <Segment className="row">
+        <Label>Pre-text:</Label>
+        <div><Field type="text" name="pretext" /></div>
+      </Segment>
 
-    <Segment className="row">
-      <Label>Text:</Label>
-      <div><Field type="text" name="text" /></div>
-    </Segment>
+      <Segment className="row">
+        <Label>Text:</Label>
+        <div><Field type="text" name="text" /></div>
+      </Segment>
 
-    <Segment className="row">
-      <Label>Countdown until:</Label>
-      <div><Field type="text" name="when" /></div>
-    </Segment>
-  </OverlayForm>
-));
+      <Segment className="row">
+        <Label>Countdown until:</Label>
+        <div><Field type="text" name="when" /></div>
+      </Segment>
+
+      <Field type="text" name="managedBy"/>
+
+      <OverlayLowerThirdFormButtons managedBy={hackathon.overlay.lowerThird.managedBy} />
+
+    </OverlayForm>
+  );
+});
 
 const UpperThird = React.memo(({ hackathon }: { hackathon: IHackathonState }) => (
   <OverlayForm hackathon={hackathon} kind="upperThird">
