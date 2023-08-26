@@ -201,7 +201,8 @@
       "icon": "",
       "pretext": "",
       "text": "",
-      "when": ""
+      "when": "",
+      "managedBy": "admin"
     },
     "milestone": {
       "enabled": false,

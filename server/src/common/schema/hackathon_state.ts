@@ -51,6 +51,7 @@ const OverlayStateSchema = z.object({
     pretext: z.string(),
     text: z.string(),
     when: optionalDatetimeString,
+    managedBy: z.literal("admin").or(z.literal("youtube")),
   }),
   milestone: z.object({
     enabled: z.boolean(),
