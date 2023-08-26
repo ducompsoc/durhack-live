@@ -215,7 +215,7 @@ const Stage = React.memo(() => {
 
   return (
     <Section className="row" style={{ marginBottom: 0 }}>
-      <LiveCard noPadding colour="primaryDark" style={{ color: "#1e1e1e" }}>
+      <LiveCard $noPadding colour="primaryDark" style={{ color: "#1e1e1e" }}>
         <Player>
           <iframe
             title="DurHack Livestream"
