@@ -129,6 +129,10 @@ export async function attemptStateSocketAuth() {
         return reject(err);
       }
 
+      if (!role) {
+        return reject(new Error("User role is null"));
+      }
+
       userRole = role;
       if (lastConnection.connected) {
         lastConnection.role = role;
