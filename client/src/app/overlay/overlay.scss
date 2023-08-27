@@ -108,7 +108,7 @@ html, body {
     }
 
     .text {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 600;
       text-transform: uppercase;
     }
@@ -129,9 +129,10 @@ html, body {
           opacity: 0;
         }
 
-        &:not(.sep) {
-          width: 92px;
+        &.digit {
+          width: 46px;
           overflow: hidden;
+          text-align: center;
         }
       }
     }
