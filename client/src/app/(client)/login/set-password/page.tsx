@@ -2,27 +2,29 @@
 
 import React from "react";
 import { Formik, ErrorMessage, Form } from "formik";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
 import { makeLiveApiRequest } from "@/app/util/api";
 import { attemptStateSocketAuth } from "@/app/util/socket";
 
 export default function SetPasswordPage() {
+  const searchParams = useSearchParams();
   const [email, setEmail] = React.useState<string>();
   const [error, setError] = React.useState<string>();
   const [verifyCode, setVerifyCode] = React.useState<string>();
   const router = useRouter();
 
+  const query_email = searchParams.get("email");
+
   React.useEffect( () => {
     (async () => {
-      const query_email = new URLSearchParams(window.location.search).get("email");
       if (!query_email) return router.push("/login");
       setEmail(query_email);
 
       await requestVerifyCode(query_email);
     })();
-  }, []);
+  }, [query_email]);
 
   function setUnknownError() {
     setError(`An unknown error occurred. Please try a refresh, and if you\'re still having problems,
