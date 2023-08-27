@@ -73,7 +73,7 @@ export default function OverlayYoutubeQueue() {
     await youtubeElement.resetPlayer();
   }
 
-  const onPlayerReady: YouTubeProps["onReady"] = (event) => {
+  const onPlayerReady: YouTubeProps["onReady"] = async (event) => {
     const youtubeElement = youtubeRef.current;
     if (!youtubeElement) return;
 
@@ -83,7 +83,7 @@ export default function OverlayYoutubeQueue() {
     if (!containerElement) return;
 
     containerElement.classList.add("animate-in");
-    event.target.loadPlaylist(queue.map(({ id }) => id));
+    await event.target.loadPlaylist(queue.map(({ id }) => id));
   };
 
   function onInitialPlayback(player: YouTubePlayer) {
@@ -98,8 +98,15 @@ export default function OverlayYoutubeQueue() {
     });
   }
 
-  const onStateChange: YouTubeProps["onStateChange"] = (event) => {
+  const onStateChange: YouTubeProps["onStateChange"] = async (event) => {
     const playerState = event.data;
+
+    if (
+      lastPlayerStateIndex === YouTube.PlayerState.BUFFERING
+      && playerState === YouTube.PlayerState.UNSTARTED
+    ) {
+      await event.target.playVideo();
+    }
 
     if (
       lastPlayerStateIndex === YouTube.PlayerState.UNSTARTED
