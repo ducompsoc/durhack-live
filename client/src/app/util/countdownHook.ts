@@ -21,7 +21,14 @@ function getCountdownValues(countdownMillis: number) {
   return { days, hours, minutes, seconds, milliseconds };
 }
 
-export default function useCountdown(countdownTo: Date) {
+/**
+ * a React hook that returns an object containing days, hours, ..., milliseconds
+ * counting down to countdownTo. The values will update every `granularity` milliseconds. (default: 1000ms)
+ *
+ * @param countdownTo
+ * @param granularity
+ */
+export default function useCountdown(countdownTo: Date, granularity: number = 1000) {
   const countdownToMillis = countdownTo.getTime();
 
   function calcCountdownMillis() {
@@ -34,7 +41,7 @@ export default function useCountdown(countdownTo: Date) {
     setCountdownMillis(calcCountdownMillis());
     const interval = setInterval(() => {
       setCountdownMillis(calcCountdownMillis());
-    }, 1000);
+    }, granularity);
     return () => clearInterval(interval);
   }, [countdownToMillis]);
 
