@@ -3,6 +3,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
+import useCountdown from "@/app/util/countdownHook";
 import { useHackathon } from "@/app/util/socket";
 
 const Wrapper = styled.div`
@@ -21,7 +22,7 @@ const WrapperInner = styled.div`
 
 const CountdownTitle = styled.div`
 	width: 100%;
-	font-size: 24px;
+	font-size: 26px;
     font-weight: 600;
 	text-transform: uppercase;
 	margin-bottom: -6px;
@@ -53,39 +54,18 @@ function digitise(num: string) {
 
 const Countdown = React.memo(() => {
   const { state } = useHackathon();
-  const [countdownValues, setCountdownValues] = React.useState<[number, number, number]>();
-
-  const countdownTo = React.useMemo(() => {
-    if (!state) {
-      return null;
-    }
-
-    const millis = (state as any).milestoneMillis;
-    if (millis === null) {
-      return null;
-    }
-
-    return Date.now() + millis;
-  }, [state]);
+  const [milestoneWhen, setMilestoneWhen] = React.useState<Date>(() => {
+    if (!state?.overlay.milestone.when) return new Date();
+    return new Date(state.overlay.milestone.when);
+  });
+  const countdownValues = useCountdown(milestoneWhen, 500);
 
   React.useEffect(() => {
-    if (!countdownTo) {
-      return () => {};
-    }
+    if (!state) return;
 
-    const countdownToSeconds = Math.floor(countdownTo / 1000);
-    const interval = setInterval(() => {
-      const diffSeconds = Math.max(0, countdownToSeconds - Math.floor(Date.now() / 1000));
-      const hours = Math.floor(diffSeconds / 3600);
-      const minutes = Math.floor((diffSeconds - (hours * 3600)) / 60);
-      const seconds = diffSeconds - (hours * 3600) - (minutes * 60);
-      setCountdownValues([hours, minutes, seconds]);
-    }, 500);
+    setMilestoneWhen(new Date(state.overlay.milestone.when));
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [countdownTo]);
+  }, [state]);
 
   if (!state || !state.overlay.milestone.enabled || !countdownValues) {
     return <></>;
@@ -96,11 +76,11 @@ const Countdown = React.memo(() => {
       <WrapperInner className="column center flex">
         <CountdownTitle>{state.overlay.milestone.text}</CountdownTitle>
         <CountdownContainer>
-          {digitise(zeroPad(countdownValues[0]))}
+          {digitise(zeroPad(countdownValues.hours))}
           :
-          {digitise(zeroPad(countdownValues[1]))}
+          {digitise(zeroPad(countdownValues.minutes))}
           :
-          {digitise(zeroPad(countdownValues[2]))}
+          {digitise(zeroPad(countdownValues.seconds))}
         </CountdownContainer>
       </WrapperInner>
     </Wrapper>
