@@ -5,8 +5,12 @@ import { isEqual } from "lodash";
 
 import { waitFor, zeroPad } from "@/app/util/util";
 import useCountdown from "@/app/util/countdownHook";
-import {IOverlayState, useHackathon} from "@/app/util/socket";
+import { IOverlayState, useHackathon } from "@/app/util/socket";
 
+
+function digitise(num: string) {
+  return num.split("").map((char, index) => <span className="digit" key={index}>{char}</span>);
+}
 
 function MilestoneCountdown(props: { hours: number, minutes: number, seconds: number }) {
   const { hours, minutes, seconds } = props;
@@ -15,15 +19,14 @@ function MilestoneCountdown(props: { hours: number, minutes: number, seconds: nu
 
   return (
     <>
-      <span>{zeroPad(hours)}</span>
+      {digitise(zeroPad(hours))}
       <Sep />
-      <span>{zeroPad(minutes)}</span>
+      {digitise(zeroPad(minutes))}
       <Sep />
-      <span>{zeroPad(seconds)}</span>
+      {digitise(zeroPad(seconds))}
     </>
   );
 }
-
 
 export default function OverlayMilestone() {
   const { state } = useHackathon();
