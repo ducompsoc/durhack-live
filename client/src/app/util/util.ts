@@ -15,5 +15,5 @@ export function zeroPad(num: number) {
     return `0${num}`;
   }
 
-  return num;
+  return num.toString();
 }
