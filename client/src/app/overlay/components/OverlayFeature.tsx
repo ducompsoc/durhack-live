@@ -38,7 +38,6 @@ export default function OverlayFeature() {
     featureContainer.classList.add("animate-out");
     await waitFor(2);
     featureContainer.classList.remove("animate-out"); // performance
-
   }
 
   async function updateFeature(feature: IOverlayState["feature"]): Promise<void> {
