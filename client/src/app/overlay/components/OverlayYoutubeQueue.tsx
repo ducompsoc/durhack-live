@@ -1,12 +1,12 @@
 "use client";
 import React from "react";
-import YouTube, {YouTubePlayer, YouTubeProps} from "react-youtube";
+import YouTube, { YouTubePlayer, YouTubeProps } from "react-youtube";
+import { isEqual } from "lodash";
 
-import {IOverlayState, useHackathon} from "@/app/util/socket";
+import { IOverlayState, useHackathon } from "@/app/util/socket";
 
 import { OverlayUpperThird, OverlayLowerThird } from "./";
-import {platform} from "os";
-import {isEqual} from "lodash";
+
 
 interface YoutubePlayerState {
   currentlyPlaying: string;
