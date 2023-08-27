@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  OverlayUpperThird,
-  OverlayLowerThird,
   OverlayMainWrapper,
   OverlaySlides,
   OverlayMilestone,
@@ -16,9 +14,6 @@ export default function LivestreamOverlay() {
       <div className="canvas">
 
         <OverlayYoutubeQueue />
-
-        <OverlayUpperThird />
-        <OverlayLowerThird />
 
         <OverlayMainWrapper>
           <OverlaySlides />
