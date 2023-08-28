@@ -27,6 +27,7 @@ export default function FeedOverlay() {
     },
   });
   const [videoInProgress, setVideoInProgress] = React.useState<boolean>(false);
+  const [enabled, setEnabled] = React.useState<boolean | null>(null);
   const [queue, setQueue] = React.useState<IOverlayState["youtube"]["queue"]>(state?.overlay.youtube.queue || []);
   const [lastPlayerStateIndex, setLastPlayerStateIndex] = React.useState<number>(YouTube.PlayerState.UNSTARTED);
   const [contextState, setContextState] = React.useState<YoutubePlayerState | null>(null);
@@ -48,25 +49,34 @@ export default function FeedOverlay() {
     }
   }
 
+  async function teardownPlayer() {
+    const containerElement = containerRef.current;
+    if (!containerElement) return;
+
+    containerElement.classList.remove("animate-in");
+
+    const youtubeElement = youtubeRef.current;
+    if (!youtubeElement) return;
+
+    if (youtubeElement.internalPlayer) {
+      await youtubeElement.destroyPlayer();
+    }
+
+    setContextState(null);
+
+    return;
+  }
+
   async function updateYoutube(options: IOverlayState["youtube"]) {
     const youtubeElement = youtubeRef.current;
     if (!youtubeElement) return;
 
-    const containerElement = containerRef.current;
-    if (!containerElement) return;
-
     const { enabled, queue } = options;
 
+    setEnabled(enabled);
+
     if (!enabled) {
-      containerElement.classList.remove("animate-in");
-
-      if (youtubeElement.internalPlayer) {
-        await youtubeElement.destroyPlayer();
-      }
-
-      setContextState(null);
-
-      return;
+      await teardownPlayer();
     }
 
     setQueue(queue);
@@ -75,8 +85,9 @@ export default function FeedOverlay() {
   }
 
   const onPlayerReady: YouTubeProps["onReady"] = async (event) => {
-    const youtubeElement = youtubeRef.current;
-    if (!youtubeElement) return;
+    if (!enabled) {
+      return await teardownPlayer();
+    }
 
     console.info("Youtube ready.");
 
