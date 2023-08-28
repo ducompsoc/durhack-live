@@ -12,7 +12,7 @@ import NextUpCountdown from "@/app/overlay/components/NextUpCountdown";
 
 export default function OverlayLowerThird() {
   const { state } = useHackathon();
-  const [lastLowerThird, setLastLowerThird] = React.useState<IOverlayState["lowerThird"] | null>(state?.overlay.lowerThird || null);
+  const [lastLowerThird, setLastLowerThird] = React.useState<IOverlayState["lowerThird"] | null>(null);
 
   const [pretext, setPretext] = React.useState<string | null>(state?.overlay.lowerThird.pretext || null);
   const [text, setText] = React.useState<string | null>(state?.overlay.lowerThird.text || null);
