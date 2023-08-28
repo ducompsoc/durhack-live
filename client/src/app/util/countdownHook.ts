@@ -38,7 +38,10 @@ export default function useCountdown(countdownTo: Date, granularity: number = 10
   const [countdownMillis, setCountdownMillis] = React.useState(calcCountdownMillis);
 
   React.useEffect(() => {
-    setCountdownMillis(calcCountdownMillis());
+    const newCountdownMillis = calcCountdownMillis();
+    if (Number.isNaN(newCountdownMillis)) return;
+
+    setCountdownMillis(newCountdownMillis);
     const interval = setInterval(() => {
       setCountdownMillis(calcCountdownMillis());
     }, granularity);
