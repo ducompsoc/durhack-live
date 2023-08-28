@@ -14,6 +14,7 @@ declare type NextUpCountdownProps = {
   countdownTo: string | Date;
   className?: string;
   separatorClassName?: string;
+  inline?: boolean;
 }
 
 export default function NextUpCountdown(props: NextUpCountdownProps) {
@@ -27,11 +28,15 @@ export default function NextUpCountdown(props: NextUpCountdownProps) {
 
   if (countdownTo.toString() === "Invalid Date") return <></>;
 
+  const Wrapper = props.inline ?
+    ({ children }) => <span>{children}</span> :
+    ({ children }) => <div>{children}</div>;
+
   return (
-    <div className={props.className} >
+    <Wrapper className={props.className} >
       {digitise(countdownValues.minutes.toString())}
       <span className={props.separatorClassName}>:</span>
       {digitise(zeroPad(countdownValues.seconds))}
-    </div>
+    </Wrapper>
   );
 }
