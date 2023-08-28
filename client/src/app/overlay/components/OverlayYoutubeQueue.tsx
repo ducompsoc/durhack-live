@@ -26,6 +26,7 @@ export default function OverlayYoutubeQueue() {
       autoplay: 1,
     },
   });
+  const [videoInProgress, setVideoInProgress] = React.useState<boolean>(false);
   const [queue, setQueue] = React.useState<IOverlayState["youtube"]["queue"]>(state?.overlay.youtube.queue || []);
   const [lastPlayerStateIndex, setLastPlayerStateIndex] = React.useState<number>(YouTube.PlayerState.UNSTARTED);
   const [contextState, setContextState] = React.useState<YoutubePlayerState | null>(null);
@@ -87,6 +88,8 @@ export default function OverlayYoutubeQueue() {
   };
 
   function onInitialPlayback(player: YouTubePlayer) {
+    setVideoInProgress(true);
+
     const currentId = new URL(player.getVideoUrl()).searchParams.get("v");
     if (!currentId) return;
 
@@ -101,6 +104,8 @@ export default function OverlayYoutubeQueue() {
   const onStateChange: YouTubeProps["onStateChange"] = async (event) => {
     const playerState = event.data;
 
+    console.debug(`Player state is now ${playerState}`);
+
     if (
       lastPlayerStateIndex === YouTube.PlayerState.BUFFERING
       && playerState === YouTube.PlayerState.UNSTARTED
@@ -109,7 +114,7 @@ export default function OverlayYoutubeQueue() {
     }
 
     if (
-      lastPlayerStateIndex === YouTube.PlayerState.UNSTARTED
+      !videoInProgress
       && playerState === YouTube.PlayerState.PLAYING
     ) {
       onInitialPlayback(event.target);
@@ -118,6 +123,7 @@ export default function OverlayYoutubeQueue() {
     if (
       playerState === YouTube.PlayerState.ENDED
     ) {
+      setVideoInProgress(false);
       setContextState(null);
     }
 
