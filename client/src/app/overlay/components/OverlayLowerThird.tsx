@@ -3,7 +3,7 @@
 import React from "react";
 import isEqual from "lodash/isEqual";
 
-import {useHackathon, pushHackathon, IOverlayState, IHackathonState} from "@/app/util/socket";
+import { useHackathon, pushHackathon, IOverlayState } from "@/app/util/socket";
 
 import { YoutubeContext } from "./FeedOverlay";
 import { waitFor } from "@/app/util/util";
@@ -64,14 +64,7 @@ export default function OverlayLowerThird() {
     });
 
     const timeout = setTimeout(() => {
-      void updateLowerThird({
-        enabled: false,
-        icon: "",
-        pretext: "",
-        text: "",
-        when: "",
-        managedBy: "youtube",
-      });
+      void animateOutLowerThird();
     }, 16000);
     setHideTimeout(timeout);
   }
