@@ -4,8 +4,9 @@ function getCountdownValues(countdownMillis: number) {
   if (isNaN(countdownMillis)) return {
     days: 99,
     hours: 99,
-    minutes: 99,
-    seconds: 99,
+    minutes: 59,
+    seconds: 59,
+    milliseconds: 999,
   };
 
   let diffSeconds = Math.max(0, countdownMillis/1000);
