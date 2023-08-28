@@ -15,7 +15,7 @@ interface YoutubePlayerState {
 
 export const YoutubeContext = React.createContext<YoutubePlayerState | null>(null);
 
-export default function OverlayYoutubeQueue() {
+export default function FeedOverlay() {
   const { state } = useHackathon();
   const [lastOverlayYoutube, setLastOverlayYoutube] = React.useState<IOverlayState["youtube"] | null>(null);
   const [youtubeOpts, setYoutubeOpts] = React.useState<YouTubeProps["opts"]>({

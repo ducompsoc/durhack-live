@@ -5,4 +5,4 @@ export { default as OverlayMilestone } from "./OverlayMilestone";
 export { default as OverlaySlides } from "./OverlaySlides";
 export { default as OverlayUpperThird } from "./OverlayUpperThird";
 export { default as OverlayTextPatternBackground } from "./OverlayTextPatternBackground";
-export { default as OverlayYoutubeQueue } from "./OverlayYoutubeQueue";
+export { default as FeedOverlay } from "./FeedOverlay";

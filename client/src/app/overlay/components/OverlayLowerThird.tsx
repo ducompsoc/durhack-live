@@ -5,7 +5,7 @@ import isEqual from "lodash/isEqual";
 
 import {useHackathon, pushHackathon, IOverlayState, IHackathonState} from "@/app/util/socket";
 
-import { YoutubeContext } from "./OverlayYoutubeQueue";
+import { YoutubeContext } from "./FeedOverlay";
 import { waitFor } from "@/app/util/util";
 import NextUpCountdown from "@/app/overlay/components/NextUpCountdown";
 

@@ -4,7 +4,7 @@ import {
   OverlayMainWrapper,
   OverlaySlides,
   OverlayMilestone,
-  OverlayYoutubeQueue,
+  FeedOverlay,
 } from "./components";
 
 
@@ -13,7 +13,7 @@ export default function LivestreamOverlay() {
     <main>
       <div className="canvas">
 
-        <OverlayYoutubeQueue />
+        <FeedOverlay />
 
         <OverlayMainWrapper>
           <OverlaySlides />
