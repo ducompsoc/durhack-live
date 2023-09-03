@@ -8,6 +8,8 @@ Start by using `ssh root@[ip]` and providing access token to connect to Scaleway
 Clone the repository. You will need to **[set up SSH keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)** since `durhack-live` is a private repository.
 
 ```bash
+mkdir -p /var/www/live.durhack.com
+cd /var/www/live.durhack.com
 git init
 git remote add origin git@github.com:ducompsoc/durhack-live.git
 git pull origin master
@@ -17,6 +19,8 @@ Alternatively, you can use a **[Personal Access Token](https://docs.github.com/e
 when prompted. 
 
 ```bash 
+mkdir -p /var/www/live.durhack.com
+cd /var/www/live.durhack.com
 git init 
 git remote add origin https://github.com/ducompsoc/durhack-live
 git pull origin master
