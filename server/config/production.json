@@ -9,10 +9,15 @@
     "cookie": { "secure": true }
   },
   "jsonwebtoken": {
+    "issuer": "https://live.durhack.com",
+    "audience": "https://live.durhack.com",
     "algorithm": "rsa",
     "accessTokenPublicKeyFilePath": "keys/accessToken.pub.pem",
     "accessTokenPrivateKeyFilePath": "keys/accessToken.pem",
     "refreshTokenPublicKeyFilePath": "keys/refreshToken.pub.pem",
     "refreshTokenPrivateKeyFilePath": "keys/refreshToken.pem"
+  },
+  "discord": {
+    "redirectUri": "https://live.durhack.com/auth/discord/redirect"
   }
 }
