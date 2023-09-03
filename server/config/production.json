@@ -7,5 +7,12 @@
   },
   "session": {
     "cookie": { "secure": true }
+  },
+  "jsonwebtoken": {
+    "algorithm": "rsa",
+    "accessTokenPublicKeyFilePath": "keys/accessToken.pub.pem",
+    "accessTokenPrivateKeyFilePath": "keys/accessToken.pem",
+    "refreshTokenPublicKeyFilePath": "keys/refreshToken.pub.pem",
+    "refreshTokenPrivateKeyFilePath": "keys/refreshToken.pem"
   }
 }
