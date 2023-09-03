@@ -206,6 +206,15 @@ html, body {
       }
     }
 
+    &.visible {
+      display: block;
+      .minor-text, .major-text {
+        > div > div {
+          width: 100%;
+        }
+      }
+    }
+
     &.animate-out {
       display: block;
 

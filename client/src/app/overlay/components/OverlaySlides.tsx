@@ -153,7 +153,7 @@ function NextUpSlide(props: NextUpSlideProps) {
   function Countdown() {
     if (!when) return;
 
-    return (
+    const element = (
       <>
         <SeparatorElement />
         <MainTextElement textStyle={MainTextStyle.minor} animationDelay={currentAnimationDelay}>
@@ -165,13 +165,21 @@ function NextUpSlide(props: NextUpSlideProps) {
         </MainTextElement>
       </>
     );
+    incrementAnimationDelay();
+    return element;
   }
+
+  // pre-generate the contents, otherwise currentAnimationDelay will be 0 when the return statement evaluates
+  // note the functions cannot be referenced as components as they lazy-load; currentAnimationDelay will still be 0
+  const contents = <>
+    { Pretext() }
+    { Title() }
+    { Countdown() }
+  </>;
 
   return (
     <div className={props.className} data-max-delay={currentAnimationDelay}>
-      <Pretext />
-      <Title />
-      <Countdown />
+      {contents}
     </div>
   );
 }
@@ -205,7 +213,7 @@ export default function OverlaySlides() {
     if (!containerElement) return [];
 
     return Array.from(containerElement.childNodes).filter((element) =>
-      element instanceof HTMLElement && element.classList.contains("animate-in")
+      element instanceof HTMLElement && (element.classList.contains("animate-in") || element.classList.contains("visible"))
     ) as HTMLElement[];
   }
 
@@ -239,6 +247,7 @@ export default function OverlaySlides() {
 
   async function animateOutSlide(slide: HTMLElement): Promise<void> {
     slide.classList.add("animate-out");
+    slide.classList.remove("visible");
     slide.classList.remove("animate-in");
 
     await waitFor((Number(slide.dataset.maxDelay) || 1) + 1.5);
@@ -308,8 +317,9 @@ export default function OverlaySlides() {
     if (!currentSlide) return;
 
     currentSlide.classList.add("animate-in");
-
-    return currentSlide;
+    await waitFor((Number(currentSlide?.dataset.maxDelay) || 0) + 1);
+    currentSlide.classList.add("visible");
+    currentSlide.classList.remove("animate-in");
   }
 
   return (
