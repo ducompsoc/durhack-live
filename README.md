@@ -77,7 +77,7 @@ mysql> show tables;
 Create a file in `/etc/nginx/sites-available` called `live.durhack.com`.
 
 ```
-   server {
+server {
     server_name live.durhack.com www.live.durhack.com;
     
     location /api {
