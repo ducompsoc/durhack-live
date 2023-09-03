@@ -108,7 +108,8 @@ export default function OverlayMainWrapper({ children }: { children: React.React
       classList(".main-wrapper").add("animate-out");
     }
 
-    await obs.call("SetCurrentProgramScene", { sceneName });
+    await obs.call("SetCurrentProgramScene", { sceneName })
+      .catch(console.error);
   }
 
   function switchDarkMode(darkMode: boolean) {
