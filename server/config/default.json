@@ -70,7 +70,7 @@
     "host": "api.eu.mailgun.net"
   },
   "session": {
-    "name": "session_cookie_name",
+    "name": "durhack-live-session",
     "secret": "session_cookie_secret",
     "resave": false,
     "saveUninitialized": false,
