@@ -5,6 +5,7 @@ import {
   OverlaySlides,
   OverlayMilestone,
   FeedOverlay,
+  MusicVolumeController
 } from "./components";
 
 
@@ -19,6 +20,8 @@ export default function LivestreamOverlay() {
           <OverlaySlides />
           <OverlayMilestone />
         </OverlayMainWrapper>
+
+        <MusicVolumeController />
       </div>
     </main>
   );
