@@ -2,7 +2,6 @@
 
 ## Setup
 
-All setup uses Node 18.
 Start by using `ssh root@[ip]` and providing access token to connect to Scaleway.
 
 ### Install dependencies
