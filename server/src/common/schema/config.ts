@@ -53,7 +53,8 @@ export const mailgun_options_schema = z.object({
   username: z.string(),
   key: z.string(),
   domain: z.string(),
-  host: z.string(),
+  sendAsDomain: z.string(),
+  url: z.string(),
 });
 
 export const session_options_schema = z.object({

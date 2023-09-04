@@ -81,7 +81,8 @@
     "username": "api",
     "key": "yourAPIKeyHere",
     "domain": "mailgun.durhack.com",
-    "host": "api.eu.mailgun.net"
+    "sendAsDomain": "durhack.com",
+    "url": "https://api.eu.mailgun.net"
   },
   "session": {
     "name": "durhack-live-session",

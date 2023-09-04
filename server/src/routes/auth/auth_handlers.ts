@@ -10,6 +10,7 @@ import { NullError } from "@/common/errors";
 import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";
 import User from "@/database/user";
+import {mailgun_options_schema} from "@/common/schema/config";
 
 
 export default class AuthHandlers {
@@ -74,14 +75,10 @@ export default class AuthHandlers {
       verify_sent_at: new Date(),
     });
 
-    const domain = config.get("mailgun.domain");
-
-    if (typeof domain !== "string") {
-      throw new Error("Mailgun domain incorrectly configured");
-    }
+    const { domain, sendAsDomain } = mailgun_options_schema.parse(config.get("mailgun"));
 
     await MailgunClient.messages.create(domain, {
-      from: `DurHack <noreply@${domain}>`,
+      from: `DurHack <noreply@${sendAsDomain}>`,
       "h:Reply-To": "hello@durhack.com",
       to: user.email,
       subject: `Your DurHack verification code is ${user.verify_code}`,
