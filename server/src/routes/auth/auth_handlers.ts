@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 
 import { requireLoggedIn } from "@/auth/decorators";
 import { hashPasswordText, randomBytesAsync } from "@/auth/strategy/local/util";
-import TokenVault from "@/auth/strategy/bearer/util";
+import TokenVault from "@/auth/tokens";
 import { NullError } from "@/common/errors";
 import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";

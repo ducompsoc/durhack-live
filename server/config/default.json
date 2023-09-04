@@ -53,9 +53,23 @@
   "jsonwebtoken": {
     "issuer": "http://localhost:8080",
     "audience": "http://localhost:8080",
-    "algorithm": "hsa",
-    "refreshTokenSecret": "an-even-more-secure-SECRET",
-    "accessTokenSecret": "totally-a-secure-SECRET"
+    "authorities": [
+      {
+        "for": "accessToken",
+        "algorithm": "hsa",
+        "secret": "totally-a-secure-SECRET"
+      },
+      {
+        "for": "refreshToken",
+        "algorithm": "hsa",
+        "secret": "an-even-more-secure-SECRET"
+      },
+      {
+        "for": "authorizationCode",
+        "algorithm": "hsa",
+        "secret": "the-MOST-secure-SECRET"
+      }
+    ]
   },
   "oauth": {
     "grants": ["authorization_code", "refresh_token"],

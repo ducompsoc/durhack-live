@@ -1,4 +1,5 @@
 import { z } from "zod";
+import TokenType from "@/auth/token_type";
 
 export const listen_options_schema = z.object({
   host: z.string(),
@@ -70,26 +71,26 @@ export const discord_options_schema = z.object({
   redirectUri: z.string().url(),
 });
 
-const abstract_jwt_schema = z.object({
+const rsa_token_authority_schema = z.object({
+  for: z.nativeEnum(TokenType),
+  algorithm: z.literal("rsa"),
+  publicKeyFilePath: z.string(),
+  privateKeyFilePath: z.string(),
+});
+
+const hsa_token_authority_schema = z.object({
+  for: z.nativeEnum(TokenType),
+  algorithm: z.literal("hsa"),
+  secret: z.string(),
+});
+
+export const token_authority_schema = z.union([rsa_token_authority_schema, hsa_token_authority_schema]);
+
+export const jwt_options_schema = z.object({
   issuer: z.string().url(),
   audience: z.string().url(),
+  authorities: z.array(token_authority_schema),
 });
-
-const jwt_rsa_schema = abstract_jwt_schema.extend({
-  algorithm: z.literal("rsa"),
-  accessTokenPublicKeyFilePath: z.string(),
-  accessTokenPrivateKeyFilePath: z.string(),
-  refreshTokenPublicKeyFilePath: z.string(),
-  refreshTokenPrivateKeyFilePath: z.string(),
-});
-
-const jwt_hsa_schema = abstract_jwt_schema.extend({
-  algorithm: z.literal("hsa"),
-  accessTokenSecret: z.string(),
-  refreshTokenSecret: z.string(),
-});
-
-export const jwt_options_schema = z.union([jwt_rsa_schema, jwt_hsa_schema]);
 
 export const oauth_options_schema = z.object({
   model: z.any().optional(),

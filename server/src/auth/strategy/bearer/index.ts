@@ -1,14 +1,15 @@
 import config from "config";
-import { VerifyFunction, IStrategyOptions } from "passport-http-bearer";
+import { IStrategyOptions, VerifyFunction } from "passport-http-bearer";
 import passport from "passport";
 
 import { passport_bearer_options_schema } from "@/common/schema/config";
 import User from "@/database/user";
 import { NullError } from "@/common/errors";
+import TokenType from "@/auth/token_type";
+import TokenVault from "@/auth/tokens";
+import { TokenError } from "@/auth/jwt_error";
 
 import BearerStrategy from "./strategy";
-import TokenVault from "./util";
-import { TokenError } from "./jwt_error";
 
 
 const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
@@ -21,7 +22,7 @@ const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
 
   let decodedPayload;
   try {
-    decodedPayload = (await TokenVault.decodeAccessToken(token)).payload;
+    decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, token)).payload;
   } catch (error) {
     return callback(null, false, { message: "Token validation failure", scope: [] });
   }

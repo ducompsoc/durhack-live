@@ -3,7 +3,7 @@ import { Server, Socket } from "socket.io";
 import User from "@/database/user";
 import { getHackathonState, setHackathonState } from "./state";
 import { HackathonStateSchema } from "@/common/schema/hackathon_state";
-import TokenVault from "@/auth/strategy/bearer/util";
+import TokenVault from "@/auth/tokens";
 import { ZodError } from "zod";
 
 

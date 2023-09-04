@@ -11,11 +11,25 @@
   "jsonwebtoken": {
     "issuer": "https://live.durhack.com",
     "audience": "https://live.durhack.com",
-    "algorithm": "rsa",
-    "accessTokenPublicKeyFilePath": "keys/accessToken.pub.pem",
-    "accessTokenPrivateKeyFilePath": "keys/accessToken.pem",
-    "refreshTokenPublicKeyFilePath": "keys/refreshToken.pub.pem",
-    "refreshTokenPrivateKeyFilePath": "keys/refreshToken.pem"
+    "authorities": [
+      {
+        "for": "accessToken",
+        "publicKeyFilePath": "keys/accessToken.pub.pem",
+        "privateKeyFilePath": "keys/accessToken.pem"
+      },
+      {
+        "for": "refreshToken",
+        "algorithm": "rsa",
+        "publicKeyFilePath": "keys/refreshToken.pub.pem",
+        "privateKeyFilePath": "keys/refreshToken.pem"
+      },
+      {
+        "for": "authorizationCode",
+        "algorithm": "rsa",
+        "publicKeyFilePath": "keys/authorizationCode.pub.pem",
+        "privateKeyFilePath": "keys/authorizationCode.pem"
+      }
+    ]
   },
   "discord": {
     "redirectUri": "https://live.durhack.com/auth/discord/redirect"

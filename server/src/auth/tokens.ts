@@ -7,20 +7,16 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 import User from "@/database/user";
-import { jwt_options_schema, oauth_options_schema } from "@/common/schema/config";
+import {jwt_options_schema, oauth_options_schema, token_authority_schema} from "@/common/schema/config";
 import { epoch } from "@/common/time";
 import { NullError } from "@/common/errors";
 
 import { TokenError } from "./jwt_error";
+import TokenType from "./token_type";
 
 
 const jwt_options = jwt_options_schema.parse(config.get("jsonwebtoken"));
 const { accessTokenLifetime, refreshTokenLifetime } = oauth_options_schema.parse(config.get("oauth"));
-
-export enum BearerTokenType {
-  accessToken = "accessToken",
-  refreshToken = "refreshToken",
-}
 
 abstract class TokenAuthority {
   public abstract signToken(token: SignJWT): Promise<string>;
@@ -133,15 +129,17 @@ interface TokenOptions {
 }
 
 class TokenVault {
-  declare accessTokenAuthority: TokenAuthority;
-  declare refreshTokenAuthority: TokenAuthority;
+  declare authorities: Map<TokenType, TokenAuthority>;
 
-  constructor(accessTokenAuthority: TokenAuthority, refreshTokenAuthority: TokenAuthority) {
-    this.accessTokenAuthority = accessTokenAuthority;
-    this.refreshTokenAuthority = refreshTokenAuthority;
+  constructor() {
+    this.authorities = new Map();
   }
 
-  public async createToken(type: BearerTokenType, user: User, options: TokenOptions): Promise<string> {
+  public registerAuthority(type: TokenType, authority: TokenAuthority) {
+    this.authorities.set(type, authority);
+  }
+
+  public async createToken(type: TokenType, user: User, options: TokenOptions): Promise<string> {
     let { scope, lifetime } = options;
     if (!scope) {
       scope = this.getDefaultTokenScope(type);
@@ -153,15 +151,14 @@ class TokenVault {
     const token = new SignJWT({ user_id: user.id, scope: scope })
       .setIssuedAt()
       .setExpirationTime(expiry);
+
     return await this.getTokenAuthority(type).signToken(token);
   }
 
-  public async decodeAccessToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
-    return await this.accessTokenAuthority.verifyToken(payload);
-  }
-
-  public async decodeRefreshToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
-    return await this.refreshTokenAuthority.verifyToken(payload);
+  public async decodeToken(type: TokenType, payload: string | Uint8Array): Promise<JWTVerifyResult> {
+    const authority = this.authorities.get(type);
+    if (typeof authority === "undefined") throw new NullError("No registered authority for token type.");
+    return await authority.verifyToken(payload);
   }
 
   public async getUserAndScopeClaims(payload: JWTPayload): Promise<{ user: User, scope: string[] }> {
@@ -181,31 +178,31 @@ class TokenVault {
   }
 
   public async createAccessToken(user: User, options: TokenOptions): Promise<string> {
-    return await this.createToken(BearerTokenType.accessToken, user, options);
+    return await this.createToken(TokenType.accessToken, user, options);
   }
 
   public async createRefreshToken(user: User, options: TokenOptions): Promise<string> {
-    return await this.createToken(BearerTokenType.refreshToken, user, options);
+    return await this.createToken(TokenType.refreshToken, user, options);
   }
 
-  private getDefaultTokenScope(type: BearerTokenType): string[] {
-    if (type === BearerTokenType.accessToken) {
+  private getDefaultTokenScope(type: TokenType): string[] {
+    if (type === TokenType.accessToken) {
       return [ "api" ];
     }
 
-    if (type === BearerTokenType.refreshToken) {
+    if (type === TokenType.refreshToken) {
       return [ "refresh" ];
     }
 
     throw new Error("Unknown token type.");
   }
 
-  private getDefaultTokenLifetime(type: BearerTokenType): number {
-    if (type === BearerTokenType.accessToken) {
+  private getDefaultTokenLifetime(type: TokenType): number {
+    if (type === TokenType.accessToken) {
       return accessTokenLifetime;
     }
 
-    if (type === BearerTokenType.refreshToken) {
+    if (type === TokenType.refreshToken) {
       return refreshTokenLifetime;
     }
 
@@ -217,49 +214,52 @@ class TokenVault {
     return epoch(new Date()) + lifetime;
   }
 
-  private getTokenAuthority(type: BearerTokenType): TokenAuthority {
-    if (type === BearerTokenType.accessToken) {
-      return this.accessTokenAuthority;
-    }
-
-    if (type === BearerTokenType.refreshToken) {
-      return this.refreshTokenAuthority;
-    }
-
-    throw new Error("Unknown token type.");
+  private getTokenAuthority(type: TokenType): TokenAuthority {
+    const authority = this.authorities.get(type);
+    if (typeof authority === "undefined") throw new NullError("No registered authority for token type.");
+    return authority;
   }
 }
 
 function resolveFilePathFromProjectRoot(path_to_resolve: string) {
-  return fileURLToPath(new URL(path.join("..", "..", "..", "..", path_to_resolve), import.meta.url));
+  return fileURLToPath(new URL(path.join("..", "..", path_to_resolve), import.meta.url));
 }
 
-async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promise<TokenVault> {
+async function getAuthority(options: z.infer<typeof token_authority_schema>) {
   if (options.algorithm === "rsa") {
-    console.debug("Instantiating RSA key vault...");
-    const accessTokenAuthorityOptions = {
-      publicKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPublicKeyFilePath),
-      privateKeyFilePath: resolveFilePathFromProjectRoot(options.accessTokenPrivateKeyFilePath),
+    console.debug(`Instantiating RSA authority for ${options.for}...`);
+    const authorityOptions = {
+      publicKeyFilePath: resolveFilePathFromProjectRoot(options.publicKeyFilePath),
+      privateKeyFilePath: resolveFilePathFromProjectRoot(options.privateKeyFilePath),
     };
-    const refreshTokenAuthorityOptions = {
-      publicKeyFilePath: resolveFilePathFromProjectRoot(options.refreshTokenPublicKeyFilePath),
-      privateKeyFilePath: resolveFilePathFromProjectRoot(options.refreshTokenPrivateKeyFilePath),
+    return {
+      for: options.for,
+      authority: await RSATokenAuthority.fromFilePaths(authorityOptions),
     };
-    return new TokenVault(
-      await RSATokenAuthority.fromFilePaths(accessTokenAuthorityOptions),
-      await RSATokenAuthority.fromFilePaths(refreshTokenAuthorityOptions),
-    );
   }
 
   if (options.algorithm === "hsa") {
-    console.debug("Instantiating HSA key vault...");
-    return new TokenVault(
-      new HSATokenAuthority({ secret: options.accessTokenSecret }),
-      new HSATokenAuthority({ secret: options.refreshTokenSecret }),
-    );
+    console.debug(`Instantiating HSA authority for ${options.for}...`);
+    return {
+      for: options.for,
+      authority: new HSATokenAuthority({ secret: options.secret })
+    };
   }
 
   throw new Error("Jsonwebtoken is misconfigured.");
+}
+
+async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promise<TokenVault> {
+  const { authorities } = options;
+  const authoritiesWithInfo = await Promise.all(authorities.map(getAuthority));
+
+  const vault = new TokenVault();
+
+  authoritiesWithInfo.forEach((authorityWithInfo) => {
+    vault.registerAuthority(authorityWithInfo.for, authorityWithInfo.authority);
+  });
+
+  return vault;
 }
 
 export default await getTokenVault(jwt_options);
