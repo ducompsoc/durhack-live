@@ -1,10 +1,12 @@
 import { Server, Socket } from "socket.io";
+import { ZodError } from "zod";
 
 import User from "@/database/user";
-import { getHackathonState, setHackathonState } from "./state";
-import { HackathonStateSchema } from "@/common/schema/hackathon_state";
 import TokenVault from "@/auth/tokens";
-import { ZodError } from "zod";
+import TokenType from "@/auth/token_type";
+import { HackathonStateSchema } from "@/common/schema/hackathon_state";
+
+import { getHackathonState, setHackathonState } from "./state";
 
 
 class HackathonStateSocketConnection {
