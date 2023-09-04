@@ -8,7 +8,6 @@ import Section from "@/app/(client)/(pages)/components/Section";
 
 const SocialOptionButton = styled.a`
 	position: relative;
-	width: 25%;
 	color: #fff;
 	text-decoration: none;
 	padding: 32px 18px;
@@ -64,7 +63,7 @@ const SocialOption = React.memo(({
   href, icon, pretext, text,
 }: ISocialOptionProps) => (
   <SocialOptionButton href={href} target="_blank" rel="noopener">
-    <SocialOptionButtonInner className="row center">
+    <SocialOptionButtonInner className="row">
       <SocialOptionIcon><span className={icon} /></SocialOptionIcon>
       <div>
         <SocialOptionButtonPreText>{pretext}</SocialOptionButtonPreText>
@@ -77,7 +76,7 @@ const SocialOption = React.memo(({
 const Socials = React.memo(() => (
   <Section>
     <div>
-      <Card className="row" $noPadding>
+      <Card className="row" style={{justifyContent: "space-evenly"}} $noPadding>
         <SocialOption
           href="/discord"
           icon="fab fa-discord"
@@ -101,8 +100,8 @@ const Socials = React.memo(() => (
 
         <SocialOption
           href="https://twitter.com/DurHackEvent"
-          icon="fab fa-twitter"
-          pretext="Mention us on Twitter"
+          icon="fab fa-x-twitter"
+          pretext="Mention us on X"
           text="@DurHackEvent"
         />
       </Card>
