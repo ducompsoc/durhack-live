@@ -30,7 +30,7 @@ class HackathonStateSocketConnection {
 
     let decodedPayload;
     try {
-      decodedPayload = (await TokenVault.decodeAccessToken(token)).payload;
+      decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, token)).payload;
     } catch (error) {
       return cb("Auth failed.");
     }
