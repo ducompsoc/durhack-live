@@ -194,6 +194,10 @@ class TokenVault {
       return [ "refresh" ];
     }
 
+    if (type === TokenType.authorizationCode) {
+      return [ ];
+    }
+
     throw new Error("Unknown token type.");
   }
 
@@ -204,6 +208,10 @@ class TokenVault {
 
     if (type === TokenType.refreshToken) {
       return refreshTokenLifetime;
+    }
+
+    if (type === TokenType.authorizationCode) {
+      return 60;
     }
 
     throw new Error("Unknown token type.");
