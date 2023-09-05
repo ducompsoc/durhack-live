@@ -1,6 +1,8 @@
 import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript";
+import { hashText, randomBytesAsync } from "@/auth/hashed_secrets";
 
 import OAuthUser from "./oauth_user";
+
 
 @Table
 export default class OAuthClient extends Model {
@@ -32,16 +34,19 @@ export default class OAuthClient extends Model {
 
   @Column({
     type: DataType.INTEGER,
+    allowNull: true,
   })
-  declare access_token_lifetime: number;
+  declare access_token_lifetime: number | null;
 
   @Column({
     type: DataType.INTEGER,
+    allowNull: true,
   })
-  declare refresh_token_lifetime: number;
+  declare refresh_token_lifetime: number | null;
 
   @Column({
     type: DataType.BLOB("tiny"),
+    allowNull: true,
   })
   declare hashed_secret: Buffer;
 
@@ -53,4 +58,10 @@ export default class OAuthClient extends Model {
 
   @HasMany(() => OAuthUser, "client_id")
   declare users: OAuthUser[];
+
+  async updateSecret(newSecret: string): Promise<void> {
+    this.secret_salt = await randomBytesAsync(16);
+    this.hashed_secret = await hashText(newSecret, this.secret_salt);
+    await this.save();
+  }
 }
