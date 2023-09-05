@@ -7,6 +7,7 @@ import TokenType from "@/auth/token_type";
 import { HackathonStateSchema } from "@/common/schema/hackathon_state";
 
 import { getHackathonState, setHackathonState } from "./state";
+import "./oauth_client";
 
 
 class HackathonStateSocketConnection {
