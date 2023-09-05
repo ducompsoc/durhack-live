@@ -14,7 +14,8 @@ import BearerStrategy from "./strategy";
 
 const bearerVerifyFunction: VerifyFunction = async function(token, callback) {
   /**
-   * Verify function for Passport.js.
+   * HTTP Authorization: Bearer Verify function for Passport.js.
+   * Currently unused - superseded by OAuth2Server authenticate
    *
    * @param token - Token to search for user with
    * @param callback - function to call with (error, user) when done
