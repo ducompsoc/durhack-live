@@ -145,7 +145,7 @@ class TokenVault {
     this.authorities.set(type, authority);
   }
 
-  public async createToken(type: TokenType, user: User, options: TokenOptions): Promise<string> {
+  public async createToken(type: TokenType, user: { id: string | number }, options: TokenOptions): Promise<string> {
     let { scope, lifetime, claims } = options;
     if (!scope) {
       scope = this.getDefaultTokenScope(type);
