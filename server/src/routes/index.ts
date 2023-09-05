@@ -17,11 +17,12 @@ import passport from "passport";
 const api_router = ExpressRouter();
 
 api_router.use(passport.authenticate("session"));
-api_router.use(passport.authenticate("bearer"));
 
 api_router.use(cookie_parser(config.get("cookie-parser.secret")));
 api_router.use(bodyParser.json());
 api_router.use(bodyParser.urlencoded({ extended: true }));
+
+api_router.use(passport.authenticate("bearer"));
 
 if (config.get("csrf.enabled")) {
   api_router.use(doubleCsrfProtection);

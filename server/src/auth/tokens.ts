@@ -6,8 +6,8 @@ import { readFile, writeFile } from "fs/promises";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import User from "@/database/user";
-import {jwt_options_schema, oauth_options_schema, token_authority_schema} from "@/common/schema/config";
+import User from "@/database/tables/user";
+import { jwt_options_schema, oauth_options_schema, token_authority_schema } from "@/common/schema/config";
 import { epoch } from "@/common/time";
 import { NullError } from "@/common/errors";
 
@@ -60,24 +60,29 @@ class RSATokenAuthority implements TokenAuthority {
     const { publicKey, privateKey } = await generateKeyPair<KeyObject>("RS256");
     console.debug("Generated key pair.");
     console.debug("Writing key pair to filesystem...");
+
+    async function writePublicKey() {
+      await writeFile(options.publicKeyFilePath, await publicKey.export({
+        type: "spki",
+        format: "pem",
+      }));
+      console.debug(`Written public key to ${options.publicKeyFilePath}`);
+    }
+
+    async function writePrivateKey() {
+      await writeFile(options.privateKeyFilePath, await privateKey.export({
+        type: "pkcs8",
+        format: "pem",
+      }));
+      console.debug(`Written private key to ${options.privateKeyFilePath}`);
+    }
+
     await Promise.all([
-      async function () {
-        await writeFile(options.publicKeyFilePath, await publicKey.export({
-          type: "spki",
-          format: "pem",
-        }));
-        console.debug(`Written public key to ${options.publicKeyFilePath}`);
-      }(),
-      async function() {
-        await writeFile(options.privateKeyFilePath, await privateKey.export({
-          type: "pkcs8",
-          format: "pem",
-        }));
-        console.debug(`Written private key to ${options.privateKeyFilePath}`);
-      }(),
+      writePublicKey(),
+      writePrivateKey(),
     ]);
 
-    console.log("Written key pair to filesystem.");
+    console.debug("Written key pair to filesystem.");
     return new RSATokenAuthority({ publicKey, privateKey });
   }
 
@@ -126,6 +131,7 @@ class HSATokenAuthority implements TokenAuthority {
 interface TokenOptions {
   scope?: string[];
   lifetime?: string | number;
+  claims?: { [ key: string ]: unknown }
 }
 
 class TokenVault {
@@ -140,15 +146,21 @@ class TokenVault {
   }
 
   public async createToken(type: TokenType, user: User, options: TokenOptions): Promise<string> {
-    let { scope, lifetime } = options;
+    let { scope, lifetime, claims } = options;
     if (!scope) {
       scope = this.getDefaultTokenScope(type);
     }
     if (!lifetime) {
       lifetime = this.getDefaultTokenLifetime(type);
     }
+    if (!claims) {
+      claims = {};
+    }
+
+    const corePayload = { user_id: user.id, scope: scope };
+
     const expiry = this.lifetimeToExpiry(lifetime);
-    const token = new SignJWT({ user_id: user.id, scope: scope })
+    const token = new SignJWT({...claims, ...corePayload})
       .setIssuedAt()
       .setExpirationTime(expiry);
 
@@ -217,7 +229,7 @@ class TokenVault {
     throw new Error("Unknown token type.");
   }
 
-  private lifetimeToExpiry(lifetime: number | string): number | string {
+  public lifetimeToExpiry(lifetime: number | string): number | string {
     if (typeof lifetime === "string") return lifetime;
     return epoch(new Date()) + lifetime;
   }

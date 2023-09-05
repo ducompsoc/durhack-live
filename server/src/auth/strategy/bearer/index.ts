@@ -3,7 +3,7 @@ import { IStrategyOptions, VerifyFunction } from "passport-http-bearer";
 import passport from "passport";
 
 import { passport_bearer_options_schema } from "@/common/schema/config";
-import User from "@/database/user";
+import User from "@/database/tables/user";
 import { NullError } from "@/common/errors";
 import TokenType from "@/auth/token_type";
 import TokenVault from "@/auth/tokens";

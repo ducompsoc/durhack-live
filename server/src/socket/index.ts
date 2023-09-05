@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { ZodError } from "zod";
 
-import User from "@/database/user";
+import User from "@/database/tables/user";
 import TokenVault from "@/auth/tokens";
 import TokenType from "@/auth/token_type";
 import { HackathonStateSchema } from "@/common/schema/hackathon_state";

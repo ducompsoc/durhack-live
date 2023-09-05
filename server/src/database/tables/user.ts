@@ -1,6 +1,8 @@
-import { Model, DataType, Table, Column } from "sequelize-typescript";
+import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript";
 import { Op } from "sequelize";
 import { Ethnicity, Gender, UserRole } from "@/common/model_enums";
+
+import OAuthUser from "./oauth_user";
 
 @Table
 export default class User extends Model {
@@ -140,6 +142,9 @@ export default class User extends Model {
     allowNull: true,
   })
   declare discord_name: string | null;
+
+  @HasMany(() => OAuthUser, "user_id")
+  declare oauth_logins: OAuthUser[];
   
   static async findOneByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
     let augmentedEmail = [email];

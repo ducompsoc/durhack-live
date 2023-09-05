@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { requireSelf } from "@/routes/users/user_util";
 import { Ethnicity, Gender } from "@/common/model_enums";
-import User from "@/database/user";
+import User from "@/database/tables/user";
 
 export default class UserHandlers {
   private static pickPayloadFields(user: User) {

@@ -2,11 +2,24 @@ import config from "config";
 import Local, {IStrategyOptions, VerifyFunction} from "passport-local";
 import passport from "passport";
 
-import User from "@/database/user";
+import User from "@/database/tables/user";
 import { passport_local_options_schema } from "@/common/schema/config";
-import { NullError } from "@/common/errors";
+import { NullError, ConflictError } from "@/common/errors";
 
-import { checkPassword } from "./util";
+import { checkTextAgainstHash } from "@/auth/hashed_secrets";
+
+async function checkPassword(user: User, password_attempt: string): Promise<boolean> {
+  if (!(user.password_salt instanceof Buffer && user.hashed_password instanceof Buffer)) {
+    throw new ConflictError("Password has not been set");
+  }
+  return await checkTextAgainstHash(
+    {
+      hashed_secret: user.hashed_password,
+      salt: user.password_salt
+    },
+    password_attempt
+  );
+}
 
 const localVerifyFunction: VerifyFunction = async function(username, password, callback) {
   /**
@@ -16,7 +29,7 @@ const localVerifyFunction: VerifyFunction = async function(username, password, c
    * @param password - password to attempt to log in as user with
    * @param callback - function to call with (error, user) when done
    */
-  let user;
+  let user: User;
   try {
     user = await User.findOne({ where: { email: username }, rejectOnEmpty: new NullError() });
   } catch (error) {

@@ -4,13 +4,13 @@ import { NextFunction, Request, Response } from "express";
 import createHttpError from "http-errors";
 
 import { requireLoggedIn } from "@/auth/decorators";
-import { hashPasswordText, randomBytesAsync } from "@/auth/strategy/local/util";
+import { hashText, randomBytesAsync } from "@/auth/hashed_secrets";
 import TokenVault from "@/auth/tokens";
 import { NullError } from "@/common/errors";
 import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";
-import User from "@/database/user";
-import {mailgun_options_schema} from "@/common/schema/config";
+import User from "@/database/tables/user";
+import { mailgun_options_schema } from "@/common/schema/config";
 
 
 export default class AuthHandlers {
@@ -133,7 +133,7 @@ export default class AuthHandlers {
     AuthHandlers.ensureCorrectVerifyCode(found_user, verify_code);
 
     const password_salt = await randomBytesAsync(16);
-    found_user.hashed_password = await hashPasswordText(password, password_salt);
+    found_user.hashed_password = await hashText(password, password_salt);
     found_user.password_salt = password_salt;
 
     await found_user.save();

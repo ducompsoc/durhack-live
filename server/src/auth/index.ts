@@ -1,6 +1,6 @@
 import passport from "passport";
 
-import SequelizeUser from "@/database/user";
+import SequelizeUser from "@/database/tables/user";
 import { NullError } from "@/common/errors";
 
 import "./strategy/local";

@@ -1,14 +1,16 @@
 import { promisify } from "util";
 import { randomBytes, pbkdf2, timingSafeEqual } from "crypto";
 
-import User from "@/database/user";
-import { ConflictError } from "@/common/errors";
-
 
 export const pbkdf2Async = promisify(pbkdf2);
 export const randomBytesAsync = promisify(randomBytes);
 
-export async function hashPasswordText(password: string, salt: Buffer): Promise<Buffer> {
+interface Hashed {
+  hashed_secret: Buffer;
+  salt: Buffer;
+}
+
+export async function hashText(password: string, salt: Buffer): Promise<Buffer> {
   /**
    * Returns hashed text for password storage/comparison.
    *
@@ -21,7 +23,7 @@ export async function hashPasswordText(password: string, salt: Buffer): Promise<
   return await pbkdf2Async(normalized_password, salt, 310000, 32, "sha256");
 }
 
-export async function checkPassword(user: User, password_attempt: string): Promise<boolean> {
+export async function checkTextAgainstHash(hash: Hashed, password_attempt: string): Promise<boolean> {
   /**
    * Returns whether the password attempt is correct for the provided user.
    *
@@ -29,10 +31,6 @@ export async function checkPassword(user: User, password_attempt: string): Promi
    * @param password_attempt - the password attempt to check
    * @returns whether the password attempt matches the user's password hash
    */
-  if (!(user.password_salt instanceof Buffer && user.hashed_password instanceof Buffer)) {
-    throw new ConflictError("Password has not been set");
-  }
-
-  const hashed_password_attempt = await hashPasswordText(password_attempt, user.password_salt);
-  return timingSafeEqual(hashed_password_attempt, user.hashed_password);
+  const hashed_password_attempt = await hashText(password_attempt, hash.salt);
+  return timingSafeEqual(hashed_password_attempt, hash.hashed_secret);
 }
