@@ -127,4 +127,7 @@ export const config = z.object({
   mailgun: mailgun_options_schema,
   session: session_options_schema,
   discord: discord_options_schema,
+  "hackathonStateSocket": z.object({
+    "clientSecret": z.string(),
+  }),
 });

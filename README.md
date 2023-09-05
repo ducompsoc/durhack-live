@@ -145,6 +145,7 @@ Use DataGrip to connect via `durhack` user.
       - `cookie-parser.secret`
       - (do not overwrite `jsonwebtoken` secret - production uses RSA by default)
       - `session.secret`
+      - `hackathonStateSocket.secret`
    2) Configure databases. Add suitable login information and database names to `mysql.data` and `mysql.session`
    3) Add API keys and secrets from other applications
       - MailGun -> `mailgun.key`

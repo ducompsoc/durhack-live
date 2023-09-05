@@ -96,5 +96,8 @@
     "clientId": "yourDiscordAppClientIdHere",
     "clientSecret": "yourDiscordAppClientSecretHere",
     "redirectUri": "http://localhost:3001/auth/discord/redirect"
+  },
+  "hackathonStateSocket": {
+    "clientSecret": "the-best-ever-secret"
   }
 }
