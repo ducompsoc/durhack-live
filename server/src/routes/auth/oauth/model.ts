@@ -1,4 +1,7 @@
-import OAuth2Server, { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server";
+import OAuth2Server, {
+  AuthorizationCodeModel,
+  RefreshTokenModel,
+} from "@node-oauth/oauth2-server";
 import config from "config";
 import { JWTPayload } from "jose";
 
@@ -193,6 +196,8 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     user: OAuth2Server.User
   ): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
 
+    if (!user.id) return false;
+
     code.authorizationCode = await TokenVault.createToken(TokenType.authorizationCode, user, {
       scope: code.scope === undefined? [] : (typeof code.scope === "string"? [code.scope] : code.scope),
       lifetime: 60,
@@ -266,6 +271,18 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     if (!secretMatches) return;
 
     return client;
+  }
+
+  async validateScope(user: User, client: OAuth2Server.Client, scope: string | string[]): Promise<string | string[] | OAuth2Server.Falsey> {
+    if ((Array.isArray(scope) && scope.length === 0) || scope === "") return scope;
+    if (!Array.isArray(client.allowed_scopes)) return false;
+
+    if (typeof scope === "string") {
+      scope = [scope];
+    }
+
+    if (!scope.every((element) => client.allowed_scopes.includes(element))) return false;
+    return scope;
   }
 
   async verifyScope(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
