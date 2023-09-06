@@ -5,8 +5,12 @@ import { ZodError } from "zod";
 import createHttpError, { isHttpError } from "http-errors";
 import { Request, Response, NextFunction } from "express";
 
-import { sendHttpErrorResponse, sendZodErrorResponse } from "@/common/response";
+import { sendHttpErrorResponse, sendZodErrorResponse, sendOAuthErrorResponse } from "@/common/response";
 import { ConflictError, NullError, ValueError } from "@/common/errors";
+import {
+  OAuthError,
+  UnauthorizedRequestError as NoOAuthTokenProvidedError
+} from "@node-oauth/oauth2-server";
 
 
 export default function api_error_handler(error: Error, request: Request, response: Response, next: NextFunction) {
@@ -16,6 +20,15 @@ export default function api_error_handler(error: Error, request: Request, respon
 
   if (isHttpError(error)) {
     return sendHttpErrorResponse(response, error);
+  }
+
+  if (error instanceof NoOAuthTokenProvidedError) {
+    response.setHeader("WWW-Authenticate", 'Bearer realm="Service"');
+    return next();
+  }
+
+  if (error instanceof OAuthError) {
+    return sendOAuthErrorResponse(response, error);
   }
 
   if (error instanceof ZodError) {

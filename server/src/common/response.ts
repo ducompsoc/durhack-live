@@ -2,11 +2,13 @@ import {Response} from "express";
 import {HttpError} from "http-errors";
 import {STATUS_CODES} from "http";
 import {ZodError} from "zod";
+import {OAuthError} from "@node-oauth/oauth2-server";
 
 interface ResponseBody {
   status: number
   message: string
   detail?: string | object
+  [key: string]: any
 }
 
 function makeHttpErrorResponseBody(error: HttpError): ResponseBody {
@@ -31,7 +33,7 @@ function makeZodErrorResponseBody(error: ZodError): ResponseBody {
   return {
     status: 400,
     message: STATUS_CODES[400] as string,
-    detail: { issues: error.issues }
+    detail: { issues: error.issues },
   };
 }
 
@@ -43,7 +45,7 @@ export function sendZodErrorResponse(response: Response, error: ZodError): void 
 export function makeStandardResponseBody(status: number, message?: string): ResponseBody {
   const response_body: ResponseBody = {
     status: status,
-    message: STATUS_CODES[status] || "Unknown status"
+    message: STATUS_CODES[status] || "Unknown status",
   };
 
   if (message !== undefined) {
@@ -56,4 +58,29 @@ export function makeStandardResponseBody(status: number, message?: string): Resp
 export function sendStandardResponse(response: Response, status: number, message?: string): void {
   const response_body = makeStandardResponseBody(status, message);
   response.status(status).json(response_body);
+}
+
+export function makeOAuthErrorResponseBody(error: OAuthError): ResponseBody {
+  const status = error.code || 500;
+  return {
+    status: status,
+    message: STATUS_CODES[status] || "Unknown status",
+    reason: error.name,
+    detail: error.message,
+  };
+}
+
+function setWWWAuthenticateHeader(response: Response, error: OAuthError): void {
+  if (error.name) {
+    response.setHeader("WWW-Authenticate", `Bearer realm="Service",error="${error.name}"`);
+    return;
+  }
+
+  response.setHeader("WWW-Authenticate", 'Bearer realm="Service"');
+}
+
+export function sendOAuthErrorResponse(response: Response, error: OAuthError): void {
+  const response_body = makeOAuthErrorResponseBody(error);
+  setWWWAuthenticateHeader(response, error);
+  response.status(response_body.status).json(response_body);
 }

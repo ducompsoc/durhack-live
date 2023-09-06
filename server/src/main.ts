@@ -11,6 +11,8 @@ import session from "./auth/session";
 import sequelize, { ensureDatabaseExists } from "./database";
 import api_router from "./routes";
 import HackathonStateSocketManager from "./socket";
+import getStateSocketClient, {updateStateSocketSecret} from "@/socket/oauth_client";
+import {update} from "lodash";
 
 const environment = process.env.NODE_ENV;
 const dev = environment !== "production";
@@ -39,6 +41,9 @@ function getServer(app: Express) {
 async function main() {
   await ensureDatabaseExists();
   await sequelize.sync({ force: false });
+
+  const client = await getStateSocketClient();
+  await updateStateSocketSecret(client);
 
   const app = getExpressApp();
   const server = getServer(app);

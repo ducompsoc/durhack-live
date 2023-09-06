@@ -4,14 +4,15 @@ import bodyParser from "body-parser";
 import methodOverride from "method-override";
 import createHttpError from "http-errors";
 import cookie_parser from "cookie-parser";
+import passport from "passport";
 
 import { handleMethodNotAllowed } from "@/common/middleware";
-
 import { doubleCsrfProtection } from "@/auth/csrf";
+import wrapped_oauth_provider from "@/routes/auth/oauth/wrapper";
+
 import auth_router from "./auth";
 import users_router from "./users";
 import api_error_handler from "./error_handling";
-import passport from "passport";
 
 
 const api_router = ExpressRouter();
@@ -20,6 +21,9 @@ api_router.use(bodyParser.json());
 api_router.use(bodyParser.urlencoded({ extended: true }));
 
 api_router.use(passport.authenticate("session"));
+api_router.use(wrapped_oauth_provider.authenticate({
+  scope: [ "api" ]
+}));
 
 
 api_router.use(cookie_parser(config.get("cookie-parser.secret")));

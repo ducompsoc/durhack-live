@@ -5,13 +5,15 @@ import createHttpError from "http-errors";
 
 import { requireLoggedIn } from "@/auth/decorators";
 import { hashText, randomBytesAsync } from "@/auth/hashed_secrets";
-import TokenVault from "@/auth/tokens";
 import { NullError } from "@/common/errors";
 import MailgunClient from "@/common/mailgun";
 import { sendStandardResponse } from "@/common/response";
-import User from "@/database/tables/user";
+import { User } from "@/database/tables";
 import { mailgun_options_schema } from "@/common/schema/config";
+import getStateSocketClient from "@/socket/oauth_client";
 
+import OAuthModel from "./oauth/model";
+import oauth_client from "@/socket/oauth_client";
 
 export default class AuthHandlers {
   static check_email_schema = z.object({
@@ -143,7 +145,7 @@ export default class AuthHandlers {
 
   @requireLoggedIn
   static async handleGetSocketToken(request: Request, response: Response): Promise<void> {
-    const auth_token = await TokenVault.createAccessToken(request.user!, { scope: [ "socket:state" ], lifetime: "3 days"});
+    const auth_token = await OAuthModel.generateAccessToken(await getStateSocketClient(), request.user!, "socket:state");
     response.status(200);
     response.json({ "status": 200, "message": "Token generation OK", "token": auth_token });
   }
