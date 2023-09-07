@@ -5,6 +5,14 @@ import MySQLStoreMeta, { MySQLStore as MySQLStoreType, Options as MySqlStoreOpti
 
 import { session_options_schema } from "@/common/schema/config";
 
+
+// Augment express-session with a custom SessionData object
+declare module "express-session" {
+  interface SessionData {
+    redirect_to?: string;
+  }
+}
+
 function get_mysql_session_store(): MySQLStoreType {
   const MySQLStore = MySQLStoreMeta(constructor_session);
   const options = config.get("mysql.session") as MySqlStoreOptions;

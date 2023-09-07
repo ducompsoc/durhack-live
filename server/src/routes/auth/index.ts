@@ -15,6 +15,7 @@ auth_router.use("/discord", discord_router);
 auth_router.use("/oauth", oauth_router);
 
 auth_router.route("/login")
+  .get(handlers.handleLoginSuccess)
   .post(
     passport.authenticate("local", {
       failWithError: true,

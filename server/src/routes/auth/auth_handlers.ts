@@ -64,9 +64,13 @@ export default class AuthHandlers {
   }
 
   static async handleLoginSuccess(request: Request, response: Response) {
-    if (!request.user) throw new Error();
+    if (!request.user) {
+      return response.redirect("/login");
+    }
 
-    return sendStandardResponse(response, 200);
+    const redirect_to = request.session.redirect_to || "/";
+
+    return response.redirect(redirect_to);
   }
 
   private static async sendVerifyCode(user: User) {

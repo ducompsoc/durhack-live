@@ -15,6 +15,12 @@ export default class OAuthClient extends Model {
   declare id: string;
 
   @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  declare name: string;
+
+  @Column({
     type: DataType.JSON,
     defaultValue: [],
   })

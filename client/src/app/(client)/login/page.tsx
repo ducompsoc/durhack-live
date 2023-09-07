@@ -61,6 +61,7 @@ export default function LoginPage() {
   async function handlePasswordSubmit(submissionPassword: string): Promise<void> {
     const login_request = await makeLiveApiRequest("/auth/login", {
       method: "POST",
+      redirect: "manual",
       body: new URLSearchParams({ email: email, password: submissionPassword }),
     });
 
@@ -75,7 +76,7 @@ export default function LoginPage() {
       return setError("Incorrect password.");
     }
 
-    if (!login_response.ok) {
+    if (login_response.status !== 0 && !login_response.ok) {
       return setUnknownError();
     }
 
@@ -96,7 +97,8 @@ export default function LoginPage() {
       return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();
-    return router.push("/");
+
+    return router.push(login_response.url);
   }
   const callbackHandlePasswordSubmit = React.useCallback(handlePasswordSubmit, [email, router]);
 

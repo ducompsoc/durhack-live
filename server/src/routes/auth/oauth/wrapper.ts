@@ -26,7 +26,7 @@ class DurhackExpressOAuthServer extends ExpressOAuthServer {
 
   override _handleError(response: Response, oauthResponse: OAuth2Server.Response, error: Error, next: NextFunction) {
     if (error instanceof UnauthorizedRequestError) {
-      response.set(oauthResponse.headers);
+      response.setHeader("WWW-Authenticate", 'Bearer realm="Service"');
       return next();
     }
     super._handleError(response, oauthResponse, error, next);
@@ -38,7 +38,7 @@ const wrapped_oauth_provider = new DurhackExpressOAuthServer(
     model: Model,
     accessTokenLifetime: oauth_config.accessTokenLifetime,
     refreshTokenLifetime: oauth_config.refreshTokenLifetime,
-    allowEmptyState: true,
+    allowEmptyState: false,
     allowExtendedTokenAttributes: true,
     useErrorHandler: true,
     continueMiddleware: false,

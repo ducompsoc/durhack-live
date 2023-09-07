@@ -46,7 +46,23 @@ export default function CheckInPage() {
     if (!check_in_response.ok) return setUnknownError();
 
     void attemptStateSocketAuth();
-    return router.push("/");
+
+    const get_redirect_request = await makeLiveApiRequest("/auth/login", {
+      redirect: "manual",
+    });
+
+    let get_redirect_response: Response;
+    try {
+      get_redirect_response = await fetch(get_redirect_request);
+    } catch (error) {
+      return setUnknownError();
+    }
+
+    if (get_redirect_response.status !== 0 && !get_redirect_response.ok) return setUnknownError();
+
+
+
+    return router.push(get_redirect_response.url);
   }, []);
 
   function ErrorMessage() {
