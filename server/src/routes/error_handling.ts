@@ -43,10 +43,6 @@ export default function api_error_handler(error: Error, request: Request, respon
     return sendHttpErrorResponse(response, new createHttpError.Conflict(error.message));
   }
 
-  if (error instanceof TypeError) {
-    return sendHttpErrorResponse(response, new createHttpError.BadRequest(error.message));
-  }
-
   console.error("Unexpected API error:");
   Error.captureStackTrace(error);
   console.error(error.stack);
