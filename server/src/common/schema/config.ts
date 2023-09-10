@@ -94,11 +94,12 @@ export const jwt_options_schema = z.object({
 });
 
 export const oauth_options_schema = z.object({
-  model: z.any().optional(),
-  grants: z.string().array(),
-  debug: z.boolean(),
   accessTokenLifetime: z.number().positive(),
   refreshTokenLifetime: z.number().positive(),
+  allowEmptyState: z.boolean(),
+  allowExtendedTokenAttributes: z.boolean(),
+  useErrorHandler: z.boolean(),
+  continueMiddleware: z.boolean(),
 });
 
 export const config = z.object({
