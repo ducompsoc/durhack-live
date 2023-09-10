@@ -72,10 +72,12 @@
     ]
   },
   "oauth": {
-    "grants": ["authorization_code", "refresh_token"],
-    "debug": false,
     "accessTokenLifetime": 1800,
-    "refreshTokenLifetime": 1209600
+    "refreshTokenLifetime": 1209600,
+    "allowEmptyState": false,
+    "allowExtendedTokenAttributes": true,
+    "useErrorHandler": true,
+    "continueMiddleware": false
   },
   "mailgun": {
     "username": "api",

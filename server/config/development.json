@@ -2,7 +2,5 @@
   "flags": {
     "skipEmailVerification": true
   },
-  "oauth": {
-    "debug": true
-  }
+  "oauth": {}
 }
