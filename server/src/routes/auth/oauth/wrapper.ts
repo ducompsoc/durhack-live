@@ -36,12 +36,7 @@ export class DurhackExpressOAuthServer extends ExpressOAuthServer {
 const wrapped_oauth_provider = new DurhackExpressOAuthServer(
   {
     model: Model,
-    accessTokenLifetime: oauth_config.accessTokenLifetime,
-    refreshTokenLifetime: oauth_config.refreshTokenLifetime,
-    allowEmptyState: false,
-    allowExtendedTokenAttributes: true,
-    useErrorHandler: true,
-    continueMiddleware: false,
+    ...oauth_config,
   }
 );
 
