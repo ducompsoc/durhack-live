@@ -95,7 +95,7 @@ const TimelineContainer = styled.div`
 				line-height: 18px;
 				font-size: 14px;
 				font-weight: bold;
-				color: #222;
+				color: white;
 				padding: 4px 9px;
 				margin-bottom: 4px;
 			}
