@@ -30,44 +30,44 @@ export default class OAuthClient extends Model {
     type: DataType.JSON,
     defaultValue: [],
   })
-  declare allowed_scopes: string[];
+  declare allowedScopes: string[];
 
   @Column({
     type: DataType.JSON,
     defaultValue: [],
   })
-  declare redirect_uris: string[];
+  declare redirectUris: string[];
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  declare access_token_lifetime: number | null;
+  declare accessTokenLifetime: number | undefined;
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  declare refresh_token_lifetime: number | null;
+  declare refreshTokenLifetime: number | undefined;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare hashed_secret: Buffer;
+  declare hashedSecret: Buffer;
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare secret_salt: Buffer;
+  declare secretSalt: Buffer;
 
   @HasMany(() => OAuthUser, "client_id")
   declare users: OAuthUser[];
 
   async updateSecret(newSecret: string): Promise<void> {
-    this.secret_salt = await randomBytesAsync(16);
-    this.hashed_secret = await hashText(newSecret, this.secret_salt);
+    this.secretSalt = await randomBytesAsync(16);
+    this.hashedSecret = await hashText(newSecret, this.secretSalt);
     await this.save();
   }
 }

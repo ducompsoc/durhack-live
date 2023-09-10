@@ -12,9 +12,10 @@ export default async function getStateSocketClient() {
     },
     defaults: {
       id: "state-socket",
+      name: "DurHack Live Event State",
       grants: ["authorization_code"],
-      access_token_lifetime: 86400 * 3,
-      allowed_scopes: [ "socket:state" ],
+      accessTokenLifetime: 86400 * 3,
+      allowedScopes: [ "socket:state" ],
       redirect_uris: [],
     },
   });
@@ -25,12 +26,12 @@ export async function updateStateSocketSecret(client: OAuthClient) {
   const clientSecret = z.string().parse(config.get("hackathonStateSocket.clientSecret"));
 
   if (
-    client.hashed_secret instanceof Buffer
-    && client.secret_salt instanceof Buffer
+    client.hashedSecret instanceof Buffer
+    && client.secretSalt instanceof Buffer
     && await checkTextAgainstHash(
       {
-        hashed_secret: client.hashed_secret,
-        salt: client.secret_salt,
+        hashed_secret: client.hashedSecret,
+        salt: client.secretSalt,
       },
       clientSecret
     )
