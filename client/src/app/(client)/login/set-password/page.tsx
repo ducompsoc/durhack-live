@@ -81,7 +81,7 @@ export default function SetPasswordPage() {
   async function handleSetPasswordSubmit(submission_password: string): Promise<void> {
     const set_password_request = await makeLiveApiRequest("/auth/set-password", {
       method: "POST",
-      redirect: "manual",
+      redirect: "follow",
       body: new URLSearchParams({ email: email!, verify_code: verifyCode!, password: submission_password! }),
     });
 
@@ -94,7 +94,7 @@ export default function SetPasswordPage() {
 
     if (set_password_response.status === 400) return setError("That's not the right code, or it's expired - try again.");
     if (set_password_response.status === 404) return router.push("/login");
-    if (set_password_response.status !== 0 && !set_password_response.ok) return setUnknownError();
+    if (!set_password_response.ok) return setUnknownError();
 
     const profile_request = await makeLiveApiRequest("/users/me");
     let profile_response: Response;
@@ -113,7 +113,8 @@ export default function SetPasswordPage() {
       return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();
-    return router.push(set_password_response.url);
+
+    if (set_password_response.redirected) return router.push(set_password_response.url);
   }
   const callbackHandleSetPasswordSubmit = React.useCallback(handleSetPasswordSubmit, [email, router, verifyCode]);
 

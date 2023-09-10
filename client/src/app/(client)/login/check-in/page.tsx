@@ -48,7 +48,7 @@ export default function CheckInPage() {
     void attemptStateSocketAuth();
 
     const get_redirect_request = await makeLiveApiRequest("/auth/login", {
-      redirect: "manual",
+      redirect: "follow",
     });
 
     let get_redirect_response: Response;
@@ -58,11 +58,9 @@ export default function CheckInPage() {
       return setUnknownError();
     }
 
-    if (get_redirect_response.status !== 0 && !get_redirect_response.ok) return setUnknownError();
+    if (!get_redirect_response.ok) return setUnknownError();
 
-
-
-    return router.push(get_redirect_response.url);
+    if (get_redirect_response.redirected) return router.push(get_redirect_response.url);
   }, []);
 
   function ErrorMessage() {
