@@ -19,6 +19,7 @@ auth_router.route("/login")
   .post(
     passport.authenticate("local", {
       failWithError: true,
+      keepSessionInfo: true,
     }),
     handlers.handleLoginSuccess
   )
@@ -40,6 +41,7 @@ auth_router.route("/set-password")
   .post(handlers.handleSetPassword,
     passport.authenticate("local", {
       failWithError: true,
+      keepSessionInfo: true,
     }),
     handlers.handleLoginSuccess)
   .all(handleMethodNotAllowed);
