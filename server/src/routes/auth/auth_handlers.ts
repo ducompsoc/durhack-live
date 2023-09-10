@@ -13,7 +13,7 @@ import { mailgun_options_schema } from "@/common/schema/config";
 import getStateSocketClient from "@/socket/oauth_client";
 
 import OAuthModel from "./oauth/model";
-import oauth_client from "@/socket/oauth_client";
+
 
 export default class AuthHandlers {
   static check_email_schema = z.object({
