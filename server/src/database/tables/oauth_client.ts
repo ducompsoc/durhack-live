@@ -63,7 +63,7 @@ export default class OAuthClient extends Model {
   declare secretSalt: Buffer;
 
   @HasMany(() => OAuthUser, "client_id")
-  declare users: OAuthUser[];
+  declare users: Awaited<OAuthUser>[];
 
   async updateSecret(newSecret: string): Promise<void> {
     this.secretSalt = await randomBytesAsync(16);

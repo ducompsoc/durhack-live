@@ -144,7 +144,7 @@ export default class User extends Model {
   declare discord_name: string | null;
 
   @HasMany(() => OAuthUser, "user_id")
-  declare oauth_logins: OAuthUser[];
+  declare oauth_logins: Awaited<OAuthUser>[];
   
   static async findOneByEmail(email: string, rejectOnEmpty: boolean | Error = false): Promise<User> {
     let augmentedEmail = [email];

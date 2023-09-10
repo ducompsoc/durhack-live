@@ -22,10 +22,10 @@ export default class OAuthUser extends Model {
   declare user_id: number;
 
   @BelongsTo(() => User, "user_id")
-  declare user: User;
+  declare user: Awaited<User>;
 
   @BelongsTo(() => OAuthClient, "client_id")
-  declare client: OAuthClient;
+  declare client: Awaited<OAuthClient>;
 
   @Column({
     type: DataType.DATE,
