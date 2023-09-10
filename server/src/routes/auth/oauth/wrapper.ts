@@ -9,7 +9,7 @@ declare class ExpressOAuthServer {
   _handleError(response: Response, oauthResponse: OAuth2Server.Response, error: Error, next: NextFunction): void;
 }
 
-class DurhackExpressOAuthServer extends ExpressOAuthServer {
+export class DurhackExpressOAuthServer extends ExpressOAuthServer {
   override authenticate(options?: OAuth2Server.AuthenticateOptions): (request: Request, response: Response, next: NextFunction) => Promise<OAuth2Server.Token> {
     const middleware = super.authenticate(options);
 
