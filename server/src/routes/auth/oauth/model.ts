@@ -42,7 +42,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     if (!Array.isArray(decoded_payload.scope)) return;
 
     const client = await this.getClient(decoded_payload.client_id, null);
-    const user = await User.findByPk(decoded_payload.user_id, { include: [ OAuthUser ] });
+    const user = await User.findByPk(decoded_payload.user_id);
 
     if (!client) return;
     if (!user) return;
@@ -257,13 +257,14 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async getClient(clientId: string, clientSecret: string | null): Promise<OAuth2Server.Client | OAuth2Server.Falsey> {
     const client = await OAuthClient.findByPk(clientId);
 
+    if (!client) return false;
     if (clientSecret === null) return client;
     if (!client) return;
 
     const secretMatches = await checkTextAgainstHash(
       {
-        hashed_secret: client.hashed_secret,
-        salt: client.secret_salt,
+        hashed_secret: client.hashedSecret,
+        salt: client.secretSalt,
       },
       clientSecret
     );
@@ -275,14 +276,20 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
   async validateScope(user: User, client: OAuth2Server.Client, scope: string | string[]): Promise<string | string[] | OAuth2Server.Falsey> {
     if ((Array.isArray(scope) && scope.length === 0) || scope === "") return scope;
-    if (!Array.isArray(client.allowed_scopes)) return false;
+    if (!Array.isArray(client.allowedScopes)) return false;
 
     if (typeof scope === "string") {
       scope = [scope];
     }
 
-    if (!scope.every((element) => client.allowed_scopes.includes(element))) return false;
+    if (!scope.every((element) => client.allowedScopes.includes(element))) return false;
     return scope;
+  }
+
+  async validateRedirectUri(redirectUri: string, client: OAuth2Server.Client) {
+    if (!client.redirectUris) return false;
+    if (typeof client.redirectUris === "string") return redirectUri === client.redirectUris;
+    return client.redirectUris.includes(redirectUri);
   }
 
   async verifyScope(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
