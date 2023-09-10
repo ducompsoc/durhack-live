@@ -12,7 +12,7 @@ import sequelize, { ensureDatabaseExists } from "./database";
 import api_router from "./routes";
 import HackathonStateSocketManager from "./socket";
 import getStateSocketClient, {updateStateSocketSecret} from "@/socket/oauth_client";
-import {update} from "lodash";
+
 
 const environment = process.env.NODE_ENV;
 const dev = environment !== "production";
@@ -22,7 +22,6 @@ function getExpressApp(): Express {
 
   app.use(session);
   app.use(passport.initialize());
-  app.use(passport.session());
 
   app.use("/api", api_router);
 
