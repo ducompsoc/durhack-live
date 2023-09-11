@@ -16,7 +16,7 @@ export default async function getStateSocketClient() {
       grants: ["authorization_code"],
       accessTokenLifetime: 86400 * 3,
       allowedScopes: [ "socket:state" ],
-      redirect_uris: [],
+      redirectUris: [],
     },
   });
   return stateOAuthClient;
