@@ -284,8 +284,10 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async validateScope(user: User, client: OAuth2Server.Client, scope: string | string[]): Promise<string | string[] | OAuth2Server.Falsey> {
-    if ((Array.isArray(scope) && scope.length === 0) || scope === "") return scope;
-    if (!Array.isArray(client.allowedScopes)) return false;
+    if (typeof scope === "undefined") return;
+    if (scope === "") return;
+    if (Array.isArray(scope) && scope.length === 0) return;
+    if (!Array.isArray(client.allowedScopes)) return;
 
     if (typeof scope === "string") {
       scope = [scope];
