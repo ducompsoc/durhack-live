@@ -162,7 +162,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async getAuthorizationCode(authorizationCode: string): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
     let decoded_payload: JWTPayload;
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.accessToken, authorizationCode)).payload;
+      decoded_payload = (await TokenVault.decodeToken(TokenType.authorizationCode, authorizationCode)).payload;
     } catch (error) {
       return false;
     }
