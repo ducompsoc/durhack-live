@@ -9,7 +9,7 @@
     "start": "node ./dist/main",
     "build": "tsc",
     "dev": "tsx ./src/main",
-    "watch": "tsx watch ./src/main",
+    "dev:watch": "tsx watch ./src/main",
     "lint": "eslint src"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
