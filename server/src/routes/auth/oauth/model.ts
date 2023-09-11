@@ -170,8 +170,8 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     if (typeof decoded_payload.client_id !== "string") return;
     if (typeof decoded_payload.user_id !== "number") return;
     if (typeof decoded_payload.redirect_uri !== "string") return;
-    if (typeof decoded_payload.code_challenge !== "string" || typeof decoded_payload.code_challenge_method !== "undefined") return;
-    if (typeof decoded_payload.code_challenge_method !== "string" || typeof decoded_payload.code_challenge_method !== "undefined") return;
+    if (typeof decoded_payload.code_challenge !== "string" && typeof decoded_payload.code_challenge_method !== "undefined") return;
+    if (typeof decoded_payload.code_challenge_method !== "string" && typeof decoded_payload.code_challenge_method !== "undefined") return;
     if (typeof decoded_payload.exp !== "number") return;
     if (typeof decoded_payload.iat !== "number") return;
     if (!Array.isArray(decoded_payload.scope)) return;
@@ -194,8 +194,8 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       scope: decoded_payload.scope,
       client: client,
       user: user,
-      codeChallenge: decoded_payload.code_challenge,
-      codeChallengeMethod: decoded_payload.code_challenge_method,
+      codeChallenge: decoded_payload.code_challenge as string | undefined,
+      codeChallengeMethod: decoded_payload.code_challenge_method as string | undefined,
     };
   }
 
