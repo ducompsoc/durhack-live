@@ -49,9 +49,12 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return;
 
+    const expiresAt = new Date();
+    expiresAt.setSeconds(decoded_payload.exp);
+
     return {
       accessToken: accessToken,
-      accessTokenExpiresAt: new Date(decoded_payload.exp),
+      accessTokenExpiresAt: expiresAt,
       scope: decoded_payload.scope,
       client: client,
       user: user,
@@ -92,9 +95,12 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return;
 
+    const expiresAt = new Date();
+    expiresAt.setSeconds(decoded_payload.exp);
+
     return {
       refreshToken: refreshToken,
-      refreshTokenExpiresAt: new Date(decoded_payload.exp),
+      refreshTokenExpiresAt: expiresAt,
       scope: decoded_payload.scope,
       client: client,
       user: user,
@@ -178,9 +184,12 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     if (await this.checkAuthorizationCodeRevoked(client, user, decoded_payload.iat)) return;
 
+    const expiresAt = new Date();
+    expiresAt.setSeconds(decoded_payload.exp);
+
     return {
       authorizationCode: authorizationCode,
-      expiresAt: new Date(decoded_payload.exp),
+      expiresAt: expiresAt,
       redirectUri: decoded_payload.redirect_uri,
       scope: decoded_payload.scope,
       client: client,
