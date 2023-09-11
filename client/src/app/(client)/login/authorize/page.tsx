@@ -91,10 +91,15 @@ export default function AuthorizePage() {
     setHasResponded(true);
 
     const authorizeRequest = await makeLiveApiRequest(
-      getAuthorizeRoute(searchParams),
+      "/auth/oauth/authorize",
       {
         method: "POST",
-        body: new URLSearchParams({ allowed: true }),
+        body: new URLSearchParams([
+          ...Array.from(searchParams.entries()),
+          ...Object.entries({
+            allowed: true,
+          }),
+        ]),
         redirect: "follow",
       },
     );
@@ -109,6 +114,11 @@ export default function AuthorizePage() {
 
     if (!authorizeResponse.ok) {
       return setErrorMessage("An unknown error occurred. Try again.");
+    }
+
+    const location = authorizeResponse.headers.get("location");
+    if (location) {
+      return router.push(location);
     }
   }
 
@@ -117,11 +127,15 @@ export default function AuthorizePage() {
     setHasResponded(true);
 
     const authorizeRequest = await makeLiveApiRequest(
-      getAuthorizeRoute(searchParams),
+      "/auth/oauth/authorize",
       {
         method: "POST",
-        body: new URLSearchParams({ allowed: false }),
-        redirect: "follow",
+        body: new URLSearchParams([
+          ...Array.from(searchParams.entries()),
+          ...Object.entries({
+            allowed: false,
+          }),
+        ]),
       },
     );
 
@@ -135,6 +149,11 @@ export default function AuthorizePage() {
 
     if (!authorizeResponse.ok) {
       return setErrorMessage("An unknown error occurred. Try again.");
+    }
+
+    const location = authorizeResponse.headers.location;
+    if (location) {
+      return router.push(location);
     }
   }
 
@@ -151,8 +170,6 @@ export default function AuthorizePage() {
       } catch (error) {
         return setErrorMessage("A network error occurred. Try again.");
       }
-
-      console.log(getClientDetailsResponse);
 
       if (getClientDetailsResponse.redirected) {
         router.push(getClientDetailsResponse.url);
