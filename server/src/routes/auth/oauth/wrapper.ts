@@ -31,6 +31,18 @@ export class DurhackExpressOAuthServer extends ExpressOAuthServer {
     }
     super._handleError(response, oauthResponse, error, next);
   }
+
+  override _handleResponse(request: Request, response: Response, oauthResponse: OAuth2Server.Response) {
+    if (oauthResponse.status === 302) {
+      const location = oauthResponse.headers!.location;
+      delete oauthResponse.headers!.location;
+      response.set(oauthResponse.headers!);
+      response.redirect(200, location);
+      return;
+    }
+    response.set(oauthResponse.headers);
+    response.status(oauthResponse.status || 500).send(oauthResponse.body);
+  }
 }
 
 const wrapped_oauth_provider = new DurhackExpressOAuthServer(
