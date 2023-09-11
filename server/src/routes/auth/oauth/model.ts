@@ -304,7 +304,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async verifyScope(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
-    if ((Array.isArray(scope) && scope.length === 0) || scope === "") return true;
+    if ((Array.isArray(scope) && scope.length === 0) || scope === "" || typeof scope === "undefined") return true;
     if (typeof token.scope === "undefined") return false;
     if (
       (Array.isArray(token.scope) && token.scope.length === 0)
