@@ -11,6 +11,7 @@ import { doubleCsrfProtection } from "@/auth/csrf";
 import wrapped_oauth_provider from "@/routes/auth/oauth/wrapper";
 
 import auth_router from "./auth";
+import user_router from "./user";
 import users_router from "./users";
 import api_error_handler from "./error_handling";
 
@@ -44,6 +45,7 @@ api_router.route("/")
   .all(handleMethodNotAllowed("GET"));
 
 api_router.use("/auth", auth_router);
+api_router.use("/user", user_router);
 api_router.use("/users", users_router);
 
 api_router.use(handle_unhandled_request);
