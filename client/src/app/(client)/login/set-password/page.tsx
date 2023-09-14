@@ -96,7 +96,7 @@ export default function SetPasswordPage() {
     if (set_password_response.status === 404) return router.push("/login");
     if (!set_password_response.ok) return setUnknownError();
 
-    const profile_request = await makeLiveApiRequest("/users/me");
+    const profile_request = await makeLiveApiRequest("/user");
     let profile_response: Response;
     try {
       profile_response = await fetch(profile_request);
@@ -109,7 +109,7 @@ export default function SetPasswordPage() {
     }
 
     const profile = (await profile_response.json()).data;
-    if (!profile.checked_in) {
+    if (profile.role === "hacker" && !profile.checked_in) {
       return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();

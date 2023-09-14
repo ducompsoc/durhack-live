@@ -80,7 +80,7 @@ export default function LoginPage() {
       return setUnknownError();
     }
 
-    const profile_request = await makeLiveApiRequest("/users/me");
+    const profile_request = await makeLiveApiRequest("/user");
     let profile_response: Response;
     try {
       profile_response = await fetch(profile_request);
@@ -93,7 +93,7 @@ export default function LoginPage() {
     }
 
     const profile = (await profile_response.json()).data;
-    if (!profile.checked_in) {
+    if (profile.role === "hacker" && !profile.checked_in) {
       return router.push("/login/check-in");
     }
     void attemptStateSocketAuth();

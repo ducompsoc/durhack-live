@@ -22,8 +22,8 @@ export default function CheckInPage() {
   const handleSubmit = React.useCallback(async (submission: any) => {
     setError(undefined);
 
-    const check_in_request = await makeLiveApiRequest("/users/me", {
-      method: "PATCH",
+    const check_in_request = await makeLiveApiRequest("/user/check-in", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json; charset=UTF-8",
       },
@@ -81,7 +81,7 @@ export default function CheckInPage() {
 
     React.useEffect(() => {
       (async () => {
-        const profile_request = await makeLiveApiRequest("/users/me");
+        const profile_request = await makeLiveApiRequest("/user");
         let profile_response: Response;
         try {
           profile_response = await fetch(profile_request);
@@ -97,9 +97,7 @@ export default function CheckInPage() {
 
         const profile = (await profile_response.json()).data;
 
-        if (profile.checked_in) return router.push("/");
-
-        console.log(profile);
+        if (profile.checked_in || profile.role !== "hacker") return router.push("/");
 
         await setValues({
           age: profile.age || values.age,

@@ -24,7 +24,7 @@ const PageLayout = React.memo(({ requireAuth, children }: React.PropsWithChildre
     if (requireAuth === false) return;
 
     (async () => {
-      const profile_request = await makeLiveApiRequest("/users/me");
+      const profile_request = await makeLiveApiRequest("/user");
       let profile_response: Response;
       try {
         profile_response = await fetch(profile_request);
@@ -37,6 +37,9 @@ const PageLayout = React.memo(({ requireAuth, children }: React.PropsWithChildre
       }
 
       const profile = (await profile_response.json()).data;
+
+      if (profile.role !== "hacker") return;
+
       if (!profile.checked_in) {
         return router.push("/login/check-in");
       }
