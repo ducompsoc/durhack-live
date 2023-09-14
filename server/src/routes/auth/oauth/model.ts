@@ -204,10 +204,9 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     client: OAuth2Server.Client,
     user: OAuth2Server.User
   ): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-
     if (!user.id) return false;
 
-    code.authorizationCode = await TokenVault.createToken(TokenType.authorizationCode, user, {
+    code.authorizationCode = await TokenVault.createToken(TokenType.authorizationCode, (user as {id: string | number}), {
       scope: code.scope === undefined? [] : (typeof code.scope === "string"? [code.scope] : code.scope),
       lifetime: 60,
       claims: {
