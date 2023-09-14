@@ -2,7 +2,7 @@ import ExpressOAuthServer from "@node-oauth/express-oauth-server";
 
 import Model, { oauth_config } from "@/routes/auth/oauth/model";
 import { NextFunction, Request, Response } from "express";
-import OAuth2Server, {UnauthorizedRequestError} from "@node-oauth/oauth2-server";
+import OAuth2Server, {AccessDeniedError, UnauthorizedRequestError} from "@node-oauth/oauth2-server";
 
 
 declare class ExpressOAuthServer {
@@ -10,18 +10,12 @@ declare class ExpressOAuthServer {
 }
 
 export class DurhackExpressOAuthServer extends ExpressOAuthServer {
-  override authenticate(options?: OAuth2Server.AuthenticateOptions): (request: Request, response: Response, next: NextFunction) => Promise<OAuth2Server.Token> {
-    const middleware = super.authenticate(options);
 
-    return async function(request: Request, response: Response, next: NextFunction): Promise<OAuth2Server.Token> {
-      const result = await middleware(request, response, next);
-
-      if (typeof response.locals.oauth?.token === "object") {
-        request.user = response.locals.oauth.token.user;
-      }
-
-      return result;
-    };
+  copyUserFromOAuthToken(request: Request, response: Response, next: NextFunction) {
+    if (typeof response.locals.oauth === "object") {
+      request["user"] = response.locals.oauth.token.user;
+    }
+    return next();
   }
 
   override _handleError(response: Response, oauthResponse: OAuth2Server.Response, error: Error, next: NextFunction) {
@@ -29,10 +23,13 @@ export class DurhackExpressOAuthServer extends ExpressOAuthServer {
       response.setHeader("WWW-Authenticate", 'Bearer realm="Service"');
       return next();
     }
+    if (error instanceof AccessDeniedError) {
+      return this._handleResponse(null, response, oauthResponse);
+    }
     super._handleError(response, oauthResponse, error, next);
   }
 
-  override _handleResponse(request: Request, response: Response, oauthResponse: OAuth2Server.Response) {
+  override _handleResponse(request: Request | null, response: Response, oauthResponse: OAuth2Server.Response) {
     if (oauthResponse.status === 302) {
       const location = oauthResponse.headers!.location;
       delete oauthResponse.headers!.location;
