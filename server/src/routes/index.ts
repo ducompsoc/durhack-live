@@ -25,6 +25,7 @@ api_router.use(passport.session());
 api_router.use(wrapped_oauth_provider.authenticate({
   scope: [ "api" ]
 }));
+api_router.use(wrapped_oauth_provider.copyUserFromOAuthToken);
 
 api_router.use(cookie_parser(config.get("cookie-parser.secret")));
 if (config.get("csrf.enabled")) {
