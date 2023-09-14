@@ -1,0 +1,6 @@
+{
+  "flags": {
+    "skipEmailVerification": true
+  },
+  "oauth": {}
+}

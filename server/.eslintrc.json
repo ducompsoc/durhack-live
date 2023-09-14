@@ -1,0 +1,23 @@
+{
+  "plugins": [
+    "@typescript-eslint/eslint-plugin",
+    "eslint-plugin-tsdoc"
+  ],
+  "extends":  [
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "root": true,
+  "parser":  "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "./",
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "rules": {
+    "tsdoc/syntax": "warn",
+    "semi": ["warn", "always"],
+    "indent": ["warn", 2],
+    "quotes": ["warn", "double", { "avoidEscape": true }]
+  }
+}

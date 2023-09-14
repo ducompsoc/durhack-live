@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:wght@400;700;800;900&display=swap');
+
+$fa-font-path: '/fa-webfonts';
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/brands';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/v4-shims';
+
+@font-face {
+  font-family: 'Deciso';
+  font-weight: bold;
+  src: url('/Deciso-Bold.otf');
+}
+
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+}
+
+body, button, input, select, textarea {
+  font-family: 'Exo 2', 'Open Sans', Arial, sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h3, label {
+  display: block;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+h3 {
+  margin: 0 0 6px 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.center, .align-center {
+  align-items: center;
+}
+
+.center {
+  justify-content: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.flex {
+  flex: 1;
+}
+
+a {
+  color: #fff;
+}

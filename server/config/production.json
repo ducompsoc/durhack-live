@@ -1,0 +1,37 @@
+{
+  "csrf": {
+    "cookieName": "__Host-psifi.x-csrf-token",
+    "cookieOptions": {
+      "secure": true
+    }
+  },
+  "session": {
+    "cookie": { "secure": true }
+  },
+  "jsonwebtoken": {
+    "issuer": "https://live.durhack.com",
+    "audience": "https://live.durhack.com",
+    "authorities": [
+      {
+        "for": "accessToken",
+        "publicKeyFilePath": "keys/accessToken.pub.pem",
+        "privateKeyFilePath": "keys/accessToken.pem"
+      },
+      {
+        "for": "refreshToken",
+        "algorithm": "rsa",
+        "publicKeyFilePath": "keys/refreshToken.pub.pem",
+        "privateKeyFilePath": "keys/refreshToken.pem"
+      },
+      {
+        "for": "authorizationCode",
+        "algorithm": "rsa",
+        "publicKeyFilePath": "keys/authorizationCode.pub.pem",
+        "privateKeyFilePath": "keys/authorizationCode.pem"
+      }
+    ]
+  },
+  "discord": {
+    "redirectUri": "https://live.durhack.com/auth/discord/redirect"
+  }
+}
