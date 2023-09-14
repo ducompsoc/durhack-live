@@ -2,8 +2,11 @@ import createHttpError from "http-errors";
 import { NextFunction, Request, Response } from "express";
 import { ValueError } from "@/common/errors";
 
-export function handleMethodNotAllowed() {
-  throw new createHttpError.MethodNotAllowed();
+export function handleMethodNotAllowed(...allowedMethods: string[]) {
+  return function(request: Request, response: Response) {
+    response.setHeader("Allow", allowedMethods.join(", "));
+    throw new createHttpError.MethodNotAllowed();
+  };
 }
 
 export function handleNotImplemented() {

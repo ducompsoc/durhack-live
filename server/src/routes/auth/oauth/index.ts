@@ -9,11 +9,11 @@ const oauth_router = ExpressRouter();
 oauth_router.route("/authorize")
   .get(handlers.getAuthorize)
   .post(handlers.postAuthorize)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("GET", "POST"));
 
 oauth_router.route("/token")
   .post(handlers.postToken)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("POST"));
 
 
 export default oauth_router;

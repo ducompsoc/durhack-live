@@ -23,19 +23,19 @@ auth_router.route("/login")
     }),
     handlers.handleLoginSuccess
   )
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("GET", "POST"));
 
 auth_router.route("/check-verify")
   .post(handlers.handleCheckVerifyCode)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("POST"));
 
 auth_router.route("/check-email")
   .post(handlers.handleCheckEmail)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("POST"));
 
 auth_router.route("/verify-email")
   .post(handlers.handleVerifyEmail)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("POST"));
 
 auth_router.route("/set-password")
   .post(handlers.handleSetPassword,
@@ -44,14 +44,14 @@ auth_router.route("/set-password")
       keepSessionInfo: true,
     }),
     handlers.handleLoginSuccess)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("POST"));
 
 auth_router.route("/csrf-token")
   .get(handleGetCsrfToken)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("GET"));
 
 auth_router.route("/socket-token")
   .get(handlers.handleGetSocketToken, handleFailedAuthentication)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("GET"));
 
 export default auth_router;

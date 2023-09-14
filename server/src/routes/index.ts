@@ -41,7 +41,7 @@ function handle_unhandled_request() {
 
 api_router.route("/")
   .get(handle_root_request)
-  .all(handleMethodNotAllowed);
+  .all(handleMethodNotAllowed("GET"));
 
 api_router.use("/auth", auth_router);
 api_router.use("/users", users_router);
