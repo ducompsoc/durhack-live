@@ -66,14 +66,7 @@ class OAuthHandlers {
   };
 
   async postAuthorize(request: Request, response: Response, next: NextFunction) {
-    try {
-      await this.provider.authorize(OAuthHandlers.authorizeOptions).call(this.provider, request, response, next);
-    } catch (error) {
-      if (error instanceof AccessDeniedError) {
-        // TODO
-      }
-      throw error;
-    }
+    return await this.provider.authorize(OAuthHandlers.authorizeOptions).call(this.provider, request, response, next);
   }
 
   static tokenOptions = {};
