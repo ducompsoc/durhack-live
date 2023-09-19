@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:wght@400;700;800;900&display=swap');
 
 $fa-font-path: '/fa-webfonts';
@@ -11,6 +15,32 @@ $fa-font-path: '/fa-webfonts';
   font-family: 'Deciso';
   font-weight: bold;
   src: url('/Deciso-Bold.otf');
+}
+
+.dh-box {
+  @apply bg-gray-200/90 drop-shadow-lg dark:bg-neutral-700/90 rounded p-6;
+
+  label {
+    font-weight: normal;
+    text-transform: none;
+    margin-bottom: .25em;
+  }
+
+  a {
+    @apply text-black dark:text-neutral-200;
+  }
+}
+
+.dh-input {
+  @apply block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm sm:leading-6 dark:bg-neutral-800/50 dark:placeholder:text-neutral-400 dark:text-neutral-200;
+}
+
+.dh-btn {
+  @apply rounded px-2 py-1 bg-accent text-white hover:bg-gray-500;
+}
+
+.dh-check {
+  @apply h-4 w-4 rounded border-gray-300 text-accent bg-gray-100 border-gray-300 rounded focus:ring-accent focus:ring-2 disabled:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-neutral-500 dark:bg-neutral-300;
 }
 
 html, body {

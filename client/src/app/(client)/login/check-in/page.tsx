@@ -4,7 +4,6 @@ import React from "react";
 import { Formik, ErrorMessage as FormikErrorMessage, Form, Field, useFormikContext } from "formik";
 import { useRouter } from "next/navigation";
 
-import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
 import { makeLiveApiRequest } from "@/app/util/api";
 import { attemptStateSocketAuth } from "@/app/util/socket";
 
@@ -65,7 +64,7 @@ export default function CheckInPage() {
 
   function ErrorMessage() {
     if (!error) return <></>;
-    return <ErrorAlert>{error}</ErrorAlert>;
+    return <p className="text-red-600">{error}</p>;
   }
 
   function LoadingMessage() {
@@ -117,49 +116,54 @@ export default function CheckInPage() {
     if (loading) return <></>;
 
     return (
-      <>
-        <ErrorMessage/>
+      <div className="grid gap-y-2">
+        <ErrorMessage />
         <p>
-          Welcome to DurHack! To check-in, please make sure the details below are correct, and fill in any we&rsquo;re missing.
+          Welcome to DurHack! To check-in, please make sure the details below
+          are correct, and fill in any we&rsquo;re missing.
         </p>
 
-        <FormSection>
+        <div>
           <label htmlFor="age">Age:</label>
-          <Textbox
+          <Field
+            className="dh-input w-full"
             name="age"
             type="number"
             min={18}
             placeholder="Age"
             required
           />
-          <FormikErrorMessage name="age"/>
-        </FormSection>
+          <FormikErrorMessage name="age" />
+        </div>
 
-        <FormSection>
+        <div>
           <label htmlFor="phone_number">Phone number:</label>
-          <Textbox
+          <Field
+            className="dh-input w-full"
             name="phone_number"
             type="text"
             placeholder="Phone number"
             required
           />
-          <FormikErrorMessage name="phone_number"/>
-        </FormSection>
+          <FormikErrorMessage name="phone_number" />
+        </div>
 
-        <FormSection>
+        <div>
           <label htmlFor="university">University:</label>
-          <Textbox
+          <Field
+            className="dh-input w-full"
             name="university"
             type="text"
             placeholder="University"
             required
           />
-          <FormikErrorMessage name="university"/>
-        </FormSection>
+          <FormikErrorMessage name="university" />
+        </div>
 
-        <FormSection>
+        <div>
           <label htmlFor="graduation_year">Graduation Year:</label>
-          <Textbox
+          <Field
+            className="dh-input w-full"
             name="graduation_year"
             type="number"
             min={2020}
@@ -167,12 +171,14 @@ export default function CheckInPage() {
             placeholder="Graduation Year"
             required
           />
-          <FormikErrorMessage name="graduation_year"/>
-        </FormSection>
+          <FormikErrorMessage name="graduation_year" />
+        </div>
 
-        <FormSection>
+        <div>
           <label htmlFor="ethnicity">Ethnicity (optional): </label>
-          <Field as="select"
+          <Field
+            className="dh-input w-full"
+            as="select"
             name="ethnicity"
             placeholder="Ethnicity"
             required
@@ -185,12 +191,14 @@ export default function CheckInPage() {
             <option value="multiple">Multiple ethnicity / Other</option>
             <option value="pnts">Prefer not to say</option>
           </Field>
-          <FormikErrorMessage name="ethnicity"/>
-        </FormSection>
+          <FormikErrorMessage name="ethnicity" />
+        </div>
 
-        <FormSection>
+        <div>
           <label htmlFor="gender">Gender (optional): </label>
-          <Field as="select"
+          <Field
+            className="dh-input w-full"
+            as="select"
             name="gender"
             placeholder="Gender"
             required
@@ -201,29 +209,46 @@ export default function CheckInPage() {
             <option value="other">Other</option>
             <option value="pnts">Prefer not to say</option>
           </Field>
-          <FormikErrorMessage name="gender"/>
-        </FormSection>
+          <FormikErrorMessage name="gender" />
+        </div>
 
-        <FormSection>
-          <Field type="checkbox" name="h_UK_consent" required />
-          <label htmlFor="h_UK_consent" style={{ textTransform: "none" }}> (required){" "}
-            <span style={{ fontWeight: "normal" }}>I authorise you to share my application/registration information with Hackathons UK Limited for event administration, Hackathons UK Limited administration, and with my authorisation email in-line with the Hackathons UK Limited Privacy Policy.</span>
+        <div>
+          <label>
+            <Field
+              className="dh-check mr-2"
+              type="checkbox"
+              name="h_UK_consent"
+              required
+            />
+            <span className="font-semibold">(required)</span>
+            <br />I authorise you to share my application/registration
+            information with Hackathons UK Limited for event administration,
+            Hackathons UK Limited administration, and with my authorisation
+            email in-line with the Hackathons UK Limited Privacy Policy.
           </label>
-          <FormikErrorMessage name="h_UK_consent"/>
-        </FormSection>
+          <FormikErrorMessage name="h_UK_consent" />
+        </div>
 
-        <FormSection>
-          <input type="checkbox" name="h_UK_marketing" />
-          <label htmlFor="h_UK_marketing" style={{ textTransform: "none" }}> (optional){" "}
-            <span style={{ fontWeight: "normal" }}>I authorise Hackathons UK Limited to send me occasional messages about hackathons and their activities.
-            </span></label>
-          <FormikErrorMessage name="h_UK_marketing"/>
-        </FormSection>
+        <div>
+          <label>
+            <Field
+              className="dh-check mr-2"
+              type="checkbox"
+              name="h_UK_marketing"
+            />
+            <span className="font-semibold">(optional)</span>
+            <br />I authorise Hackathons UK Limited to send me occasional
+            messages about hackathons and their activities.
+          </label>
+          <FormikErrorMessage name="h_UK_marketing" />
+        </div>
 
         <p>
-          <Button type="submit">Check in</Button>
+          <button type="submit" className="dh-btn">
+            Check in
+          </button>
         </p>
-      </>
+      </div>
     );
   }
 

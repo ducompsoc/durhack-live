@@ -25,21 +25,6 @@ const Button = styled.button`
   color: white;
 `;
 
-const CancelButton = styled(Button)`
-  background-color: rgba(0,0,0,0);
-  &:hover {
-    color: darkgrey;
-  }
-`;
-
-const AuthorizeButton = styled(Button)`
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
-  background-color: rgba(255, 0, 64, 1);
-  &:hover {
-    background-color: indianred;
-  }
-`;
-
 function FontAwesomeListItem(props: { children?: React.ReactNode, iconClassName: string, iconStyle?: CSSProperties }) {
   return <li>
     <i className={props.iconClassName} style={props.iconStyle}/> &nbsp;
@@ -65,7 +50,7 @@ function FakeOauth2Scope() {
     "Read you a bedtime story"
   ];
 
-  return <FontAwesomeListItem iconClassName={"fa-solid fa-square-xmark"} iconStyle={{color: "white"}}>
+  return <FontAwesomeListItem iconClassName="fa-solid fa-square-xmark text-neutral-600 dark:text-white">
     <span>
       {scopes[Math.floor(Math.random() * scopes.length)]}
     </span>
@@ -151,7 +136,7 @@ export default function AuthorizePage() {
       return setErrorMessage("An unknown error occurred. Try again.");
     }
 
-    const location = authorizeResponse.headers.location;
+    const location = authorizeResponse.headers.get("location");
     if (location) {
       return router.push(location);
     }
@@ -219,32 +204,38 @@ export default function AuthorizePage() {
     </FontAwesomeListItem>;
   }
 
-  return (<main style={{textAlign: "center"}}>
-    <h1>Hey, {authenticatedUserName}!</h1>
-    <p>An external application</p>
-    <h2><strong>{clientDetails!.name}</strong></h2>
-    <p>wants to access your DurHack account.</p>
-    <hr/>
-    <p>This will allow the developer of {clientDetails!.name} to:</p>
-    <ul style={{textAlign: "left"}} className={"fa-ul"}>
-      <OAuth2Scope>
-        <span>Access your preferred name, email address, and avatar</span>
-      </OAuth2Scope>
-      <OAuth2Scope>
-        <span>Access your third party connections</span>
-      </OAuth2Scope>
-      <FakeOauth2Scope/>
-    </ul>
-    <hr/>
-    <small>
-      <ul style={{textAlign: "left"}} className={"fa-ul"}>
-        <RedirectWarning redirect_uri={clientDetails!.redirect_uri}/>
+  return (
+    <main className="grid gap-y-2">
+      <h1>Hey, {authenticatedUserName}!</h1>
+      <p>An external application</p>
+      <h2 className="text-center">
+        <strong>{clientDetails!.name}</strong>
+      </h2>
+      <p>wants to access your DurHack account.</p>
+      <hr />
+      <p>This will allow the developer of {clientDetails!.name} to:</p>
+      <ul className="mx-8 mt-2 mb-4">
+        <OAuth2Scope>
+          <span>Access your preferred name, email address, and avatar</span>
+        </OAuth2Scope>
+        <OAuth2Scope>
+          <span>Access your third party connections</span>
+        </OAuth2Scope>
+        <FakeOauth2Scope />
       </ul>
-    </small>
+      <hr />
+      <small>
+        <ul className="mx-2 text-center">
+          <RedirectWarning redirect_uri={clientDetails!.redirect_uri} />
+        </ul>
+      </small>
 
-    <div style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
-      <CancelButton onClick={handleCancelPressed}>Cancel</CancelButton>
-      <AuthorizeButton onClick={handleAuthorizePressed}>Authorize</AuthorizeButton>
-    </div>
-  </main>);
+      <div className="flex justify-evenly mt-2">
+        <button className="dh-btn !bg-gray-400" onClick={handleCancelPressed}>Cancel</button>
+        <button className="dh-btn" onClick={handleAuthorizePressed}>
+          Authorize
+        </button>
+      </div>
+    </main>
+  );
 }

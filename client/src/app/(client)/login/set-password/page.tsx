@@ -1,10 +1,9 @@
 "use client";
 
 import React from "react";
-import { Formik, ErrorMessage, Form } from "formik";
+import { Formik, ErrorMessage, Form, Field } from "formik";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { Button, ErrorAlert, FormSection, Textbox } from "@/app/(client)/login/components";
 import { makeLiveApiRequest } from "@/app/util/api";
 import { attemptStateSocketAuth } from "@/app/util/socket";
 
@@ -136,24 +135,27 @@ export default function SetPasswordPage() {
     return (
       <>
         <p>
-          Welcome to DurHack! We&apos;ve just emailed you a verification code.
+          Welcome to DurHack! We've just emailed you a verification code.
         </p>
         <p>
-          <strong>Please check your email, and type your code in here.</strong> Make sure you double-check your spam folder.{" "}
-          If it&apos;s been a while and you still don&apos;t have one, please talk to someone on the DurHack team.
+          <strong>Please check your email, and type your code in here.</strong>
+        </p>
+        <p>
+          Make sure you double-check your spam folder. If it's been a while and you still don't have one, please talk to someone on the DurHack team.
         </p>
 
-        <FormSection>
+        <div className="mb-2">
           <label htmlFor="code">Verification code:</label>
-          <Textbox
+          <Field
             name="verify_code"
             type="text"
             placeholder="ABC123"
             minLength={6}
             maxLength={6}
             required
+            className="dh-input"
           />
-        </FormSection>
+        </div>
       </>
     );
   }
@@ -162,24 +164,24 @@ export default function SetPasswordPage() {
     if (!verifyCode) return <></>;
     return (
       <>
-        <p>Thanks, you&apos;re in!</p>
+        <p>Thanks, you're in!</p>
 
         <p>
-          Next time you log in, we&apos;d like to ask you for a password instead. What{" "}
-          would you like your password to be?
+          Next time you log in, we'd like to ask you for a password instead. What would you like your password to be?
         </p>
-        <FormSection>
+        <div className="mb-2">
           <label htmlFor="password">Password:</label>
-          <Textbox
+          <Field
             name="password"
             type="password"
             placeholder="Your password"
             minLength={6}
             required
             autoFocus
+            className="dh-input"
           />
           <ErrorMessage name="password"/>
-        </FormSection>
+        </div>
       </>
     );
   }
@@ -190,12 +192,12 @@ export default function SetPasswordPage() {
         initialValues={{ verify_code: "", password: "", }}
         onSubmit={handleSubmit}
       >
-        <Form>
-          {error ? <ErrorAlert>{error}</ErrorAlert> : <></>}
+        <Form className="grid gap-y-2">
+          {error ? <p className="text-red-600">{error}</p> : <></>}
           <VerifyCodeFormSection/>
           <SetPasswordFormSection/>
           <p>
-            <Button type="submit">{verifyCode ? "Set Password" : "Submit"}</Button>
+            <button type="submit" className="dh-btn">{verifyCode ? "Set Password" : "Submit"}</button>
           </p>
         </Form>
       </Formik>

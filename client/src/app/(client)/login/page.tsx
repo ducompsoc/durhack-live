@@ -1,13 +1,11 @@
 "use client";
 
-import { ErrorMessage, Form, Formik } from "formik";
+import { ErrorMessage, Form, Field, Formik } from "formik";
 import React from "react";
 import { useRouter } from "next/navigation";
 
 import { makeLiveApiRequest } from "@/app/util/api";
 import { attemptStateSocketAuth } from "@/app/util/socket";
-
-import { ErrorAlert, FormSection, Button, Textbox } from "./components";
 
 
 export default function LoginPage() {
@@ -16,7 +14,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   function setUnknownError() {
-    setError(`An unknown error occurred. Please try a refresh, and if you\'re still having problems,
+    setError(`An unknown error occurred. Please try a refresh, and if you're still having problems,
       ask a member of the DurHack team.`
     );
   }
@@ -35,9 +33,9 @@ export default function LoginPage() {
     }
 
     if (check_email_response.status === 404) {
-      return setError(`We can\'t find a DurHack ticket for that email address. If you\'re a Durham student,
-          you might want to try both your name and CIS code (e.g. if john.smith@durham.ac.uk doesn\'t work, try
-          abcd12@durham.ac.uk). If you\'re still struggling, please chat to a member of the DurHack team; it could be
+      return setError(`We can't find a DurHack ticket for that email address. If you're a Durham student,
+          you might want to try both your name and CIS code (e.g. if john.smith@durham.ac.uk doesn't work, try
+          abcd12@durham.ac.uk). If you're still struggling, please chat to a member of the DurHack team; it could be
           a mistake.`
       );
     }
@@ -119,34 +117,36 @@ export default function LoginPage() {
   function PasswordFormSection() {
     if (!email) return <></>;
     return (
-      <FormSection>
+      <div className="mb-3">
         <label htmlFor="password">Password:</label>
-        <Textbox
+        <Field
           name="password"
           type="password"
           placeholder="Your password"
           minLength={6}
           required
           autoFocus
+          className="dh-input"
         />
         <ErrorMessage name="password"/>
-      </FormSection>
+      </div>
     );
   }
 
   function EmailFormSection() {
     if (email) return <></>;
     return (
-      <FormSection>
+      <div className="mb-3">
         <label htmlFor="email">Email address:</label>
-        <Textbox
+        <Field
           name="email"
           type="email"
           placeholder="your.name@durham.ac.uk"
           required
+          className="dh-input"
         />
         <ErrorMessage name="email"/>
-      </FormSection>
+      </div>
     );
   }
 
@@ -157,11 +157,11 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
       >
         <Form>
-          {error ? <ErrorAlert>{error}</ErrorAlert> : <></>}
+          {error ? <p className="text-red-600 mb-2">{error}</p> : <></>}
           <EmailFormSection/>
           <PasswordFormSection/>
           <p>
-            <Button type="submit">Log in</Button>
+            <button type="submit" className="dh-btn">Log in</button>
           </p>
         </Form>
       </Formik>

@@ -1,80 +1,67 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const LoginWrapper = styled.div`
-	background-image: url('/images/login-background.jpg');
-	background-position: center 0;
-	background-repeat: no-repeat;
-	background-size: cover;
+  background-image: url("/images/login-background.jpg");
+  background-position: center 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
 `;
 
 const LoginPurpleKeyframes = keyframes`
 	0% {
-		background-color: rgba(255, 0, 64, 1);
+		background-color: rgba(125, 99, 153, 1);
 	}
 
 	100% {
-		background-color: rgba(255, 0, 64, 0.6);
+		background-color: rgba(125, 99, 153, 0.8);
 	}
 `;
 
 const LoginInner = styled.div`
-	min-height: 100vh;
-	background-color: rgba(255, 0, 64, 1);
+  min-height: 100vh;
+  background-color: rgba(125, 99, 153, 1);
 
-	animation-name: ${LoginPurpleKeyframes};
-	animation-delay: 1s;
-	animation-duration: 1s;
-	animation-iteration-count: 1;
-	animation-fill-mode: forwards;
-`;
-
-const LoginContainer = styled.div`
-	max-width: 600px;
-	margin: 64px 0;
-`;
-
-const LoginTitle = styled.h1`
-	font-size: 72px;
-	margin: 0 0 32px 0;
-`;
-
-const LoginCard = styled.div`
-	background-color: rgba(17, 17, 17, 0.9);
-	margin-top: 16px;
-	padding: 16px 36px;
+  animation-name: ${LoginPurpleKeyframes};
+  animation-delay: 1s;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
 `;
 
 export default function LoginLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isLoginPage = pathname === "/login";
+
   return (
     <LoginWrapper>
-      <LoginInner className="column">
-        <div className="flex" />
+      <LoginInner>
+        <div className="flex flex-col gap-y-3 p-6 text-black dark:text-neutral-200 justify-center md:max-w-3xl md:justify-end md:p-28 min-h-screen">
+          {isLoginPage && (
+            <h1 className="text-5xl text-white mb-2">Let's jump in.</h1>
+          )}
 
-        <ContentContainer>
-          <LoginContainer>
-            <LoginTitle>Let&apos;s jump in.</LoginTitle>
-
-            <LoginCard>
-              {children}
-            </LoginCard>
-            <LoginCard>
-              <p>
-                Please use the email you entered when you registered for DurHack.
+          <div className="dh-box">{children}</div>
+          {isLoginPage && (
+            <div className="dh-box mb-12 md:mb-0">
+              <p className="mb-2">
+                Please use the email you entered when you registered for
+                DurHack.
               </p>
               <p>
                 Having trouble? Please chat to a member of the DurHack team.
               </p>
-            </LoginCard>
-          </LoginContainer>
-        </ContentContainer>
+            </div>
+          )}
+        </div>
       </LoginInner>
     </LoginWrapper>
   );
