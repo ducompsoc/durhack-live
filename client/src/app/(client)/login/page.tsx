@@ -157,7 +157,7 @@ export default function LoginPage() {
         onSubmit={handleSubmit}
       >
         <Form>
-          {error ? <p className="text-red-600 mb-2">{error}</p> : <></>}
+          {error ? <p className="dh-err mb-2">{error}</p> : <></>}
           <EmailFormSection/>
           <PasswordFormSection/>
           <p>

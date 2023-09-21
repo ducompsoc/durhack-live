@@ -64,7 +64,7 @@ export default function CheckInPage() {
 
   function ErrorMessage() {
     if (!error) return <></>;
-    return <p className="text-red-600">{error}</p>;
+    return <p className="dh-err">{error}</p>;
   }
 
   function LoadingMessage() {

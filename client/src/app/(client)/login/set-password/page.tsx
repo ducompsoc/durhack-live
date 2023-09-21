@@ -193,7 +193,7 @@ export default function SetPasswordPage() {
         onSubmit={handleSubmit}
       >
         <Form className="grid gap-y-2">
-          {error ? <p className="text-red-600">{error}</p> : <></>}
+          {error ? <p className="dh-err">{error}</p> : <></>}
           <VerifyCodeFormSection/>
           <SetPasswordFormSection/>
           <p>
