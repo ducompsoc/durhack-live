@@ -66,6 +66,9 @@ class OAuthHandlers {
   };
 
   async postAuthorize(request: Request, response: Response, next: NextFunction) {
+    delete request.session.redirect_to;
+    request.session.save();
+
     return await this.provider.authorize(OAuthHandlers.authorizeOptions).call(this.provider, request, response, next);
   }
 

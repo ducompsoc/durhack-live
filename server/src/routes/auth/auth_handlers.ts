@@ -69,7 +69,6 @@ export default class AuthHandlers {
     }
 
     const redirect_to = request.session.redirect_to || "/";
-    delete request.session.redirect_to;
 
     return response.redirect(redirect_to);
   }
