@@ -32,7 +32,7 @@ const ConnectionBar = React.memo(() => {
   }
 
   return (
-    <ConnectionBarContainer className="bg-accent">
+    <ConnectionBarContainer className="bg-accent text-white">
       <ContentContainer className="row center">
         <SpinnerContainer>
           <span className="fas fa-sync fa-spin" />

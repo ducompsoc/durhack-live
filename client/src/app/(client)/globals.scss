@@ -34,7 +34,7 @@ $fa-font-path: '/fa-webfonts';
 }
 
 .dh-btn {
-  @apply rounded px-2 py-1 bg-accent text-white hover:bg-gray-500;
+  @apply rounded px-2 py-1 bg-accent text-white hover:bg-gray-500 #{!important};
   cursor: pointer;
 }
 
