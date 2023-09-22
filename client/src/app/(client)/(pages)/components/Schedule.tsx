@@ -54,6 +54,10 @@ const TimelineContainer = styled.div`
 				border-color: ${p => p.theme.secondaryA};
 				margin-top: -149px;
 
+				@media (prefers-color-scheme: light) {
+					border-color: black;
+				}
+
 				.day {
 					width: 164px;
 					font-weight: bold;
@@ -95,7 +99,6 @@ const TimelineContainer = styled.div`
 				line-height: 18px;
 				font-size: 14px;
 				font-weight: bold;
-				color: white;
 				padding: 4px 9px;
 				margin-bottom: 4px;
 			}
@@ -121,7 +124,6 @@ const TimelineContainer = styled.div`
 				.icon {
 					font-size: 32px;
 					margin: 16px;
-					color: #fff;
 				}
 			}
 

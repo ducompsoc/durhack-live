@@ -7,11 +7,6 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 import Countdown from "./Countdown";
 
-
-const HeaderContainer = styled.div`
-	background-image: linear-gradient(45deg, #52216b, #ff0040);
-`;
-
 const HeaderInner = styled.div`
 	padding: 64px 0px 0px 0px;
 `;
@@ -20,23 +15,18 @@ const LogoWrapper = styled.div`
 	margin: 16px 0px;
 `;
 
-const Logo = styled.img`
-	width: auto;
-	height: 100px;
-`;
-
 const Header = React.memo(() => (
-  <HeaderContainer>
+  <div className="bg-accent">
     <HeaderInner>
       <ContentContainer className="row">
         <LogoWrapper className="column center">
-          <a href="/"><Logo src="/images/header-logo.png" alt="Logo" /></a>
+          <p className="font-heading text-7xl text-white">DURHACK</p>
         </LogoWrapper>
-        <div className="flex" />
+        <div className="grow basis-0" />
         <Countdown />
       </ContentContainer>
     </HeaderInner>
-  </HeaderContainer>
+  </div>
 ));
 
 export default Header;

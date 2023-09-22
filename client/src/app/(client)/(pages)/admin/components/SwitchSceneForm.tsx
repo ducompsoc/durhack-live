@@ -20,7 +20,7 @@ const SwitchSceneContent = React.memo(() => {
       <Segment className="row">
         <Label>Scene:</Label>
         <div>
-          <Field as="select" name="scene">
+          <Field as="select" className="dh-input" name="scene">
             {scenes.map(value => <option value={value} key={value}>{value}</option>)}
           </Field>
         </div>
@@ -28,12 +28,12 @@ const SwitchSceneContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Seconds:</Label>
-        <div><Field type="number" name="countdown" min="0" step="1" /></div>
+        <div><Field type="number" className="dh-input" name="countdown" min="0" step="1" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Music on:</Label>
-        <div><Field type="checkbox" name="music" /></div>
+        <div><Field type="checkbox" className="dh-check" name="music" /></div>
       </Segment>
 
       <DefaultButtons />

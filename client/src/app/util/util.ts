@@ -17,3 +17,13 @@ export function zeroPad(num: number) {
 
   return num.toString();
 }
+
+export function formatDateLocal(dateStr: Date) {
+  try {
+    let date = new Date(dateStr);
+    date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+    return date.toISOString().slice(0, 16);
+  } catch {
+    return "";
+  }
+}

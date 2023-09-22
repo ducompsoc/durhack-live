@@ -16,29 +16,29 @@ const MainContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Dark Mode:</Label>
-        <div><Field type="checkbox" name="darkMode" /></div>
+        <div><Field type="checkbox" className="dh-check" name="darkMode" /></div>
       </Segment>
 
       <h4>Next up</h4>
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" name="nextUp.enabled" /></div>
+        <div><Field type="checkbox" className="dh-check" name="nextUp.enabled" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Pre-text:</Label>
-        <div><Field type="text" name="nextUp.pretext" /></div>
+        <div><Field type="text" className="dh-input" name="nextUp.pretext" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Text:</Label>
-        <div><Field type="text" name="nextUp.text" /></div>
+        <div><Field type="text" className="dh-input" name="nextUp.text" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>When:</Label>
-        <div><Field type="text" name="nextUp.when" /></div>
+        <div><Field type="text" className="dh-input" name="nextUp.when" /></div>
       </Segment>
 
       <h4>Additional slides</h4>
@@ -51,16 +51,16 @@ const MainContent = React.memo(() => {
           <Segment>
             {(formik.values.slides).map((_, index) => (
               <div className="row" key={index}>
-                <div className="flex">
-                  <Field as="textarea" name={`slides.${index}`} rows="5" />
+                <div className="grow basis-0">
+                  <Field as="textarea" className="dh-input" name={`slides.${index}`} rows="5" />
                 </div>
                 <div>
-                  <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                  <button type="button" onClick={() => arrayHelpers.insert(index, "")}>+</button>
+                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>-</button>
+                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, "")}>+</button>
                 </div>
               </div>
             ))}
-            <button type="button" onClick={() => arrayHelpers.insert(formik.values.slides.length, "")}>+ Add Slide</button>
+            <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(formik.values.slides.length, "")}>+ Add Slide</button>
           </Segment>
         )}
       />

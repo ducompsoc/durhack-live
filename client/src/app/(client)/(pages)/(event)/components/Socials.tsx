@@ -76,7 +76,7 @@ const SocialOption = React.memo(({
 const Socials = React.memo(() => (
   <Section>
     <div>
-      <Card className="row" style={{justifyContent: "space-evenly"}} $noPadding>
+      <Card className="row !p-0" style={{justifyContent: "space-evenly"}} $noPadding>
         <SocialOption
           href="/discord"
           icon="fab fa-discord"

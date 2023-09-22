@@ -39,15 +39,15 @@ export default React.memo(() => {
           <div>
             <Card>
               This admin page controls both content on this website, and what shows on the livestream.{" "}
-              Please ask @ethan on Slack if you have any questions. Changes take effect immediately after you hit Submit.
+              Changes take effect immediately after you hit Submit.
             </Card>
           </div>
 
           <div className="row">
-            <Card className="flex">
+            <Card className="grow basis-0">
               <AnnouncementForm />
             </Card>
-            <Card className="flex">
+            <Card className="grow basis-0">
               <TipsForm />
             </Card>
           </div>
@@ -59,29 +59,29 @@ export default React.memo(() => {
           </div>
 
           <div className="row">
-            <Card className="flex">
+            <Card className="grow basis-0">
               <OverlayMainForm />
             </Card>
-            <Card className="flex">
+            <Card className="grow basis-0">
               <LowerThirdForm />
               <UpperThirdForm />
             </Card>
           </div>
 
           <div className="row">
-            <Card className="flex">
+            <Card className="grow basis-0">
               <SwitchSceneForm />
             </Card>
-            <Card className="flex">
+            <Card className="grow basis-0">
               <MilestoneForm />
             </Card>
-            <Card className="flex">
+            <Card className="grow basis-0">
               <FeatureForm />
             </Card>
           </div>
 
           <div>
-            <Card className="flex">
+            <Card className="grow basis-0">
               <YoutubeForm />
             </Card>
           </div>

@@ -23,7 +23,7 @@ export const Segment = styled.div`
 		input {
 			box-sizing: border-box;
 
-			&[type=text], &[type=number] {
+			&[type=text], &[type=number], &[type=datetime-local] {
 				width: 100%;
 			}
 		}
@@ -52,7 +52,6 @@ export const Table = styled.table`
 	}
 
 	input {
-		width: 100%;
 		box-sizing: border-box;
 	}
 `;

@@ -5,7 +5,7 @@ import { Field } from "formik";
 import { IHackathonState, pushHackathon } from "@/app/util/socket";
 
 import { HackathonContext } from "../util";
-import { Segment, Label, OverlayForm, DefaultButtons } from "./";
+import { OverlayForm, DefaultButtons, Segment, Label } from "./";
 
 const AnnouncementContent = React.memo(() => {
   return (
@@ -16,27 +16,27 @@ const AnnouncementContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" name="enabled" /></div>
+        <div><Field type="checkbox" className="dh-check" name="enabled" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Title:</Label>
-        <div><Field type="text" name="title" /></div>
+        <div><Field type="text" className="dh-input" name="title" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Text:</Label>
-        <div><Field as="textarea" name="text" rows={6} /></div>
+        <div><Field as="textarea" className="dh-input" name="text" rows={6} /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Button text (optional):</Label>
-        <div><Field type="text" name="buttonText" /></div>
+        <div><Field type="text" className="dh-input" name="buttonText" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Button link (optional):</Label>
-        <div><Field type="text" name="buttonLink" /></div>
+        <div><Field type="text" className="dh-input" name="buttonLink" /></div>
       </Segment>
 
       <DefaultButtons />

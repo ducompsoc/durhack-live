@@ -154,7 +154,7 @@ const Stage = React.memo(() => {
           <h3>Live now</h3>
           <LiveEventName className="row center">
             <LiveEventIcon><span className={inProgressEvent.icon} /></LiveEventIcon>
-            <div className="flex">{inProgressEvent.name}</div>
+            <div className="grow basis-0">{inProgressEvent.name}</div>
           </LiveEventName>
         </LiveNowPlayingInner>
       </LiveNowPlaying>
@@ -173,12 +173,12 @@ const Stage = React.memo(() => {
         <h3>Up next</h3>
         <LiveEventName className="row center">
           <LiveEventIcon><span className={upNext.icon} /></LiveEventIcon>
-          <div className="flex">{upNext.name}</div>
+          <div className="grow basis-0">{upNext.name}</div>
         </LiveEventName>
         <LiveEventWhen className="row center">
           <LiveEventIcon><span className="far fa-clock" /></LiveEventIcon>
           {startDate && (
-            <div className="flex">
+            <div className="grow basis-0">
               {upNext.onStream ? "Live here" : "Takes place"} in{" "}
               {upNextTimeToGo}
             </div>
@@ -195,7 +195,7 @@ const Stage = React.memo(() => {
         <h3>Also live now</h3>
         <LiveEventName className="row center">
           <LiveEventIcon><span className={onTheSide.icon} /></LiveEventIcon>
-          <div className="flex">{onTheSide.name}</div>
+          <div className="grow basis-0">{onTheSide.name}</div>
         </LiveEventName>
         {onTheSide.liveLink && (
           <LiveEventButton>
@@ -207,7 +207,7 @@ const Stage = React.memo(() => {
   }
 
   const topTipEl = (
-    <Card className="flex">
+    <Card className="grow basis-0">
       <h3>Top tip</h3>
       <TopTip />
     </Card>
@@ -215,7 +215,7 @@ const Stage = React.memo(() => {
 
   return (
     <Section className="row" style={{ marginBottom: 0 }}>
-      <LiveCard $noPadding colour="primaryDark" style={{ color: "#1e1e1e" }}>
+      <LiveCard $noPadding colour="primaryDark">
         <Player>
           <iframe
             title="DurHack Livestream"

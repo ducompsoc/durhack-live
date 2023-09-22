@@ -73,7 +73,7 @@ const Countdown = React.memo(() => {
 
   return (
     <Wrapper className="column center">
-      <WrapperInner className="column center flex">
+      <WrapperInner className="column center grow basis-0">
         <CountdownTitle>{state.overlay.milestone.text}</CountdownTitle>
         <CountdownContainer>
           {digitise(zeroPad(countdownValues.hours))}

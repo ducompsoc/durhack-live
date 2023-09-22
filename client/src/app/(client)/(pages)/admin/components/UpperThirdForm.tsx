@@ -17,12 +17,12 @@ const UpperThirdContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" name="enabled" /></div>
+        <div><Field type="checkbox" className="dh-check" name="enabled" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Text:</Label>
-        <div><Field type="text" name="text" /></div>
+        <div><Field type="text" className="dh-input" name="text" /></div>
       </Segment>
 
       <DefaultButtons />

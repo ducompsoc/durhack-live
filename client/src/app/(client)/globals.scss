@@ -35,6 +35,12 @@ $fa-font-path: '/fa-webfonts';
 
 .dh-btn {
   @apply rounded px-2 py-1 bg-accent text-white hover:bg-gray-500;
+  cursor: pointer;
+}
+
+.plain-btn {
+  @apply rounded px-2 py-1 bg-gray-300 text-black hover:bg-gray-500;
+  cursor: pointer;
 }
 
 .dh-check {
@@ -45,17 +51,8 @@ $fa-font-path: '/fa-webfonts';
   @apply text-red-600 dark:text-red-400;
 }
 
-html, body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
 body {
-  background-color: #000;
-  color: #fff;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin: 0;
+  @apply dark:bg-neutral-900 dark:text-white;
 }
 
 code {
@@ -93,12 +90,4 @@ h3 {
 
 .wrap {
   flex-wrap: wrap;
-}
-
-.flex {
-  flex: 1;
-}
-
-a {
-  color: #fff;
 }

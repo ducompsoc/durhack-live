@@ -26,16 +26,16 @@ const TipsContent = React.memo(() => {
           <Segment>
             {(formik.values.tips).map((_, index) => (
               <div className="row" key={index}>
-                <div className="flex">
-                  <Field as="textarea" name={`tips.${index}`} rows="5" />
+                <div className="grow basis-0">
+                  <Field as="textarea" className="dh-input" name={`tips.${index}`} rows="5" />
                 </div>
                 <div>
-                  <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                  <button type="button" onClick={() => arrayHelpers.insert(index, "")}>+</button>
+                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>-</button>
+                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, "")}>+</button>
                 </div>
               </div>
             ))}
-            <button type="button" onClick={() => arrayHelpers.insert(formik.values.tips.length, "")}>+ Add Tip</button>
+            <button type="button" className="plain-btn mt-2" onClick={() => arrayHelpers.insert(formik.values.tips.length, "")}>+ Add Tip</button>
           </Segment>
         )}
       />

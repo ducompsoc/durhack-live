@@ -11,7 +11,6 @@ const ConnectionBarContainer = styled.div`
 	top: 0px;
 	right: 0px;
 	left: 0px;
-	background-color: #751C9E;
 	box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 	padding: 9px 0px;
 `;
@@ -33,12 +32,12 @@ const ConnectionBar = React.memo(() => {
   }
 
   return (
-    <ConnectionBarContainer>
+    <ConnectionBarContainer className="bg-accent">
       <ContentContainer className="row center">
         <SpinnerContainer>
           <span className="fas fa-sync fa-spin" />
         </SpinnerContainer>
-        <div className="flex">
+        <div className="grow basis-0">
           Connecting to DurHack. <Muted>Taking too long? Try a refresh, or ping an organiser on Slack.</Muted>
         </div>
       </ContentContainer>

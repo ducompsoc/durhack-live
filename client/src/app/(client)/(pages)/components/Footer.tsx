@@ -8,14 +8,12 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const FooterContainer = styled.div`
 	text-align: center;
-	color: #fff;
 	padding: 32px 0px;
 `;
 
 const ExternalLink = styled.a`
 	font-weight: bold;
 	text-decoration: none;
-	color: #fff;
 
 	&:hover {
 		text-decoration: underline;

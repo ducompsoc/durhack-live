@@ -5,7 +5,7 @@ import { Field, useFormikContext } from "formik";
 import { IOverlayState, pushHackathon } from "@/app/util/socket";
 
 import { HackathonContext } from "../util";
-import { Segment, Label, Buttons, OverlayForm } from "./";
+import { Segment, Label, OverlayForm, Buttons } from "./";
 
 const LowerThirdContent = React.memo(() => {
   const formik = useFormikContext();
@@ -23,32 +23,32 @@ const LowerThirdContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" name="enabled" /></div>
+        <div><Field type="checkbox" className="dh-check" name="enabled" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Icon:</Label>
-        <div><Field type="text" name="icon" placeholder="e.g. fab fa-slack-hash" /></div>
+        <div><Field type="text" className="dh-input" name="icon" placeholder="e.g. fab fa-slack-hash" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Pre-text:</Label>
-        <div><Field type="text" name="pretext" /></div>
+        <div><Field type="text" className="dh-input" name="pretext" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Text:</Label>
-        <div><Field type="text" name="text" /></div>
+        <div><Field type="text" className="dh-input" name="text" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Countdown until:</Label>
-        <div><Field type="text" name="when" /></div>
+        <div><Field type="text" className="dh-input" name="when" /></div>
       </Segment>
 
       <Buttons>
-        <button type="button" onClick={formik.handleReset} disabled={!formik.dirty}>Reset</button>{" "}
-        <button type="submit" disabled={disableSubmit}>Submit</button>
+        <button type="button" className="dh-btn" onClick={formik.handleReset} disabled={!formik.dirty}>Reset</button>{" "}
+        <button type="submit" className="dh-btn" disabled={disableSubmit}>Submit</button>
       </Buttons>
     </>
   );

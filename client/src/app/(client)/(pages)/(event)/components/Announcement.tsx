@@ -5,21 +5,21 @@ import styled from "styled-components";
 
 import { useHackathon } from "@/app/util/socket";
 import Card from "@/app/(client)/(pages)/components/Card";
-import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
 import Section from "@/app/(client)/(pages)/components/Section";
 
 const AnnouncementContainer = styled(Card)`
-	border-left: solid 4px ${p => p.theme.secondaryA};
+  border-left: solid 4px ${(p) => p.theme.secondaryA};
 `;
 
 const AnnouncementTitle = styled.h2`
-	font-size: 36px;
-	color: ${p => p.theme.secondaryA};
-	margin: 0;
+  font-size: 36px;
+  color: ${(p) => p.theme.secondaryA};
+  margin: 0;
 `;
 
 const AnnouncementText = styled.div`
-	padding: 9px 0;
+  padding: 9px 0;
+  margin-bottom: .5em;
 `;
 
 /* eslint-disable react/no-array-index-key */
@@ -37,10 +37,19 @@ const Announcement = React.memo(() => {
       <AnnouncementContainer>
         <AnnouncementTitle>{state.announcement.title}</AnnouncementTitle>
         <AnnouncementText>
-          {announcement.text.split("\n").map((line, index) => <div key={index}>{line || <>&nbsp;</>}</div>)}
+          {announcement.text.split("\n").map((line, index) => (
+            <div key={index}>{line || <>&nbsp;</>}</div>
+          ))}
         </AnnouncementText>
         {announcement.buttonLink && (
-          <LinkButton href={announcement.buttonLink} target="_blank" rel="noopener" primary>{announcement.buttonText}</LinkButton>
+          <a
+            className="dh-btn"
+            href={announcement.buttonLink}
+            target="_blank"
+            rel="noopener"
+          >
+            {announcement.buttonText}
+          </a>
         )}
       </AnnouncementContainer>
     </Section>

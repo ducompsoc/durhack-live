@@ -19,7 +19,6 @@ const InteractionContainer = styled.div`
 const LargerText = styled.p`
 	font-size: 20px;
 	padding-bottom: 2px;
-	color: white;
 `;
 
 const EmphasisedText = styled.p`
@@ -37,7 +36,7 @@ const Interaction = React.memo(() => {
       if (liveLink.startsWith("#")) {
         return (
           <InteractionContainer className="row center">
-            <div className="flex">
+            <div className="grow basis-0">
               <LargerText>Discuss this event in the <strong>{liveLink}</strong> channel in Slack.</LargerText>
             </div>
           </InteractionContainer>
@@ -46,7 +45,7 @@ const Interaction = React.memo(() => {
 
       return (
         <InteractionContainer className="row center">
-          <div className="flex">
+          <div className="grow basis-0">
             <p>You&apos;re currently watching a livestream of a Zoom workshop.</p>
             <EmphasisedText>Join Zoom if you want to interact with this workshop.</EmphasisedText>
           </div>
@@ -61,7 +60,7 @@ const Interaction = React.memo(() => {
 
   return (
     <InteractionContainer className="row center">
-      <div className="flex">
+      <div className="grow basis-0">
         <LargerText>Welcome to the DurHack livestream.</LargerText>
       </div>
     </InteractionContainer>

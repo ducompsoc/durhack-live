@@ -14,16 +14,16 @@ const YoutubeContent = React.memo(() => {
     <>
       <h3>YouTube</h3>
 
-      <p>DANGER ZONE: these controls are not intuitive at all; please don&apos;t touch without asking @ethan first.</p>
+      <p>DANGER ZONE: these controls are not intuitive at all; please don&apos;t touch without asking first.</p>
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" name="enabled" /></div>
+        <div><Field type="checkbox" className="dh-check" name="enabled" /></div>
       </Segment>
 
       <Segment className="row">
         <Label>Skipped:</Label>
-        <div><Field type="number" name="skipped" /></div>
+        <div><Field type="number" className="dh-input" name="skipped" /></div>
       </Segment>
 
       <FieldArray
@@ -32,15 +32,15 @@ const YoutubeContent = React.memo(() => {
           <Segment>
             {(formik.values.queue).map((_, index) => (
               <div className="row" key={index}>
-                <div className="flex">
-                  <Field type="text" name={`queue.${index}.id`} placeholder="YouTube ID (not the full URL)" />
+                <div className="grow basis-0">
+                  <Field type="text" className="dh-input" name={`queue.${index}.id`} placeholder="YouTube ID (not the full URL)" />
                 </div>
-                <div className="flex">
-                  <Field type="text" name={`queue.${index}.lowerThird`} placeholder="Lower third" />
+                <div className="grow basis-0">
+                  <Field type="text" className="dh-input" name={`queue.${index}.lowerThird`} placeholder="Lower third" />
                 </div>
                 <div>
-                  <button type="button" onClick={() => arrayHelpers.remove(index)}>-</button>
-                  <button type="button" onClick={() => arrayHelpers.insert(index, { id: "", lowerThird: "" })}>
+                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>-</button>
+                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, { id: "", lowerThird: "" })}>
                     +
                   </button>
                 </div>
@@ -48,6 +48,7 @@ const YoutubeContent = React.memo(() => {
             ))}
             <button
               type="button"
+              className="plain-btn"
               onClick={() => arrayHelpers.insert(formik.values.queue.length, { id: "", lowerThird: "" })}
             >
               + Add Video
