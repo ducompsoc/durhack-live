@@ -2,28 +2,15 @@
 
 import React, {CSSProperties} from "react";
 import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation";
-import styled from "styled-components";
 
 import { useAsyncEffect } from "@/app/util/useAsyncEffect";
 import { makeLiveApiRequest } from "@/app/util/api";
-import { ErrorAlert } from "@/app/(client)/login/components";
 
 
 interface ClientDetails {
   name: string,
   redirect_uri: string,
 }
-
-const Button = styled.button`
-  display: inline-block;
-  border: none;
-  outline: none;
-  border-radius: 100px;
-  padding: 6px 24px;
-  font-size: inherit;
-  transition: .3s ease;
-  color: white;
-`;
 
 function FontAwesomeListItem(props: { children?: React.ReactNode, iconClassName: string, iconStyle?: CSSProperties }) {
   return <li>
@@ -186,7 +173,7 @@ export default function AuthorizePage() {
     async () => {}
   );
 
-  if (errorMessage) return <ErrorAlert>{errorMessage}</ErrorAlert>;
+  if (errorMessage) return <p className="dh-err">{errorMessage}</p>;
   if (loading) return <div>Fetching client info...</div>;
 
   function RedirectWarning(props: { redirect_uri: string }) {

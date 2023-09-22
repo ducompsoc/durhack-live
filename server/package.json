@@ -14,7 +14,8 @@
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
   "contributors": [
-    "Joe Clack <durhack@joeclack.me.uk>"
+    "Joe Clack <durhack@joeclack.me.uk>",
+    "Jacob Wrenn <jacob@wrenn.me>"
   ],
   "license": "UNLICENSED",
   "devDependencies": {
