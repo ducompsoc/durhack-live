@@ -9,6 +9,9 @@ module.exports = {
     extend: {
       colors: {
         accent: "#7d6399"
+      },
+      fontFamily: {
+        "heading": "var(--durhack-font)"
       }
     }
   },

@@ -1,8 +1,16 @@
 import "./globals.scss";
 import type { Metadata } from "next";
+import { Audiowide, Space_Grotesk } from "next/font/google";
 
 import StyledComponentsRegistry from "./styledComponentsRegistry";
 
+const headings = Audiowide({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--durhack-font",
+});
+
+const font = Space_Grotesk({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DurHack: Live",
@@ -16,7 +24,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className={headings.variable + " " + font.className}>
         <StyledComponentsRegistry>
           {children}
         </StyledComponentsRegistry>
