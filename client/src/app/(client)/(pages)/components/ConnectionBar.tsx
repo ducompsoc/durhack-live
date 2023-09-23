@@ -13,6 +13,7 @@ const ConnectionBarContainer = styled.div`
 	left: 0px;
 	box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
 	padding: 9px 0px;
+  z-index: 999;
 `;
 
 const SpinnerContainer = styled.div`
