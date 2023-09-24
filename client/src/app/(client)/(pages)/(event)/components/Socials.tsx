@@ -10,7 +10,6 @@ const SocialOptionButton = styled.a`
 	position: relative;
 	color: #fff;
 	text-decoration: none;
-	padding: 32px 18px;
 	transition: .3s ease;
 
 	&:before {
@@ -76,7 +75,7 @@ const SocialOption = React.memo(({
 const Socials = React.memo(() => (
   <Section>
     <div>
-      <Card className="row !p-0" style={{justifyContent: "space-evenly"}} $noPadding>
+      <Card className="flex flex-col md:flex-row gap-4 !p-0 !pl-6 !py-4 md:!py-6 md:!px-4" style={{justifyContent: "space-evenly"}}>
         <SocialOption
           href="/discord"
           icon="fab fa-discord"

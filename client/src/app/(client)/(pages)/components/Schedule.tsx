@@ -89,7 +89,6 @@ const TimelineContainer = styled.div`
 	.group {
 		.set .event {
 			text-align: center;
-			padding: 32px 0px;
 
 			.time {
 				display: inline-block;
@@ -196,7 +195,7 @@ const Schedule = React.memo(() => {
 
   return (
     <Wrapper>
-      <TimelineContainer>
+      <TimelineContainer className="pt-6 md:pt-0">
         {groups.map((event_group, group_idx) => (
           <div className="group" key={group_idx}>
             {group_idx !== 0 && (
@@ -205,9 +204,9 @@ const Schedule = React.memo(() => {
               </div>
             )}
 
-            <div className="row set">
+            <div className="flex flex-col md:flex-row set">
               {event_group.map((event, event_idx) => (
-                <div className={`event ${event.state}`} key={event_idx}>
+                <div className={`event ${event.state} md:py-[32px]`} key={event_idx}>
                   <div className="time">
                     {event.startDate ? format(event.startDate, "p").toLowerCase() : "--:--"}
                     {event.endDate && <> &ndash; {format(new Date(event.endDate), "p").toLowerCase()}</>}

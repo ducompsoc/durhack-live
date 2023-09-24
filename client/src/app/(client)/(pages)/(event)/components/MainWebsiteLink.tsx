@@ -18,7 +18,6 @@ const LinkContainer = styled.div`
 	position: relative;
 	font-weight: 300;
 	text-align: center;
-	padding: 48px 0px 0px 0px;
 	font-size: large;
 
 	a {
@@ -36,7 +35,7 @@ const LinkContainer = styled.div`
 /* eslint-disable */
 
 const MainWebsiteLink = React.memo(() => (
-	<LinkContainer>
+	<LinkContainer className="md:pt-[48px] pt-6">
 		<h2>Meet your organisers, see our sponsors, and read the FAQs over on</h2>
 		<a href="https://durhack.com" target="_blank">durhack.com</a>
 	</LinkContainer>

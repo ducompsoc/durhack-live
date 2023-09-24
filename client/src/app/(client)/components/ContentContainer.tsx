@@ -2,10 +2,8 @@
 
 import styled from "styled-components";
 
-const ContentContainer = styled.div`
-	width: 1200px;
-	margin: 0 auto;
-	padding: 0;
-`;
+const ContentContainer = styled.div.attrs({
+  className: "md:max-w-[1200px] mx-auto",
+})``;
 
 export default ContentContainer;

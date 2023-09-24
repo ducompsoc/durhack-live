@@ -12,7 +12,6 @@ import LinkButton from "@/app/(client)/(pages)/components/LinkButton";
 import Interaction from "./Interaction";
 
 const LiveCard = styled(Card)`
-	width: 66%;
 	padding: 4px;
 `;
 
@@ -21,7 +20,6 @@ const LiveNowPlaying = styled(Card)`
 `;
 
 const Player = styled.div`
-	height: 447px;
 	background-color: #000;
 `;
 
@@ -30,9 +28,7 @@ const LiveNowPlayingInner = styled.div`
 	color: white;
 `;
 
-const LiveSidebar = styled.div`
-	width: 33%;
-`;
+const LiveSidebar = styled.div``;
 
 const LiveEventName = styled.div`
 	font-size: 18px;
@@ -207,16 +203,16 @@ const Stage = React.memo(() => {
   }
 
   const topTipEl = (
-    <Card className="grow basis-0">
+    <Card className="md:grow md:basis-0">
       <h3>Top tip</h3>
       <TopTip />
     </Card>
   );
 
   return (
-    <Section className="row" style={{ marginBottom: 0 }}>
-      <LiveCard $noPadding colour="primaryDark">
-        <Player>
+    <Section className="flex flex-col md:flex-row" style={{ marginBottom: 0 }}>
+      <LiveCard $noPadding colour="primaryDark" className="md:w-[66%]">
+        <Player className="md:h-[447px] h-[250px]">
           <iframe
             title="DurHack Livestream"
             src={`https://player.twitch.tv/?channel=durhack&parent=${window.location.host.split(":")[0]}`}
@@ -232,7 +228,7 @@ const Stage = React.memo(() => {
         <Interaction />
       </LiveCard>
 
-      <LiveSidebar className="column">
+      <LiveSidebar className="column md:w-[33%]">
         {nowPlayingEl}
         {onTheSideEl}
         {upNextEl}
