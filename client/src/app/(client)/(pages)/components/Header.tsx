@@ -40,7 +40,7 @@ const Header = React.memo(() => (
     <HeaderInner>
       <ContentContainer className="row">
         <LogoWrapper className="column center">
-          <p className="font-heading text-5xl md:text-7xl text-white ml-4 md:m-0">
+          <p className="font-heading text-5xl md:text-7xl text-white ml-6 xl:m-0">
             DURHACK
           </p>
         </LogoWrapper>

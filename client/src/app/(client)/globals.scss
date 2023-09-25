@@ -91,3 +91,13 @@ h3 {
 .wrap {
   flex-wrap: wrap;
 }
+
+.rocket {
+  position: fixed;
+  bottom: -5em;
+  right: 0;
+  z-index: -1;
+  height: 50vh;
+
+  @apply hidden md:block;
+}

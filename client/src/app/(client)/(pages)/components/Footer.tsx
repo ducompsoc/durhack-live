@@ -8,7 +8,6 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const FooterContainer = styled.div`
 	text-align: center;
-	padding: 32px 0px;
 `;
 
 const ExternalLink = styled.a`
@@ -21,7 +20,7 @@ const ExternalLink = styled.a`
 `;
 
 const Footer = React.memo(() => (
-  <FooterContainer>
+  <FooterContainer className="pb-16 pt-6">
     <ContentContainer>
       <p>
         DurHack follows the{" "}

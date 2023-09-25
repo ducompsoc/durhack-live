@@ -15,5 +15,13 @@ export default React.memo(() => (
     <Announcement />
     <HackerPack />
     <MainWebsiteLink />
+
+    <object
+      className="rocket"
+      type="image/svg+xml"
+      data="/assets/graphics/rocket/rocket-combined.svg"
+    >
+      rocket
+    </object>
   </main>
 ));
