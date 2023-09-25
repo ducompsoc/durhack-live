@@ -76,7 +76,7 @@ export default function CheckInPage() {
   }
 
   function CheckInForm() {
-    const { values, setValues } = useFormikContext();
+    const { values, setValues } = useFormikContext<any>();
 
     React.useEffect(() => {
       (async () => {

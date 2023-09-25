@@ -72,10 +72,8 @@ const ScheduleContent = React.memo(() => {
                       />
                     </td>
                     <td className="grow basis-0">
-                      <Field
-                        name={`schedule.${index}.start`}
-                      >
-                        {({ field }) => (
+                      <Field name={`schedule.${index}.start`}>
+                        {({ field }: { field: any }) => (
                           <div>
                             <input
                               type="datetime-local"
@@ -88,10 +86,8 @@ const ScheduleContent = React.memo(() => {
                       </Field>
                     </td>
                     <td className="grow basis-0">
-                    <Field
-                        name={`schedule.${index}.end`}
-                      >
-                        {({ field }) => (
+                      <Field name={`schedule.${index}.end`}>
+                        {({ field }: { field: any }) => (
                           <div>
                             <input
                               type="datetime-local"
@@ -203,10 +199,10 @@ const Schedule = React.memo(() => {
 
   function handleSubmit(values: Pick<IHackathonState, "schedule">) {
     if (!hackathon) return;
-    values.schedule.forEach(item => {
-      item.start = item.start ? (new Date(item.start)).toISOString() : "";
-      item.end = item.end ? (new Date(item.end)).toISOString() : "";
-    })
+    values.schedule.forEach((item) => {
+      item.start = item.start ? new Date(item.start).toISOString() : "";
+      item.end = item.end ? new Date(item.end).toISOString() : "";
+    });
     pushHackathon({ ...hackathon, schedule: values.schedule });
   }
 

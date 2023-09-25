@@ -39,6 +39,6 @@ export async function makeLiveApiRequest(endpoint: string, options?: RequestInit
   return request;
 }
 
-export async function query(...args) {
+export async function query(...args: any[]): Promise<any> {
 
 }

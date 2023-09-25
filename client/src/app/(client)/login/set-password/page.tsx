@@ -26,7 +26,7 @@ export default function SetPasswordPage() {
   }, [query_email]);
 
   function setUnknownError() {
-    setError(`An unknown error occurred. Please try a refresh, and if you\'re still having problems,
+    setError(`An unknown error occurred. Please try a refresh, and if you're still having problems,
       ask a member of the DurHack team.`
     );
   }
@@ -135,13 +135,13 @@ export default function SetPasswordPage() {
     return (
       <>
         <p>
-          Welcome to DurHack! We've just emailed you a verification code.
+          Welcome to DurHack! We&apos;ve just emailed you a verification code.
         </p>
         <p>
           <strong>Please check your email, and type your code in here.</strong>
         </p>
         <p>
-          Make sure you double-check your spam folder. If it's been a while and you still don't have one, please talk to someone on the DurHack team.
+          Make sure you double-check your spam folder. If it&apos;s been a while and you still don&apos;t have one, please talk to someone on the DurHack team.
         </p>
 
         <div className="mb-2">
@@ -164,10 +164,10 @@ export default function SetPasswordPage() {
     if (!verifyCode) return <></>;
     return (
       <>
-        <p>Thanks, you're in!</p>
+        <p>Thanks, you&apos;re in!</p>
 
         <p>
-          Next time you log in, we'd like to ask you for a password instead. What would you like your password to be?
+          Next time you log in, we&apos;d like to ask you for a password instead. What would you like your password to be?
         </p>
         <div className="mb-2">
           <label htmlFor="password">Password:</label>

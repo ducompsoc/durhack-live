@@ -80,7 +80,7 @@ export default function MusicVolumeController() {
     return interval;
   }
 
-  async function startUnmuting(originalVolume) {
+  async function startUnmuting(originalVolume: any) {
     console.info("starting unmute");
     // set volume to zero and unmute.
     await obs.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: 0 });

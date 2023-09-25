@@ -14,9 +14,9 @@ import {
 
 export default function OverlayMainWrapper({ children }: { children: React.ReactNode }) {
   const [initialSwitch, setInitialSwitch] = React.useState<boolean>(false);
-  const [sceneSwitchInterval, setSceneSwitchInterval] = React.useState<ReturnType<typeof setInterval>>(null);
-  const [currentScene, setCurrentScene] = React.useState<IOverlayState["currentScene"]>(null);
-  const [currentDarkMode, setCurrentDarkMode] = React.useState<boolean>(null);
+  const [sceneSwitchInterval, setSceneSwitchInterval] = React.useState<ReturnType<typeof setInterval> | undefined>(undefined);
+  const [currentScene, setCurrentScene] = React.useState<IOverlayState["currentScene"] | undefined>(undefined);
+  const [currentDarkMode, setCurrentDarkMode] = React.useState<boolean | undefined>(undefined);
   const { state } = useHackathon();
 
   React.useEffect(() => {

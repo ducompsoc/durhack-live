@@ -20,13 +20,13 @@ const fakeCanvasContext = document.createElement("canvas").getContext("2d");
 function breakUpParagraph(paragraph: string, style: MainTextStyleType) {
   const limit = 980;
   const lines: string[] = [];
-  fakeCanvasContext.font = style.font;
+  fakeCanvasContext!.font = style.font;
 
   let currentLine = "";
   paragraph.trim().split(" ").forEach(word => {
     const potentialLine = `${currentLine} ${word}`;
 
-    if (fakeCanvasContext.measureText(potentialLine).width > limit) {
+    if (fakeCanvasContext!.measureText(potentialLine).width > limit) {
       lines.push(currentLine);
       currentLine = word;
       return;
@@ -194,7 +194,7 @@ export default function OverlaySlides() {
 
   function getSlideCount() {
     const containerElement = containerRef.current;
-    if (!containerElement) return;
+    if (!containerElement) return 0;
 
     return containerElement.childElementCount;
   }
@@ -260,10 +260,10 @@ export default function OverlaySlides() {
   }
 
   function currentSlideIsNextUpAndTimerEndingSoon(): boolean {
-    if (activeSlideIndex === null) return;
+    if (activeSlideIndex === null) return false;
 
     const currentSlide = getSlideAtIndex(activeSlideIndex);
-    if (!currentSlide) return;
+    if (!currentSlide) return false;
 
     return (currentSlide?.classList.contains("nextup") && !!nextUp?.when &&
     (new Date(nextUp.when).getTime() - Date.now()) < (1000 * 60 * 1.5));
@@ -324,11 +324,16 @@ export default function OverlaySlides() {
 
   return (
     <div className="slides" ref={containerRef}>
-      <NextUpSlide className="nextup" {...nextUp} />
-      {slides?.map((slideText, slideIndex) => <Slide
-        key={slideIndex}
-        slideText={slideText}
-      />)}
+      <NextUpSlide
+        className="nextup"
+        enabled={nextUp?.enabled ?? false}
+        pretext={nextUp?.pretext ?? ""}
+        text={nextUp?.text ?? ""}
+        when={nextUp?.when ?? ""}
+      />
+      {slides?.map((slideText, slideIndex) => (
+        <Slide key={slideIndex} slideText={slideText} />
+      ))}
     </div>
   );
 }

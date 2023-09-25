@@ -47,7 +47,7 @@ export default function LoginPage() {
     const user_details = (await check_email_response.json()).data;
 
     if (!user_details.password_set) {
-      const redirect_to = new URL("/login/set-password", window.location);
+      const redirect_to = new URL("/login/set-password", window.location.href);
       redirect_to.searchParams.set("email", submissionEmail);
       return router.push(redirect_to.toString());
     }
@@ -60,7 +60,7 @@ export default function LoginPage() {
     const login_request = await makeLiveApiRequest("/auth/login", {
       method: "POST",
       redirect: "follow",
-      body: new URLSearchParams({ email: email, password: submissionPassword }),
+      body: new URLSearchParams({ email: email ?? "", password: submissionPassword }),
     });
 
     let login_response: Response;

@@ -69,7 +69,7 @@ export default function AuthorizePage() {
         body: new URLSearchParams([
           ...Array.from(searchParams.entries()),
           ...Object.entries({
-            allowed: true,
+            allowed: "true",
           }),
         ]),
         redirect: "follow",
@@ -105,7 +105,7 @@ export default function AuthorizePage() {
         body: new URLSearchParams([
           ...Array.from(searchParams.entries()),
           ...Object.entries({
-            allowed: false,
+            allowed: "false",
           }),
         ]),
       },

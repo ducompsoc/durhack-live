@@ -98,10 +98,10 @@ export default function FeedOverlay() {
     await event.target.loadPlaylist(queue.map(({ id }) => id));
   };
 
-  function onInitialPlayback(player: YouTubePlayer) {
+  async function onInitialPlayback(player: YouTubePlayer) {
     setVideoInProgress(true);
 
-    const currentId = new URL(player.getVideoUrl()).searchParams.get("v");
+    const currentId = new URL(await player.getVideoUrl()).searchParams.get("v");
     if (!currentId) return;
 
     const queued = queue.find(({ id }) => id === currentId);

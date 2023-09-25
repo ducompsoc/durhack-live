@@ -2,11 +2,15 @@
 
 import {
   OverlayMainWrapper,
-  OverlaySlides,
   OverlayMilestone,
   FeedOverlay,
   MusicVolumeController
 } from "./components";
+import dynamic from "next/dynamic";
+
+const OverlaySlides = dynamic(() => import("./components/OverlaySlides"), {
+  ssr: false,
+});
 
 
 export default function LivestreamOverlay() {

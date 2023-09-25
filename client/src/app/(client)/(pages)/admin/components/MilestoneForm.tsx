@@ -36,7 +36,7 @@ const MilestoneContent = React.memo(() => {
         <Label>Ends at:</Label>
         <div>
           <Field name="when">
-            {({ field }) => (
+            {({ field }: { field: any }) => (
               <div>
                 <input type="datetime-local" className="dh-input" {...field} value={formatDateLocal(field.value)} />
               </div>
