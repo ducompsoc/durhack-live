@@ -7,7 +7,6 @@ import useCountdown from "@/app/util/countdownHook";
 import { useHackathon } from "@/app/util/socket";
 
 const Wrapper = styled.div`
-	width: 33%;
 	color: white;
 	box-sizing: border-box;
 	/* padding: 0px 32px 0px calc(32px + 16px); */
@@ -30,13 +29,13 @@ const CountdownTitle = styled.div`
 
 const CountdownContainer = styled.div`
 	width: 100%;
-	font-family: 'Audiowide', 'Exo 2', sans-serif;
-	font-size: 64px;
+	font-size: 50px;
+  margin-left: -32px;
 `;
 
 const CountdownDigit = styled.span`
 	display: inline-block;
-	width: 58px;
+	width: 50px;
 	text-align: center;
 `;
 
@@ -72,7 +71,7 @@ const Countdown = React.memo(() => {
   }
 
   return (
-    <Wrapper className="column center">
+    <Wrapper className="column center md:w-[33%] md:m-0 ml-4 mt-2">
       <WrapperInner className="column center grow basis-0">
         <CountdownTitle>{state.overlay.milestone.text}</CountdownTitle>
         <CountdownContainer>

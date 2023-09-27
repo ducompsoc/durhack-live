@@ -7,10 +7,6 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 import Countdown from "./Countdown";
 
-const HeaderInner = styled.div`
-  padding: 64px 0px 0px 0px;
-`;
-
 const LogoWrapper = styled.div`
   margin: 16px 0px;
 `;
@@ -37,17 +33,17 @@ const Navbar = styled.div`
 
 const Header = React.memo(() => (
   <Navbar>
-    <HeaderInner>
-      <ContentContainer className="row">
-        <LogoWrapper className="column center">
+    <div className="md:pt-[64px] pt-4">
+      <ContentContainer className="flex md:flex-row flex-col">
+        <LogoWrapper className="md:flex md:flex-col center">
           <p className="font-heading text-5xl md:text-7xl text-white ml-6 xl:m-0">
             DURHACK
           </p>
         </LogoWrapper>
-        <div className="grow basis-0" />
+        <div className="md:grow md:basis-0" />
         <Countdown />
       </ContentContainer>
-    </HeaderInner>
+    </div>
   </Navbar>
 ));
 
