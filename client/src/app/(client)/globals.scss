@@ -59,7 +59,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-h3, label {
+h3,
+label {
   display: block;
   font-weight: 800;
   font-size: 15px;
@@ -80,7 +81,8 @@ h3 {
   flex-direction: column;
 }
 
-.center, .align-center {
+.center,
+.align-center {
   align-items: center;
 }
 
@@ -100,4 +102,37 @@ h3 {
   height: 50vh;
 
   @apply hidden md:block;
+}
+
+#lyra {
+  width: 245.136px;
+  height: 80%;
+  flex-shrink: 0;
+  position: fixed;
+  left: -50px;
+  bottom: -40%;
+  z-index: -1;
+  @apply hidden xl:block;
+}
+
+#lyra2 {
+  @extend #lyra;
+  filter: blur(15px);
+}
+
+#orion {
+  width: 246.372px;
+  height: 80%;
+  transform: rotate(30deg);
+  flex-shrink: 0;
+  position: fixed;
+  left: -30px;
+  bottom: 30%;
+  z-index: -1;
+  @apply hidden xl:block;
+}
+
+#orion2 {
+  @extend #orion;
+  filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.05));
 }

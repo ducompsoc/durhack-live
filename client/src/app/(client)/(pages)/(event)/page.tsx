@@ -23,5 +23,25 @@ export default React.memo(() => (
     >
       rocket
     </object>
+    <img
+      alt="orion"
+      id="orion"
+      src="/assets/graphics/megateam/orion/constellation.svg"
+    />
+    <img
+      alt="lyra"
+      id="lyra"
+      src="/assets/graphics/megateam/lyra/constellation.svg"
+    />
+    <img
+      alt="orion"
+      id="orion2"
+      src="/assets/graphics/megateam/orion/constellation.svg"
+    />
+    <img
+      alt="lyra"
+      id="lyra2"
+      src="/assets/graphics/megateam/lyra/constellation.svg"
+    />
   </main>
 ));
