@@ -12,15 +12,26 @@ interface ClientDetails {
   redirect_uri: string,
 }
 
-function FontAwesomeListItem(props: { children?: React.ReactNode, iconClassName: string, iconStyle?: CSSProperties }) {
-  return <li>
-    <i className={props.iconClassName} style={props.iconStyle}/> &nbsp;
-    {props.children}
-  </li>;
+function FontAwesomeListItem(props: {
+  children?: React.ReactNode;
+  iconClassName: string;
+  iconStyle?: CSSProperties;
+  contents?: boolean;
+}) {
+  return (
+    <li className={props.contents ? "contents" : ""}>
+      <i
+        className={props.iconClassName + (props.contents ? " mt-1" : "")}
+        style={props.iconStyle}
+      />
+      {!props.contents && <>&nbsp;</>}
+      {props.children}
+    </li>
+  );
 }
 
 function OAuth2Scope(props: { children?: React.ReactNode }) {
-  return <FontAwesomeListItem iconClassName={"fa-solid fa-square-check"} iconStyle={{color: "green"}}>
+  return <FontAwesomeListItem iconClassName={"fa-solid fa-square-check"} iconStyle={{color: "green"}} contents={true}>
     {props.children}
   </FontAwesomeListItem>;
 }
@@ -37,7 +48,7 @@ function FakeOauth2Scope() {
     "Read you a bedtime story"
   ];
 
-  return <FontAwesomeListItem iconClassName="fa-solid fa-square-xmark text-neutral-600 dark:text-white">
+  return <FontAwesomeListItem iconClassName="fa-solid fa-square-xmark text-neutral-600 dark:text-white" contents={true}>
     <span>
       {scopes[Math.floor(Math.random() * scopes.length)]}
     </span>
@@ -197,11 +208,12 @@ export default function AuthorizePage() {
       <p>An external application</p>
       <h2 className="text-center">
         <strong>{clientDetails!.name}</strong>
+
       </h2>
       <p>wants to access your DurHack account.</p>
       <hr />
       <p>This will allow the developer of {clientDetails!.name} to:</p>
-      <ul className="mx-8 mt-2 mb-4">
+      <ul className="mx-8 mt-2 mb-4 grid grid-cols-[max-content_auto] items-start gap-x-2">
         <OAuth2Scope>
           <span>Access your preferred name, email address, and avatar</span>
         </OAuth2Scope>

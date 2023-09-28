@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Inter } from "next/font/google";
+import "./login.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -47,7 +48,7 @@ export default function LoginLayout({
   return (
     <LoginWrapper className={inter.className}>
       <LoginInner>
-        <div className="flex flex-col gap-y-3 p-6 text-black dark:text-neutral-200 justify-center md:max-w-3xl md:justify-end md:p-28 min-h-screen">
+        <div className="flex flex-col gap-y-3 p-6 text-black dark:text-neutral-200 justify-center md:max-w-3xl md:justify-end md:p-28 md:pb-20 min-h-screen">
           {isLoginPage && (
             <h1 className="text-4xl text-white mb-2 font-heading">Let&apos;s jump in.</h1>
           )}

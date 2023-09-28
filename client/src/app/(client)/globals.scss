@@ -16,7 +16,8 @@ $fa-font-path: '/fa-webfonts';
 }
 
 .dh-box {
-  @apply bg-gray-200/90 drop-shadow-lg dark:bg-neutral-700/90 rounded p-6;
+  @apply bg-neutral-300/90 dark:bg-neutral-600/90 rounded p-6;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
 
   label {
     font-weight: normal;
@@ -52,7 +53,7 @@ $fa-font-path: '/fa-webfonts';
 }
 
 body {
-  @apply dark:bg-neutral-900 dark:text-white;
+  @apply bg-accent dark:text-white;
 }
 
 code {
@@ -134,5 +135,5 @@ h3 {
 
 #orion2 {
   @extend #orion;
-  filter: drop-shadow(0px 4px 3px rgba(0, 0, 0, 0.05));
+  filter: blur(15px);
 }

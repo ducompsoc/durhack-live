@@ -8,6 +8,7 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 const FooterContainer = styled.div`
 	text-align: center;
+  color: white;
 `;
 
 const ExternalLink = styled.a`
