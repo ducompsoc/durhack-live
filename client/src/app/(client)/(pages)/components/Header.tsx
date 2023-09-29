@@ -7,10 +7,6 @@ import ContentContainer from "@/app/(client)/components/ContentContainer";
 
 import Countdown from "./Countdown";
 
-const LogoWrapper = styled.div`
-  margin: 16px 0px;
-`;
-
 const Navbar = styled.div`
   background: linear-gradient(
     88deg,
@@ -35,11 +31,13 @@ const Header = React.memo(() => (
   <Navbar>
     <div className="md:pt-[64px] pt-4">
       <ContentContainer className="flex md:flex-row flex-col">
-        <LogoWrapper className="md:flex md:flex-col center">
-          <p className="font-heading text-5xl md:text-7xl text-white ml-6 xl:m-0">
-            DURHACK
-          </p>
-        </LogoWrapper>
+        <div className="md:flex md:flex-col center mb-6 mt-2 md:mt-0">
+          <object data="/logo.svg" type="image/svg+xml" className="md:h-32 w-full">
+            <p className="font-heading text-5xl md:text-7xl text-white ml-6 xl:m-0">
+              DURHACK
+            </p>
+          </object>
+        </div>
         <div className="md:grow md:basis-0" />
         <Countdown />
       </ContentContainer>

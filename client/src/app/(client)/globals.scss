@@ -16,7 +16,7 @@ $fa-font-path: '/fa-webfonts';
 }
 
 .dh-box {
-  @apply bg-neutral-300/90 dark:bg-neutral-600/90 rounded p-6;
+  @apply bg-neutral-200/90 dark:bg-neutral-600/90 rounded p-6;
   box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
 
   label {
@@ -50,6 +50,24 @@ $fa-font-path: '/fa-webfonts';
 
 .dh-err {
   @apply text-red-600 dark:text-red-400;
+}
+
+.dh-login {
+  .dh-box {
+    @apply xl:p-8;
+  }
+
+  .dh-btn {
+    @apply xl:px-3 xl:py-2 #{!important};
+  }
+
+  .dh-input {
+    @apply xl:text-lg xl:min-w-[15em];
+  }
+
+  label {
+    @apply xl:text-lg;
+  }
 }
 
 body {
