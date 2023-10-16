@@ -62,7 +62,7 @@ export default function AuthorizePage() {
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [authenticatedUserName, setAuthenticatedUserName] = React.useState<string | null>(null);
   const [clientDetails, setClientDetails] = React.useState<ClientDetails | null>(null);
-  const [hasResponded, setHasResponded] = React.useState<boolean>(false);
+  const hasResponded = React.useRef<boolean>(false);
 
   function getAuthorizeRoute(searchParams: URLSearchParams | ReadonlyURLSearchParams) {
     const stringSearchParams = searchParams.toString();
@@ -70,8 +70,8 @@ export default function AuthorizePage() {
   }
 
   async function handleAuthorizePressed() {
-    if (hasResponded) return;
-    setHasResponded(true);
+    if (hasResponded.current) return;
+    hasResponded.current = true;
 
     const authorizeRequest = await makeLiveApiRequest(
       "/auth/oauth/authorize",
@@ -91,7 +91,7 @@ export default function AuthorizePage() {
     try {
       authorizeResponse = await fetch(authorizeRequest);
     } catch (error) {
-      setHasResponded(false);
+      hasResponded.current = false;
       return setErrorMessage("A network error occurred. Try again.");
     }
 
@@ -106,8 +106,8 @@ export default function AuthorizePage() {
   }
 
   async function handleCancelPressed() {
-    if (hasResponded) return;
-    setHasResponded(true);
+    if (hasResponded.current) return;
+    hasResponded.current = true;
 
     const authorizeRequest = await makeLiveApiRequest(
       "/auth/oauth/authorize",
@@ -126,7 +126,7 @@ export default function AuthorizePage() {
     try {
       authorizeResponse = await fetch(authorizeRequest);
     } catch (error) {
-      setHasResponded(false);
+      hasResponded.current = false;
       return setErrorMessage("A network error occurred. Try again.");
     }
 
