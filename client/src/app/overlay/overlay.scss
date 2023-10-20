@@ -747,14 +747,14 @@ html, body {
 
 .feature {
   &.animate-in {
-    .icon-bg {
-      display: block;
-      opacity: 0.2;
-      animation-name: icon-move;
-      animation-duration: 3s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-    }
+    // .icon-bg {
+    //   display: block;
+    //   opacity: 0.2;
+    //   animation-name: icon-move;
+    //   animation-duration: 3s;
+    //   animation-timing-function: linear;
+    //   animation-iteration-count: infinite;
+    // }
 
     .cover {
       animation-name: feature-in;
@@ -762,9 +762,9 @@ html, body {
   }
 
   &.animate-out {
-    .icon-bg {
-      display: block;
-    }
+    // .icon-bg {
+    //   display: block;
+    // }
 
     .cover {
       animation-name: feature-out;
@@ -798,13 +798,13 @@ html, body {
     }
 
     100% {
-      width: calc(1280px - 128px);
+      width: 100%;
     }
   }
 
   @keyframes feature-out {
     0% {
-      width: calc(1280px - 128px);
+      width: 100%;
     }
 
     100% {

@@ -69,8 +69,6 @@ export default function OverlayFeature() {
           <div className="title">{featureTitle}</div>
 
           <div className="text">{featureText}</div>
-
-          <img src="/images/logo-colour.png" className="logo" />
         </div>
       </div>
     </div>
