@@ -33,10 +33,9 @@ export default function LoginPage() {
     }
 
     if (check_email_response.status === 404) {
-      return setError(`We can't find a DurHack ticket for that email address. If you're a Durham student,
-          you might want to try both your name and CIS code (e.g. if john.smith@durham.ac.uk doesn't work, try
-          abcd12@durham.ac.uk). If you're still struggling, please chat to a member of the DurHack team; it could be
-          a mistake.`
+      return setError(`We can't find a DurHack ticket for that email address. If you signed up with a university email address,
+          make sure to try all forms of your email address! (e.g. for Durham: john.smith@durham.ac.uk, abcd12@durham.ac.uk).
+          If you're still struggling, please chat to a member of the DurHack team; it could be a mistake.`
       );
     }
 
