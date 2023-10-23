@@ -90,8 +90,8 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket;
 
 Create databases, and a user for those databases.
 ```bash
-mysql> CREATE DATABASE 'durhack-live';
-mysql> CREATE DATABASE 'durhack-live-session';
+mysql> CREATE DATABASE `durhack-live`;
+mysql> CREATE DATABASE `durhack-live-session`;
 mysql> CREATE USER 'durhack'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'the-best-durhack-password'; 
 mysql> GRANT ALL PRIVILEGES ON `durhack-live`.* TO 'durhack'@'localhost';
 mysql> GRANT ALL PRIVILEGES ON `durhack-live-session`.* TO 'durhack'@'localhost';
