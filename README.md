@@ -72,7 +72,7 @@ First, set a password for `root` so that `mysql_secure_installation` will succee
 ```bash
 sudo systemctl start mysql.service
 sudo mysql
-mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'new-root-password';
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'new-root-password';
 mysql> exit
 ```
 
@@ -92,7 +92,7 @@ Create databases, and a user for those databases.
 ```bash
 mysql> CREATE DATABASE 'durhack-live';
 mysql> CREATE DATABASE 'durhack-live-session';
-mysql> CREATE USER 'durhack'@'localhost' IDENTIFIED BY 'the-best-durhack-password'; 
+mysql> CREATE USER 'durhack'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'the-best-durhack-password'; 
 mysql> GRANT ALL PRIVILEGES ON `durhack-live`.* TO 'durhack'@'localhost';
 mysql> GRANT ALL PRIVILEGES ON `durhack-live-session`.* TO 'durhack'@'localhost';
 mysql> FLUSH PRIVILEGES;
