@@ -25,7 +25,11 @@ Start by using `ssh root@[ip]` and providing access token to connect to Scaleway
    ```bash
    sudo apt-get install mysql-client=8.0* mysql-server=8.0*
    ```
-5) Certbot
+5) Nginx
+   ```bash
+   sudo apt-get install nginx
+   ``` 
+6) Certbot
    ```bash
    sudo snap install --classic certbot
    sudo ln -s /snap/bin/certbot /usr/bin/certbot
