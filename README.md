@@ -105,7 +105,7 @@ Use DataGrip to connect via `durhack` user, or by CLI:
 
 ```bash
 sudo mysql
-mysql> USE durhack;
+mysql> USE durhack-live;
 mysql> show tables;
 ```
 
