@@ -25,7 +25,11 @@ Start by using `ssh root@[ip]` and providing access token to connect to Scaleway
    ```bash
    sudo apt-get install mysql-client=8.0* mysql-server=8.0*
    ```
-5) Certbot
+5) Nginx
+   ```bash
+   sudo apt-get install nginx
+   ``` 
+6) Certbot
    ```bash
    sudo snap install --classic certbot
    sudo ln -s /snap/bin/certbot /usr/bin/certbot
@@ -72,7 +76,7 @@ First, set a password for `root` so that `mysql_secure_installation` will succee
 ```bash
 sudo systemctl start mysql.service
 sudo mysql
-mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'new-root-password';
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'new-root-password';
 mysql> exit
 ```
 
@@ -90,9 +94,9 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket;
 
 Create databases, and a user for those databases.
 ```bash
-mysql> CREATE DATABASE 'durhack-live';
-mysql> CREATE DATABASE 'durhack-live-session';
-mysql> CREATE USER 'durhack'@'localhost' IDENTIFIED BY 'the-best-durhack-password'; 
+mysql> CREATE DATABASE `durhack-live`;
+mysql> CREATE DATABASE `durhack-live-session`;
+mysql> CREATE USER 'durhack'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY 'the-best-durhack-password'; 
 mysql> GRANT ALL PRIVILEGES ON `durhack-live`.* TO 'durhack'@'localhost';
 mysql> GRANT ALL PRIVILEGES ON `durhack-live-session`.* TO 'durhack'@'localhost';
 mysql> FLUSH PRIVILEGES;
@@ -105,7 +109,7 @@ Use DataGrip to connect via `durhack` user, or by CLI:
 
 ```bash
 sudo mysql
-mysql> USE durhack;
+mysql> USE durhack-live;
 mysql> show tables;
 ```
 
