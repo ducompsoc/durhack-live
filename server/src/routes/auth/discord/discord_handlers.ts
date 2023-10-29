@@ -9,7 +9,13 @@ import { requireLoggedIn } from "@/auth/decorators";
 export default class DiscordHandlers {
   @requireLoggedIn
   static async handleBeginDiscordOAuthFlow(request: Request, response: Response) {
-    throw new createHttpError.NotImplemented();
+    response.redirect(
+      `https://discord.com/oauth2/authorize?client_id=${config.get(
+        "discord.clientId"
+      )}&redirect_uri=${encodeURIComponent(
+        config.get("discord.redirectUri")
+      )}&response_type=code&scope=identify&state=dh`
+    );
   }
 
   // a discord access code provided via redirect query parameter is exchanged for an access token
@@ -36,11 +42,11 @@ export default class DiscordHandlers {
     const discordApiBase = config.get("discord.apiEndpoint");
 
     const access_code_exchange_payload = {
-      "client_id": config.get("discord.clientId") as string,
-      "client_secret": config.get("discord.clientSecret") as string,
-      "grant_type": "authorization_code",
-      "code": code,
-      "redirect_uri": config.get("redirectUri") as string,
+      client_id: config.get("discord.clientId") as string,
+      client_secret: config.get("discord.clientSecret") as string,
+      grant_type: "authorization_code",
+      code: code,
+      redirect_uri: config.get("discord.redirectUri") as string,
     };
     const encoded_access_code_exchange_payload = new URLSearchParams(access_code_exchange_payload);
 
@@ -53,11 +59,13 @@ export default class DiscordHandlers {
       throw new createHttpError.BadGateway("Couldn't exchange access code for access token.");
     }
 
-    const { access_token } = DiscordHandlers.discord_access_token_schema.parse(await discord_access_token_response.json());
+    const { access_token } = DiscordHandlers.discord_access_token_schema.parse(
+      await discord_access_token_response.json()
+    );
 
     const discord_profile_response = await fetch(`${discordApiBase}/oauth2/@me`, {
       headers: {
-        "Authorization": `Bearer ${access_token}`,
+        Authorization: `Bearer ${access_token}`,
       },
     });
 
@@ -65,17 +73,15 @@ export default class DiscordHandlers {
       throw new createHttpError.BadGateway("Failed to read your Discord profile.");
     }
 
-    const discord_profile = await discord_profile_response.json() as any;
+    const discord_profile = (await discord_profile_response.json()) as any;
 
     if (!request.user) throw new Error(); // should never occur due to decorator
 
-    // this is out of date - most discord names now have no discriminator
     await request.user.update({
-      discordId: discord_profile.user.id,
-      discordName: `${discord_profile.user.username}#${discord_profile.user.discriminator}`,
+      discord_id: discord_profile.user.id,
+      discord_name: discord_profile.user.username,
     });
 
-    // this used to response with a discord invite
-    sendStandardResponse(response, 200, "Successfully verified Discord profile.");
+    response.redirect("https://discord.gg/dFZUYk9DMG");
   }
 }
