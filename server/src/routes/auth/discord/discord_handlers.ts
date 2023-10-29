@@ -82,6 +82,6 @@ export default class DiscordHandlers {
       discord_name: discord_profile.user.username,
     });
 
-    response.redirect("https://discord.gg/dFZUYk9DMG");
+    response.redirect("https://discord.gg/HZDQJzPsGR");
   }
 }
