@@ -4,11 +4,6 @@ import Model, { oauth_config } from "@/routes/auth/oauth/model";
 import { NextFunction, Request, Response } from "express";
 import OAuth2Server, {AccessDeniedError, UnauthorizedRequestError} from "@node-oauth/oauth2-server";
 
-
-declare class ExpressOAuthServer {
-  _handleError(response: Response, oauthResponse: OAuth2Server.Response, error: Error, next: NextFunction): void;
-}
-
 export class DurhackExpressOAuthServer extends ExpressOAuthServer {
 
   copyUserFromOAuthToken(request: Request, response: Response, next: NextFunction) {
@@ -18,6 +13,7 @@ export class DurhackExpressOAuthServer extends ExpressOAuthServer {
     return next();
   }
 
+  // @ts-ignore
   override _handleError(response: Response, oauthResponse: OAuth2Server.Response, error: Error, next: NextFunction) {
     if (error instanceof UnauthorizedRequestError) {
       response.setHeader("WWW-Authenticate", 'Bearer realm="Service"');
@@ -26,9 +22,11 @@ export class DurhackExpressOAuthServer extends ExpressOAuthServer {
     if (error instanceof AccessDeniedError) {
       return this._handleResponse(null, response, oauthResponse);
     }
+    // @ts-ignore
     super._handleError(response, oauthResponse, error, next);
   }
 
+  // @ts-ignore
   override _handleResponse(request: Request | null, response: Response, oauthResponse: OAuth2Server.Response) {
     if (oauthResponse.status === 302) {
       const location = oauthResponse.headers!.location;

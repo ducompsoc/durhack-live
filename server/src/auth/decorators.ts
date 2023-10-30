@@ -49,7 +49,7 @@ export function hasScope(scope: string | string[]) {
       tokenScope = [tokenScope];
     }
 
-    return scope.every((element) => tokenScope.includes(element));
+    return scope.every((element) => tokenScope?.includes(element));
   };
 }
 

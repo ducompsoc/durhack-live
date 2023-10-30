@@ -19,6 +19,7 @@ class OAuthHandlers {
 
     Object.getOwnPropertyNames(OAuthHandlers.prototype).forEach((key) => {
       if (key !== "constructor") {
+        // @ts-ignore
         this[key] = this[key].bind(this);
       }
     });
