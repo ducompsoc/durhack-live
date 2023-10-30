@@ -191,7 +191,7 @@ server {
         proxy_set_header Connection "upgrade";
     }
 
-    listen [::]:80 ipv6only=on;
+    listen [::]:80;
     listen 80;
 }
 ```
