@@ -206,6 +206,9 @@ Reload nginx:
 sudo systemctl reload nginx
 ```
 
+### Firewall
+[todo]
+
 ### SSL (HTTPS)
 Configure the firewall and check its status:
 ```bash
