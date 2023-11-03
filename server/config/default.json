@@ -89,6 +89,7 @@
   "session": {
     "name": "durhack-live-session",
     "secret": "session_cookie_secret",
+    "proxy": false,
     "resave": false,
     "saveUninitialized": false,
     "cookie": { "secure": false }
