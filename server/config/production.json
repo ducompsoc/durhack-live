@@ -1,7 +1,7 @@
 {
   "csrf": {
-    "cookieName": "__Host-psifi.x-csrf-token",
     "cookieOptions": {
+      "cookieName": "__Host-psifi.x-csrf-token",
       "secure": true
     }
   },
