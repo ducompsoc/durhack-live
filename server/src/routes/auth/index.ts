@@ -1,18 +1,24 @@
 import { Router as ExpressRouter } from "express";
 import passport from "passport";
 
+import { doubleCsrfProtection, handleGetCsrfToken}  from "@/auth/csrf";
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware";
-import { handleGetCsrfToken } from "@/auth/csrf";
+
 
 import discord_router from "./discord";
 import oauth_router from "./oauth";
 import handlers from "./auth_handlers";
+import config from "config";
 
 
 const auth_router = ExpressRouter();
 
 auth_router.use("/discord", discord_router);
 auth_router.use("/oauth", oauth_router);
+
+if (config.get("csrf.enabled")) {
+  auth_router.use(doubleCsrfProtection);
+}
 
 auth_router.route("/login")
   .get(handlers.handleLoginSuccess)

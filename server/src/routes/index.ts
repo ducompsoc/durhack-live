@@ -28,9 +28,6 @@ api_router.use(wrapped_oauth_provider.authenticate({
 api_router.use(wrapped_oauth_provider.copyUserFromOAuthToken);
 
 api_router.use(cookie_parser(config.get("cookie-parser.secret")));
-if (config.get("csrf.enabled")) {
-  api_router.use(doubleCsrfProtection);
-}
 
 function handle_root_request(request: Request, response: Response) {
   response.status(200);
@@ -46,6 +43,11 @@ api_router.route("/")
   .all(handleMethodNotAllowed("GET"));
 
 api_router.use("/auth", auth_router);
+
+if (config.get("csrf.enabled")) {
+  api_router.use(doubleCsrfProtection);
+}
+
 api_router.use("/user", user_router);
 api_router.use("/users", users_router);
 
