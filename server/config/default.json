@@ -98,7 +98,8 @@
     "apiEndpoint": "https://discord.com/api/v10",
     "clientId": "yourDiscordAppClientIdHere",
     "clientSecret": "yourDiscordAppClientSecretHere",
-    "redirectUri": "http://localhost:3001/auth/discord/redirect"
+    "redirectUri": "http://localhost:3001/api/auth/discord/redirect",
+    "inviteLink": "https://discord.gg/f5euRmts"
   },
   "hackathonStateSocket": {
     "clientSecret": "the-best-ever-secret"

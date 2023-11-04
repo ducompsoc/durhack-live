@@ -34,6 +34,6 @@
     ]
   },
   "discord": {
-    "redirectUri": "https://live.durhack.com/auth/discord/redirect"
+    "redirectUri": "https://live.durhack.com/api/auth/discord/redirect"
   }
 }
