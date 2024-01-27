@@ -2,9 +2,9 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
+    "module": "esnext",
     "rootDir": "./src",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "sourceMap": true,
     "outDir": "./dist",
@@ -20,6 +20,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["./dist", "./node_modules", "./__tests__", "./coverage"],
+  "exclude": ["./dist", "./node_modules", "./__tests__"],
   "include": ["src"]
 }
