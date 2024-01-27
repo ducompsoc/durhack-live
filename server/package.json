@@ -55,7 +55,7 @@
     "prettier-eslint": "^16.3.0",
     "ts-jest": "^29.1.2",
     "tsx": "^3.12.7",
-    "typescript": "^5.1.6"
+    "typescript": "^5.3.3"
   },
   "dependencies": {
     "@node-oauth/express-oauth-server": "github:node-oauth/express-oauth-server#f5bf49b",
