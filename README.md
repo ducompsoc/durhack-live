@@ -1,6 +1,6 @@
 # DurHack Live Event Site
 
-[![Continuous Integration](https://img.shields.io/github/actions/workflow/status/ducompsoc/durhack-live/ci.yml?style=for-the-badge&logo=github)](https://github.com/ducompsoc/durhack-live/actions/workflows/ci.yml)
+[![Continuous Integration](https://github.com/ducompsoc/durhack-live/actions/workflows/ci.yml/badge.svg)](https://github.com/ducompsoc/durhack-live/actions/workflows/ci.yml)
 
 ## Setup
 
