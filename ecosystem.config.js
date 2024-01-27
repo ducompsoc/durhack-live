@@ -10,7 +10,7 @@ module.exports = {
     },
     {
       name: "live-api",
-      script: "./dist/main.js",
+      script: "./dist/index.js",
       cwd: "./server",
       node_args: ["--experimental-specifier-resolution=node"],
       env: {
