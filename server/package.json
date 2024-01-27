@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "description": "Server for DurHack event site",
-  "main": "src/server.ts",
   "type": "module",
   "scripts": {
     "start": "npx cross-env NODE_ENV=production node --experimental-specifier-resolution=node ./dist/index.js",
