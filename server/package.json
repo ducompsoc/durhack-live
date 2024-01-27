@@ -6,11 +6,18 @@
   "main": "src/server.ts",
   "type": "module",
   "scripts": {
-    "start": "npx cross-env NODE_ENV=production node --experimental-specifier-resolution=node ./dist/main.js",
-    "build": "npx tsc -p tsconfig.json && npx tsc-alias -p tsconfig.json",
+    "start": "npx cross-env NODE_ENV=production node --experimental-specifier-resolution=node ./dist/index.js",
     "dev": "tsx ./src/main",
     "dev:watch": "tsx watch ./src/main",
-    "lint": "eslint src"
+    "bundle": "npm run format:write && npm run package",
+    "ci-test": "jest",
+    "format:write": "prettier --write './**/*.ts'",
+    "format:check": "prettier --check './**/*.ts'",
+    "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
+    "package": "ncc build src/main.ts --license licenses.txt",
+    "package:watch": "npm run package -- --watch",
+    "test": "jest",
+    "all": "npm run format:write && npm run lint && npm run test && npm run package"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
   "contributors": [
@@ -35,11 +42,10 @@
     "@types/validator": "^13.11.1",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
+    "@vercel/ncc": "^0.38.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.47.0",
     "eslint-plugin-tsdoc": "^0.2.17",
-    "nodemon": "^3.0.1",
-    "tsc-alias": "^1.8.7",
     "tsx": "^3.12.7",
     "typescript": "^5.1.6"
   },
