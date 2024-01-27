@@ -1,28 +1,29 @@
-import { NextFunction, Request, Response, Router as ExpressRouter } from "express";
-import createHttpError from "http-errors";
+import { NextFunction, Request, Response, Router as ExpressRouter } from "express"
+import createHttpError from "http-errors"
 
-import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware";
+import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
 
-import handlers from "./user_handlers";
+import handlers from "./user_handlers"
 
-
-const user_router = ExpressRouter();
+const user_router = ExpressRouter()
 
 user_router.use((request: Request, response: Response, next: NextFunction) => {
   if (!request.user) {
-    throw new createHttpError.Unauthorized();
+    throw new createHttpError.Unauthorized()
   }
 
-  next();
-});
+  next()
+})
 
-user_router.route("/")
+user_router
+  .route("/")
   .get(handlers.getUserWithDetails, handlers.getUser)
   .patch(handlers.patchUserDetails, handleFailedAuthentication)
-  .all(handleMethodNotAllowed("GET", "PATCH"));
+  .all(handleMethodNotAllowed("GET", "PATCH"))
 
-user_router.route("/check-in")
+user_router
+  .route("/check-in")
   .post(handlers.checkUserIn, handleFailedAuthentication)
-  .all(handleMethodNotAllowed("POST"));
+  .all(handleMethodNotAllowed("POST"))
 
-export default user_router;
+export default user_router

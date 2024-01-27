@@ -1,8 +1,7 @@
-import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript";
-import { hashText, randomBytesAsync } from "@/auth/hashed_secrets";
+import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript"
+import { hashText, randomBytesAsync } from "@/auth/hashed_secrets"
 
-import OAuthUser from "./oauth_user";
-
+import OAuthUser from "./oauth_user"
 
 @Table
 export default class OAuthClient extends Model {
@@ -12,62 +11,62 @@ export default class OAuthClient extends Model {
     unique: true,
     primaryKey: true,
   })
-  declare id: string;
+  declare id: string
 
   @Column({
     type: DataType.STRING,
     allowNull: false,
   })
-  declare name: string;
+  declare name: string
 
   @Column({
     type: DataType.JSON,
     defaultValue: [],
   })
-  declare grants: string[];
+  declare grants: string[]
 
   @Column({
     type: DataType.JSON,
     defaultValue: [],
   })
-  declare allowedScopes: string[];
+  declare allowedScopes: string[]
 
   @Column({
     type: DataType.JSON,
     defaultValue: [],
   })
-  declare redirectUris: string[];
+  declare redirectUris: string[]
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  declare accessTokenLifetime: number | undefined;
+  declare accessTokenLifetime: number | undefined
 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  declare refreshTokenLifetime: number | undefined;
+  declare refreshTokenLifetime: number | undefined
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare hashedSecret: Buffer;
+  declare hashedSecret: Buffer
 
   @Column({
     type: DataType.BLOB("tiny"),
     allowNull: true,
   })
-  declare secretSalt: Buffer;
+  declare secretSalt: Buffer
 
   @HasMany(() => OAuthUser, "client_id")
-  declare users: Awaited<OAuthUser>[];
+  declare users: Awaited<OAuthUser>[]
 
   async updateSecret(newSecret: string): Promise<void> {
-    this.secretSalt = await randomBytesAsync(16);
-    this.hashedSecret = await hashText(newSecret, this.secretSalt);
-    await this.save();
+    this.secretSalt = await randomBytesAsync(16)
+    this.hashedSecret = await hashText(newSecret, this.secretSalt)
+    await this.save()
   }
 }

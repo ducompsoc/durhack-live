@@ -4,4 +4,4 @@ enum TokenType {
   "authorizationCode" = "authorizationCode",
 }
 
-export default TokenType;
+export default TokenType

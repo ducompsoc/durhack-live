@@ -1,12 +1,12 @@
-import { z } from "zod";
+import { z } from "zod"
 
 enum ScheduledEventState {
   scheduled = "scheduled",
   in_progress = "in_progress",
-  done = "done"
+  done = "done",
 }
 
-const optionalDatetimeString = z.string().datetime().or(z.literal(""));
+const optionalDatetimeString = z.string().datetime().or(z.literal(""))
 
 const ScheduledEventSchema = z.object({
   name: z.string(),
@@ -17,7 +17,7 @@ const ScheduledEventSchema = z.object({
   end: optionalDatetimeString,
   state: z.nativeEnum(ScheduledEventState),
   onStream: z.boolean(),
-});
+})
 
 const OverlayStateSchema = z.object({
   currentScene: z.object({
@@ -64,11 +64,11 @@ const OverlayStateSchema = z.object({
       z.object({
         id: z.string(),
         lowerThird: z.string(),
-      })
+      }),
     ),
     skipped: z.number(),
   }),
-});
+})
 
 export const HackathonStateSchema = z.object({
   schedule: z.array(ScheduledEventSchema),
@@ -82,6 +82,6 @@ export const HackathonStateSchema = z.object({
   tips: z.array(z.string()),
   startedAt: z.string().datetime(),
   overlay: OverlayStateSchema,
-});
+})
 
-export type IHackathonState = z.infer<typeof HackathonStateSchema>;
+export type IHackathonState = z.infer<typeof HackathonStateSchema>

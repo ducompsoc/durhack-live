@@ -1,17 +1,13 @@
-import { Router as ExpressRouter } from "express";
+import { Router as ExpressRouter } from "express"
 
-import { handleMethodNotAllowed } from "@/common/middleware";
+import { handleMethodNotAllowed } from "@/common/middleware"
 
-import handlers from "./discord_handlers";
+import handlers from "./discord_handlers"
 
-const discord_router = ExpressRouter();
+const discord_router = ExpressRouter()
 
-discord_router.route("/")
-  .get(handlers.handleBeginDiscordOAuthFlow)
-  .all(handleMethodNotAllowed("GET"));
+discord_router.route("/").get(handlers.handleBeginDiscordOAuthFlow).all(handleMethodNotAllowed("GET"))
 
-discord_router.route("/redirect")
-  .get(handlers.handleDiscordOAuthCallback)
-  .all(handleMethodNotAllowed("GET"));
+discord_router.route("/redirect").get(handlers.handleDiscordOAuthCallback).all(handleMethodNotAllowed("GET"))
 
-export default discord_router;
+export default discord_router
