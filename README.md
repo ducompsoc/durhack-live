@@ -1,5 +1,7 @@
 # DurHack Live Event Site
 
+[![Continuous Integration](https://img.shields.io/github/actions/workflow/status/ducompsoc/durhack-live/ci.yml?style=for-the-badge&logo=github)](https://github.com/ducompsoc/durhack-live/actions/workflows/ci.yml)
+
 ## Setup
 
 Start by using `ssh root@[ip]` and providing access token to connect to Scaleway.
