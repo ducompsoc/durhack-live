@@ -9,7 +9,7 @@
     "dev": "tsx ./src/main",
     "dev:watch": "tsx watch ./src/main",
     "build": "npm run format:write && npm run compile",
-    "ci-test": "jest",
+    "ci-test": "jest --passWithNoTests",
     "format:write": "prettier --write './**/*.ts'",
     "format:check": "prettier --check './**/*.ts'",
     "lint": "npx eslint . -c ./.eslintrc.yml",
