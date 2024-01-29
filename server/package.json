@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/package",
   "name": "durhack-live",
   "version": "1.0.0",
   "private": true,
