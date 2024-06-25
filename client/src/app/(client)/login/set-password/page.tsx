@@ -141,7 +141,8 @@ export default function SetPasswordPage() {
           <strong>Please check your email, and type your code in here.</strong>
         </p>
         <p>
-          Make sure you double-check your spam folder. If it&apos;s been a while and you still don&apos;t have one, please talk to someone on the DurHack team.
+          Make sure you double-check your spam folder. If it&apos;s been a while and you still don&apos;t have one, 
+          please talk to someone on the DurHack team.
         </p>
 
         <div className="mb-2">
