@@ -165,8 +165,8 @@ html, body {
         > div {
           width: 0%;
           box-sizing: border-box;
-          box-decoration-break: clone;
           -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
           white-space: nowrap;
           overflow: hidden;
           animation-duration: 1s;
