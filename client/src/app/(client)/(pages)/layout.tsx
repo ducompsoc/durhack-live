@@ -18,31 +18,31 @@ const PageLayout = React.memo(
   }: React.PropsWithChildren<{ requireAuth?: boolean }>) => {
     const router = useRouter();
 
-    useEffect(() => {
-      if (requireAuth === false) return;
+    // useEffect(() => {
+    //   if (requireAuth === false) return;
 
-      (async () => {
-        const profile_request = await makeLiveApiRequest("/user");
-        let profile_response: Response;
-        try {
-          profile_response = await fetch(profile_request);
-        } catch (error) {
-          return router.push("/login");
-        }
+    //   (async () => {
+    //     const profile_request = await makeLiveApiRequest("/user");
+    //     let profile_response: Response;
+    //     try {
+    //       profile_response = await fetch(profile_request);
+    //     } catch (error) {
+    //       return router.push("/login");
+    //     }
 
-        if (!profile_response.ok) {
-          return router.push("/login");
-        }
+    //     if (!profile_response.ok) {
+    //       return router.push("/login");
+    //     }
 
-        const profile = (await profile_response.json()).data;
+    //     const profile = (await profile_response.json()).data;
 
-        if (profile.role !== "hacker") return;
+    //     if (profile.role !== "hacker") return;
 
-        if (!profile.checked_in) {
-          return router.push("/login/check-in");
-        }
-      })();
-    });
+    //     if (!profile.checked_in) {
+    //       return router.push("/login/check-in");
+    //     }
+    //   })();
+    // });
 
     return (
       <div>

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "passport": "^0.7.0",
+    "sequelize": "^6.37.3"
+  }
+}
