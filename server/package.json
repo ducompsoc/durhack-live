@@ -6,7 +6,7 @@
   "description": "Server for DurHack event site",
   "type": "module",
   "scripts": {
-    "start": "npx cross-env NODE_ENV=production node --import extensionless/register ./dist/main.js",
+    "start": "node ./dist/main.js",
     "dev": "tsx ./src/main",
     "dev:watch": "tsx watch ./src/main",
     "build": "npm run check:fix && npm run compile",
