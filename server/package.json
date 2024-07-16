@@ -11,12 +11,13 @@
     "dev:watch": "tsx watch ./src/main",
     "build": "tsup",
     "prebuild": "npm run type-check",
-    "ci-test": "jest --passWithNoTests",
     "lint": "biome lint .",
     "format": "biome format .",
     "check": "biome check .",
     "check:fix": "biome check --write .",
-    "test": "jest",
+    "test": "vitest run --silent",
+    "test:debug": "vitest run",
+    "test:ci": "vitest run --silent --passWithNoTests",
     "type-check": "tsc --noEmit"
   },
   "engines": {
@@ -41,8 +42,6 @@
     "@types/passport-http-bearer": "^1.0.37",
     "@types/passport-local": "^1.0.35",
     "glob": "^11.0.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
     "tsup": "^8.1.0",
     "tsx": "^3.12.7",
     "typescript": "^5.3.3"
