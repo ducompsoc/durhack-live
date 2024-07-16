@@ -45,6 +45,7 @@
     "tsup": "^8.1.0",
     "tsx": "^3.12.7",
     "typescript": "^5.3.3",
+    "vitest": "^2.0.3"
   },
   "dependencies": {
     "@node-oauth/express-oauth-server": "github:node-oauth/express-oauth-server#c58132f",
