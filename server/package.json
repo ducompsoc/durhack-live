@@ -44,7 +44,7 @@
     "glob": "^11.0.0",
     "tsup": "^8.1.0",
     "tsx": "^3.12.7",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
   },
   "dependencies": {
     "@node-oauth/express-oauth-server": "github:node-oauth/express-oauth-server#c58132f",
