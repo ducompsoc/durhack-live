@@ -3,7 +3,7 @@
 import { posix } from "path";
 
 const isClient = typeof window !== "undefined";
-export const live_api_base = isClient ? window.location.origin : "";
+export const live_api_base = isClient ? window.location.origin : "http://live.durhack.com";
 export const live_api_path = "api";
 
 /**
@@ -31,7 +31,7 @@ export async function attachCsrfTokenToRequest(request: Request): Promise<void> 
 export async function makeLiveApiRequest(endpoint: string, options?: RequestInit): Promise<Request> {
   const api_endpoint_url = new URL(posix.join(live_api_path, endpoint).normalize(), live_api_base);
   const request = new Request(api_endpoint_url, options);
-
+  console.warn("made request:", request);
   if (!!options?.method && !["GET", "HEAD", "OPTIONS"].includes(options.method)) {
     await attachCsrfTokenToRequest(request);
   }

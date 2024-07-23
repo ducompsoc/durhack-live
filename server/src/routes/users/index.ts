@@ -11,9 +11,14 @@ users_router.route("/").get(handlers.getUsersList).post(handlers.createUser).all
 users_router
   .route("/:user_id")
   .all(parseRouteId("user_id"))
-  .get(handlers.getUserDetails)
+  .get((req,res) => handlers.getUserDetails(req,res,true))
   .patch(handlers.patchUserDetails)
   .delete(handlers.deleteUser)
   .all(handleMethodNotAllowed("GET", "PATCH", "DELETE"))
+
+users_router
+  .route("/partial/:user_id")
+  .get((req,res) => handlers.getUserDetails(req,res,false))
+  .all(handleMethodNotAllowed("GET"))
 
 export default users_router

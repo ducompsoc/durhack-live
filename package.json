@@ -2,5 +2,8 @@
   "dependencies": {
     "passport": "^0.7.0",
     "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }
