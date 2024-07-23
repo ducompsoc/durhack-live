@@ -1,12 +1,13 @@
-import config from "config"
 import { Request, Response } from "@tinyhttp/app"
 import { doubleCsrf, DoubleCsrfConfig } from "@otterjs/csrf-csrf"
 
-import { double_csrf_options_schema } from "@/common/schema/config"
+import { csrfConfig } from "@/config"
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const options = double_csrf_options_schema.parse(config.get("csrf.options")) as DoubleCsrfConfig
-options.getSecret = () => config.get("csrf.secret")
+const options = {
+  ...csrfConfig.options,
+  getSessionIdentifier: () => "uh oh",
+  getSecret: () => csrfConfig.secret,
+} satisfies DoubleCsrfConfig
 
 export const { generateToken, doubleCsrfProtection } = doubleCsrf(options)
 

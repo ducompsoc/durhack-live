@@ -1,32 +1,31 @@
 import { z } from "zod"
 import { Request, Response } from "@tinyhttp/app"
-import config from "config"
 import createHttpError from "http-errors"
 
-import { sendStandardResponse } from "@/common/response"
 import { requireLoggedIn } from "@/auth/decorators"
 import { User } from "@/database/tables";
+import { discordConfig } from "@/config";
 
 export default class DiscordHandlers {
   @requireLoggedIn
   static async handleBeginDiscordOAuthFlow(request: Request, response: Response) {
     response.redirect(
-      `https://discord.com/oauth2/authorize?client_id=${config.get(
-        "discord.clientId",
-      )}&redirect_uri=${encodeURIComponent(
-        config.get("discord.redirectUri"),
-      )}&response_type=code&scope=identify&state=dh`,
+      `https://discord.com/oauth2/authorize?client_id=${
+        discordConfig.clientId
+      }&redirect_uri=${
+        encodeURIComponent(discordConfig.redirectUri)
+      }&response_type=code&scope=identify&state=dh`,
     )
   }
 
   // a discord access code provided via redirect query parameter is exchanged for an access token
-  static discord_access_code_schema = z.object({
+  static discordAccessCodeSchema = z.object({
     code: z.string(),
     state: z.string(),
   })
 
   // a discord access token represents some privileged claims to access a discord user's info
-  static discord_access_token_schema = z.object({
+  static discordAccessTokenSchema = z.object({
     access_token: z.string(),
     token_type: z.literal("Bearer"),
     expires_in: z.number(),
@@ -36,53 +35,53 @@ export default class DiscordHandlers {
 
   @requireLoggedIn
   static async handleDiscordOAuthCallback(request: Request & { user?: User }, response: Response) {
-    const { code, state } = DiscordHandlers.discord_access_code_schema.parse(request.query)
+    const { code, state } = DiscordHandlers.discordAccessCodeSchema.parse(request.query)
 
     //todo: verify that `state` matches what was assigned on flow begin
 
-    const discordApiBase = config.get("discord.apiEndpoint")
+    const discordApiBase = discordConfig.apiEndpoint
 
-    const access_code_exchange_payload = {
-      client_id: config.get("discord.clientId") as string,
-      client_secret: config.get("discord.clientSecret") as string,
+    const accessCodeExchangePayload = {
+      client_id: discordConfig.clientId,
+      client_secret: discordConfig.clientSecret,
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: config.get("discord.redirectUri") as string,
+      redirect_uri: discordConfig.redirectUri,
     }
-    const encoded_access_code_exchange_payload = new URLSearchParams(access_code_exchange_payload)
+    const encodedAccessCodeExchangePayload = new URLSearchParams(accessCodeExchangePayload)
 
-    const discord_access_token_response = await fetch(`${discordApiBase}/oauth2/token`, {
+    const discordAccessTokenResponse = await fetch(`${discordApiBase}/oauth2/token`, {
       method: "POST",
-      body: encoded_access_code_exchange_payload,
+      body: encodedAccessCodeExchangePayload,
     })
 
-    if (!discord_access_token_response.ok) {
+    if (!discordAccessTokenResponse.ok) {
       throw new createHttpError.BadGateway("Couldn't exchange access code for access token.")
     }
 
-    const { access_token } = DiscordHandlers.discord_access_token_schema.parse(
-      await discord_access_token_response.json(),
+    const { access_token } = DiscordHandlers.discordAccessTokenSchema.parse(
+      await discordAccessTokenResponse.json(),
     )
 
-    const discord_profile_response = await fetch(`${discordApiBase}/oauth2/@me`, {
+    const discordProfileResponse = await fetch(`${discordApiBase}/oauth2/@me`, {
       headers: {
         Authorization: `Bearer ${access_token}`,
       },
     })
 
-    if (!discord_profile_response.ok) {
+    if (!discordProfileResponse.ok) {
       throw new createHttpError.BadGateway("Failed to read your Discord profile.")
     }
 
-    const discord_profile = (await discord_profile_response.json()) as any
+    const discordProfile = (await discordProfileResponse.json()) as any
 
     if (!request.user) throw new Error() // should never occur due to decorator
 
     await request.user.update({
-      discord_id: discord_profile.user.id,
-      discord_name: discord_profile.user.username,
+      discord_id: discordProfile.user.id,
+      discord_name: discordProfile.user.username,
     })
 
-    response.redirect(config.get("discord.inviteLink"))
+    response.redirect(discordConfig.inviteLink)
   }
 }

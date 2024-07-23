@@ -1,14 +1,11 @@
 import OAuth2Server, { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
-import config from "config"
 import { JWTPayload } from "jose"
 
 import TokenVault from "@/auth/tokens"
 import TokenType from "@/auth/token_type"
-import { oauth_options_schema } from "@/common/schema/config"
 import { User, OAuthUser, OAuthClient } from "@/database/tables"
 import { checkTextAgainstHash } from "@/auth/hashed_secrets"
-
-export const oauthConfig = oauth_options_schema.parse(config.get("oauth"))
+import { oauthConfig } from "@/config";
 
 class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async generateAccessToken(client: OAuth2Server.Client, user: User, scope: string | string[] | null): Promise<string> {

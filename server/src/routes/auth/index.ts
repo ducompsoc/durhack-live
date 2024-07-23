@@ -2,18 +2,18 @@ import { App } from "@tinyhttp/app"
 
 import { doubleCsrfProtection, handleGetCsrfToken } from "@/auth/csrf"
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
+import { csrfConfig } from "@/config";
 
 import { discordApp } from "./discord"
 import { oauthApp } from "./oauth"
 import handlers from "./auth_handlers"
-import config from "config"
 
 const authApp = new App()
 
 authApp.use("/discord", discordApp)
 authApp.use("/oauth", oauthApp)
 
-if (config.get("csrf.enabled")) {
+if (csrfConfig) {
   authApp.use(doubleCsrfProtection)
 }
 

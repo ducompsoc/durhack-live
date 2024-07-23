@@ -1,8 +1,6 @@
-import config from "config"
-import { z } from "zod"
-
 import { OAuthClient } from "@/database/tables"
 import { checkTextAgainstHash } from "@/auth/hashed_secrets"
+import { hackathonStateSocketConfig } from "@/config";
 
 export default async function getStateSocketClient() {
   const [stateOAuthClient] = await OAuthClient.findOrCreate({
@@ -22,7 +20,7 @@ export default async function getStateSocketClient() {
 }
 
 export async function updateStateSocketSecret(client: OAuthClient) {
-  const clientSecret = z.string().parse(config.get("hackathonStateSocket.clientSecret"))
+  const { clientSecret } = hackathonStateSocketConfig
 
   if (
     client.hashedSecret instanceof Buffer &&

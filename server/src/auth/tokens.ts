@@ -1,5 +1,4 @@
 import { z } from "zod"
-import config from "config"
 import { KeyObject } from "crypto"
 import { SignJWT, jwtVerify, generateKeyPair, importPKCS8, importSPKI, JWTVerifyResult, JWTPayload } from "jose"
 import { readFile, writeFile } from "fs/promises"
@@ -7,15 +6,14 @@ import path from "path"
 import { fileURLToPath } from "url"
 
 import User from "@/database/tables/user"
-import { jwt_options_schema, oauth_options_schema, token_authority_schema } from "@/common/schema/config"
 import { epoch } from "@/common/time"
 import { NullError } from "@/common/errors"
+import { jwtConfig, oauthConfig, type TokenAuthorityConfig } from "@/config"
 
 import { TokenError } from "./jwt_error"
 import TokenType from "./token_type"
 
-const jwt_options = jwt_options_schema.parse(config.get("jsonwebtoken"))
-const { accessTokenLifetime, refreshTokenLifetime } = oauth_options_schema.parse(config.get("oauth"))
+const { accessTokenLifetime, refreshTokenLifetime } = oauthConfig
 
 abstract class TokenAuthority {
   public abstract signToken(token: SignJWT): Promise<string>
@@ -33,16 +31,16 @@ class RSATokenAuthority implements TokenAuthority {
 
   async signToken(token: SignJWT): Promise<string> {
     return await token
-      .setIssuer(jwt_options.issuer)
-      .setAudience(jwt_options.audience)
+      .setIssuer(jwtConfig.issuer)
+      .setAudience(jwtConfig.audience)
       .setProtectedHeader({ alg: "RS256" })
       .sign(this.privateKey)
   }
 
   async verifyToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
     return await jwtVerify(payload, this.publicKey, {
-      issuer: jwt_options.issuer,
-      audience: jwt_options.audience,
+      issuer: jwtConfig.issuer,
+      audience: jwtConfig.audience,
     })
   }
 
@@ -119,16 +117,16 @@ class HSATokenAuthority implements TokenAuthority {
 
   async signToken(token: SignJWT): Promise<string> {
     return await token
-      .setIssuer(jwt_options.issuer)
-      .setAudience(jwt_options.audience)
+      .setIssuer(jwtConfig.issuer)
+      .setAudience(jwtConfig.audience)
       .setProtectedHeader({ alg: "HS256" })
       .sign(this.secret)
   }
 
   async verifyToken(payload: string | Uint8Array): Promise<JWTVerifyResult> {
     return await jwtVerify(payload, this.secret, {
-      issuer: jwt_options.issuer,
-      audience: jwt_options.audience,
+      issuer: jwtConfig.issuer,
+      audience: jwtConfig.audience,
     })
   }
 }
@@ -248,7 +246,7 @@ function resolveFilePathFromProjectRoot(path_to_resolve: string) {
   return fileURLToPath(new URL(path.join("..", "..", path_to_resolve), import.meta.url))
 }
 
-async function getAuthority(options: z.infer<typeof token_authority_schema>) {
+async function getAuthority(options: TokenAuthorityConfig) {
   if (options.algorithm === "rsa") {
     console.debug(`Instantiating RSA authority for ${options.for}...`)
     const authorityOptions = {
@@ -272,7 +270,7 @@ async function getAuthority(options: z.infer<typeof token_authority_schema>) {
   throw new Error("Jsonwebtoken is misconfigured.")
 }
 
-async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promise<TokenVault> {
+async function getTokenVault(options: typeof jwtConfig): Promise<TokenVault> {
   const { authorities } = options
   const authoritiesWithInfo = await Promise.all(authorities.map(getAuthority))
 
@@ -285,4 +283,4 @@ async function getTokenVault(options: z.infer<typeof jwt_options_schema>): Promi
   return vault
 }
 
-export default await getTokenVault(jwt_options)
+export default await getTokenVault(jwtConfig)

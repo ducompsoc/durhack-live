@@ -1,11 +1,13 @@
-import config from "config"
 import nextSession from "next-session"
+import { sign, unsign } from "@tinyhttp/cookie-signature"
 
-import { session_options_schema } from "@/common/schema/config"
+import { sessionConfig } from "@/config"
 
-const session_options = session_options_schema.parse(config.get("session"))
+const { signingSecret, ...sessionOptions } = sessionConfig
 
 export const getSession = nextSession({
   store: undefined,
-  ...session_options,
+  encode: (raw: string): string => `s:${sign(raw, signingSecret)}`,
+  decode: (signed: string): string | null => unsign(signed.slice(2), signingSecret) || null,
+  ...sessionOptions,
 })

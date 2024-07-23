@@ -1,14 +1,12 @@
-import config from "config"
 import { App } from "@tinyhttp/app"
 import { type Server, createServer } from 'node:http'
 import { Server as SocketIO } from "socket.io"
 
-import { listen_options_schema } from "@/common/schema/config"
-
+import { listenConfig } from "./config"
 import sequelize, { ensureDatabaseExists } from "./database"
 import { apiApp } from "./routes"
 import HackathonStateSocketManager from "./socket"
-import getStateSocketClient, { updateStateSocketSecret } from "@/socket/oauth_client"
+import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth_client"
 
 const environment = process.env.NODE_ENV
 const dev = environment !== "production"
@@ -40,10 +38,8 @@ async function main() {
   const app = getApp()
   const server = getServer(app)
 
-  const listen = listen_options_schema.parse(config.get("listen"))
-
-  server.listen(listen.port, listen.host, () => {
-    console.log(`> Server listening on http://${listen.host}:${listen.port} as ${dev ? "development" : environment}`)
+  server.listen(listenConfig.port, listenConfig.host, () => {
+    console.log(`> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}`)
   })
 }
 

@@ -1,4 +1,3 @@
-import config from "config"
 import { App, Request, Response } from "@tinyhttp/app"
 import { json, urlencoded } from "milliparsec"
 import createHttpError from "http-errors"
@@ -7,7 +6,8 @@ import { cookieParser } from "@tinyhttp/cookie-parser"
 import { handleMethodNotAllowed } from "@/common/middleware"
 import { doubleCsrfProtection } from "@/auth/csrf"
 import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
-import { Middleware } from "@/types/middleware";
+import { Middleware } from "@/types/middleware"
+import { cookieParserConfig, csrfConfig } from "@/config"
 
 import { authApp } from "./auth"
 import { userApp } from "./user"
@@ -27,7 +27,7 @@ apiApp.use(
   }) as unknown as Middleware,
 )
 
-apiApp.use(cookieParser(config.get("cookie-parser.secret")))
+apiApp.use(cookieParser(cookieParserConfig.secret))
 
 function handle_root_request(request: Request, response: Response) {
   response.status(200)
@@ -42,7 +42,7 @@ apiApp.route("/").get(handle_root_request).all(handleMethodNotAllowed("GET"))
 
 apiApp.use("/auth", authApp)
 
-if (config.get("csrf.enabled")) {
+if (csrfConfig.enabled) {
   apiApp.use(doubleCsrfProtection)
 }
 

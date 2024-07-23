@@ -9,7 +9,7 @@ node_modules
 coverage
 
 # config and secrets
-config/local*
+src/config/local*
 keys
 .env.local
 .env.development.local

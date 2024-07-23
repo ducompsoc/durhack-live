@@ -1,30 +1,28 @@
-import config from "config"
-import mysql, { ConnectionOptions as MySqlConnectionOptions } from "mysql2/promise"
-import { Sequelize, SequelizeOptions } from "sequelize-typescript"
+import mysql from "mysql2/promise"
+import { Sequelize } from "sequelize-typescript"
 
-import { mysql_options_schema, sequelize_options_schema } from "@/common/schema/config"
+import { databaseConfig } from "@/config"
 
 import { User, OAuthUser, OAuthClient } from "./tables"
 
 export async function ensureDatabaseExists() {
-  const initialConnectOptions = mysql_options_schema.parse(config.get("mysql.data")) as MySqlConnectionOptions
-  const database_name = initialConnectOptions.database
+  const { database: databaseName, ...connectOptions } = databaseConfig.data
 
-  if (!database_name) {
+  if (!databaseName) {
     throw new Error("Database name cannot be null!")
   }
 
-  delete initialConnectOptions.database
-  const connection = await mysql.createConnection(initialConnectOptions)
+  const connection = await mysql.createConnection(connectOptions)
 
-  await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${database_name}\`;`)
+  await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\`;`)
 
-  await connection.destroy()
+  connection.destroy()
 }
 
-const sequelizeConnectOptions = sequelize_options_schema.parse(config.get("mysql.data")) as SequelizeOptions
-
-const sequelize = new Sequelize(sequelizeConnectOptions)
+const sequelize = new Sequelize({
+  dialect: "mysql",
+  ...databaseConfig.data
+})
 
 sequelize.addModels([User, OAuthClient, OAuthUser])
 

@@ -6,9 +6,10 @@ import NodeOAuthServer, {
 } from "@node-oauth/oauth2-server"
 import type { Request as TinyHttpRequest, Response as TinyHttpResponse, NextFunction } from "@tinyhttp/app"
 
+import { oauthConfig } from "@/config"
 import { User } from "@/database/tables";
 
-import { oauthModel, oauthConfig } from "./model";
+import { oauthModel } from "./model";
 
 type TinyHttpMiddleware = (request: TinyHttpRequest & { user?: User }, res: TinyHttpResponse, next: NextFunction ) => void | Promise<void>
 
