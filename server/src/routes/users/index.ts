@@ -1,14 +1,14 @@
-import { Router as ExpressRouter } from "express"
+import { App } from "@tinyhttp/app"
 
 import { handleMethodNotAllowed, parseRouteId } from "@/common/middleware"
 
 import handlers from "./users_handlers"
 
-const users_router = ExpressRouter()
+const usersApp = new App()
 
-users_router.route("/").get(handlers.getUsersList).post(handlers.createUser).all(handleMethodNotAllowed("GET", "POST"))
+usersApp.route("/").get(handlers.getUsersList).post(handlers.createUser).all(handleMethodNotAllowed("GET", "POST"))
 
-users_router
+usersApp
   .route("/:user_id")
   .all(parseRouteId("user_id"))
   .get(handlers.getUserDetails)
@@ -16,4 +16,4 @@ users_router
   .delete(handlers.deleteUser)
   .all(handleMethodNotAllowed("GET", "PATCH", "DELETE"))
 
-export default users_router
+export { usersApp }

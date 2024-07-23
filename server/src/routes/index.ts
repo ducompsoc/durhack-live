@@ -1,34 +1,33 @@
 import config from "config"
-import { Router as ExpressRouter, Request, Response } from "express"
-import bodyParser from "body-parser"
-import methodOverride from "method-override"
+import { App, Request, Response } from "@tinyhttp/app"
+import { json, urlencoded } from "milliparsec"
 import createHttpError from "http-errors"
-import cookie_parser from "cookie-parser"
-import passport from "passport"
+import { cookieParser } from "@tinyhttp/cookie-parser"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
 import { doubleCsrfProtection } from "@/auth/csrf"
-import wrapped_oauth_provider from "@/routes/auth/oauth/wrapper"
+import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
+import { Middleware } from "@/types/middleware";
 
-import auth_router from "./auth"
-import user_router from "./user"
-import users_router from "./users"
-import api_error_handler from "./error_handling"
+import { authApp } from "./auth"
+import { userApp } from "./user"
+import { usersApp } from "./users"
+import apiErrorHandler from "./error-handler"
 
-const api_router = ExpressRouter()
+const apiApp = new App({
+  onError: apiErrorHandler
+})
 
-api_router.use(bodyParser.json())
-api_router.use(bodyParser.urlencoded({ extended: true }))
+apiApp.use(json())
+apiApp.use(urlencoded())
 
-api_router.use(passport.session())
-api_router.use(
-  wrapped_oauth_provider.authenticate({
+apiApp.use(
+  oauthProvider.authenticate({
     scope: ["api"],
-  }),
+  }) as unknown as Middleware,
 )
-api_router.use(wrapped_oauth_provider.copyUserFromOAuthToken)
 
-api_router.use(cookie_parser(config.get("cookie-parser.secret")))
+apiApp.use(cookieParser(config.get("cookie-parser.secret")))
 
 function handle_root_request(request: Request, response: Response) {
   response.status(200)
@@ -39,20 +38,17 @@ function handle_unhandled_request() {
   throw new createHttpError.NotFound("Unknown API route.")
 }
 
-api_router.route("/").get(handle_root_request).all(handleMethodNotAllowed("GET"))
+apiApp.route("/").get(handle_root_request).all(handleMethodNotAllowed("GET"))
 
-api_router.use("/auth", auth_router)
+apiApp.use("/auth", authApp)
 
 if (config.get("csrf.enabled")) {
-  api_router.use(doubleCsrfProtection)
+  apiApp.use(doubleCsrfProtection)
 }
 
-api_router.use("/user", user_router)
-api_router.use("/users", users_router)
+apiApp.use("/user", userApp)
+apiApp.use("/users", usersApp)
 
-api_router.use(handle_unhandled_request)
+apiApp.use(handle_unhandled_request)
 
-api_router.use(methodOverride())
-api_router.use(api_error_handler)
-
-export default api_router
+export { apiApp }

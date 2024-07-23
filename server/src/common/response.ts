@@ -1,4 +1,4 @@
-import { Response } from "express"
+import { Response } from "@tinyhttp/app"
 import { HttpError } from "http-errors"
 import { STATUS_CODES } from "http"
 import { ZodError } from "zod"

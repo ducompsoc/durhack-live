@@ -8,11 +8,11 @@ import { oauth_options_schema } from "@/common/schema/config"
 import { User, OAuthUser, OAuthClient } from "@/database/tables"
 import { checkTextAgainstHash } from "@/auth/hashed_secrets"
 
-export const oauth_config = oauth_options_schema.parse(config.get("oauth"))
+export const oauthConfig = oauth_options_schema.parse(config.get("oauth"))
 
 class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async generateAccessToken(client: OAuth2Server.Client, user: User, scope: string | string[] | null): Promise<string> {
-    const token_lifetime = client.accessTokenLifetime || oauth_config.accessTokenLifetime
+    const token_lifetime = client.accessTokenLifetime || oauthConfig.accessTokenLifetime
 
     return await TokenVault.createToken(TokenType.accessToken, user, {
       scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
@@ -62,7 +62,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     user: User,
     scope: string | string[] | null,
   ): Promise<string> {
-    const token_lifetime = client.refreshTokenLifetime || oauth_config.refreshTokenLifetime
+    const token_lifetime = client.refreshTokenLifetime || oauthConfig.refreshTokenLifetime
 
     return await TokenVault.createToken(TokenType.refreshToken, user, {
       scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
@@ -175,19 +175,12 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       return false
     }
 
+    if (typeof decoded_payload.redirect_uri !== "string") return
+    if (decoded_payload.code_challenge != null && typeof decoded_payload.code_challenge !== "string") return
+    if (decoded_payload.code_challenge_method != null && typeof decoded_payload.code_challenge_method !== "string") return
+
     if (typeof decoded_payload.client_id !== "string") return
     if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.redirect_uri !== "string") return
-    if (
-      typeof decoded_payload.code_challenge !== "string" &&
-      typeof decoded_payload.code_challenge_method !== "undefined"
-    )
-      return
-    if (
-      typeof decoded_payload.code_challenge_method !== "string" &&
-      typeof decoded_payload.code_challenge_method !== "undefined"
-    )
-      return
     if (typeof decoded_payload.exp !== "number") return
     if (typeof decoded_payload.iat !== "number") return
     if (!Array.isArray(decoded_payload.scope)) return
@@ -210,8 +203,8 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       scope: decoded_payload.scope,
       client: client,
       user: user,
-      codeChallenge: decoded_payload.code_challenge as string | undefined,
-      codeChallengeMethod: decoded_payload.code_challenge_method as string | undefined,
+      codeChallenge: decoded_payload.code_challenge ?? undefined,
+      codeChallengeMethod: decoded_payload.code_challenge_method ?? undefined,
     }
   }
 
@@ -308,8 +301,8 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async validateScope(
     user: User,
     client: OAuth2Server.Client,
-    scope: string | string[],
-  ): Promise<string | string[] | OAuth2Server.Falsey> {
+    scope?: string | string[],
+  ): Promise<string[] | OAuth2Server.Falsey> {
     if (typeof scope === "undefined") return
     if (scope === "") return
     if (Array.isArray(scope) && scope.length === 0) return
@@ -331,27 +324,15 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
   async verifyScope(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
     if ((Array.isArray(scope) && scope.length === 0) || scope === "" || typeof scope === "undefined") return true
-    if (typeof token.scope === "undefined") return false
-    if (
-      (Array.isArray(token.scope) && token.scope.length === 0) ||
-      token.scope === "" ||
-      typeof token.scope === "undefined"
-    )
-      return false
+    if (token.scope == null) return false
+    if (token.scope.length === 0) return false
 
     if (typeof scope === "string") {
-      if (typeof token.scope === "string") {
-        if (scope.length > 1) return false
-        return token.scope === scope
-      }
-
-      scope = [scope]
+      return token.scope.includes(scope)
     }
 
-    const tokenScope = typeof token.scope === "string" ? [token.scope] : token.scope
-
-    return scope.every(element => tokenScope.includes(element))
+    return scope.every((element) => token.scope!.includes(element))
   }
 }
 
-export default new OAuthModel()
+export const oauthModel = new OAuthModel()

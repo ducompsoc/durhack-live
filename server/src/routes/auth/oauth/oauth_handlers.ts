@@ -1,19 +1,19 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response } from "@tinyhttp/app"
 import { z } from "zod"
-import { AccessDeniedError } from "@node-oauth/oauth2-server"
-import { stringify as qs_stringify } from "qs"
-
-import { OAuthClient } from "@/database/tables"
-import { NullError } from "@/common/errors"
-
-import OAuthModel from "./model"
-import wrapped_oauth_provider, { DurhackExpressOAuthServer } from "./wrapper"
+import { stringify as stringifyQuery } from "node:querystring"
 import createHttpError from "http-errors"
 
-class OAuthHandlers {
-  provider: DurhackExpressOAuthServer
+import { getSession } from "@/auth/session";
+import { OAuthClient, User } from "@/database/tables"
+import { NullError } from "@/common/errors"
 
-  constructor(provider: DurhackExpressOAuthServer) {
+import { oauthModel } from "./model"
+import { oauthProvider, TinyHttpOAuthServer } from "./oauth-server"
+
+class OAuthHandlers {
+  provider: TinyHttpOAuthServer
+
+  constructor(provider: TinyHttpOAuthServer) {
     this.provider = provider
 
     Object.getOwnPropertyNames(OAuthHandlers.prototype).forEach(key => {
@@ -29,19 +29,20 @@ class OAuthHandlers {
     redirect_uri: z.string().url().optional(),
   })
 
-  async getAuthorize(request: Request, response: Response) {
+  async getAuthorize(request: Request & { user?: User }, response: Response) {
     if (!request.user) {
-      request.session.redirect_to = "/login/authorize?" + qs_stringify(request.query)
+      const session = await getSession(request, response)
+      session.redirect_to = "/login/authorize?" + stringifyQuery(request.query)
       response.redirect("/login")
       // we have to save session manually - as we redirect, save() is not called automatically
-      request.session.save()
+      await session.commit()
       return
     }
 
     const { client_id, redirect_uri } = OAuthHandlers.get_authorize_query_params_schema.parse(request.query)
     const client = await OAuthClient.findByPk(client_id, { rejectOnEmpty: new NullError("OAuth client not found.") })
 
-    if (redirect_uri && !(await OAuthModel.validateRedirectUri(redirect_uri, client))) {
+    if (redirect_uri && !(await oauthModel.validateRedirectUri(redirect_uri, client))) {
       throw new createHttpError.BadRequest("Invalid redirect URI.")
     }
 
@@ -61,23 +62,24 @@ class OAuthHandlers {
 
   static authorizeOptions = {
     authenticateHandler: {
-      handle: (request: Request) => request.user,
+      handle: (request: Request & { user?: User }) => request.user,
     },
   }
 
   async postAuthorize(request: Request, response: Response, next: NextFunction) {
-    delete request.session.redirect_to
-    request.session.save()
+    const session = await getSession(request, response)
+    session.redirect_to = undefined
+    await session.commit()
 
-    return await this.provider.authorize(OAuthHandlers.authorizeOptions).call(this.provider, request, response, next)
+    await this.provider.authorize(OAuthHandlers.authorizeOptions).call(this.provider, request, response, next)
   }
 
   static tokenOptions = {}
 
   async postToken(request: Request, response: Response, next: NextFunction) {
-    return await this.provider.token(OAuthHandlers.tokenOptions).call(this.provider, request, response, next)
+    await this.provider.token(OAuthHandlers.tokenOptions).call(this.provider, request, response, next)
   }
 }
 
-const handlersInstance = new OAuthHandlers(wrapped_oauth_provider)
+const handlersInstance = new OAuthHandlers(oauthProvider)
 export default handlersInstance

@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response } from "@tinyhttp/app"
 import pick from "lodash/pick"
 import { z } from "zod"
 
@@ -30,13 +30,13 @@ export default class UserHandlers {
   }
 
   @requireScope("api:user.details")
-  static async getUserWithDetails(request: Request, response: Response) {
+  static async getUserWithDetails(request: Request & { user?: User }, response: Response) {
     const payload = UserHandlers.pickUserWithDetailsFields(request.user!)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
   }
 
-  static async getUser(request: Request, response: Response) {
+  static async getUser(request: Request & { user?: User }, response: Response) {
     const payload = UserHandlers.pickIdentifyingFields(request.user!)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
@@ -58,7 +58,7 @@ export default class UserHandlers {
   static update_details_payload = this.abstract_patch_payload.partial()
 
   @requireScope("api:user.details.write")
-  static async patchUserDetails(request: Request, response: Response) {
+  static async patchUserDetails(request: Request & { user?: User }, response: Response) {
     const fields_to_update = UserHandlers.update_details_payload.parse(request.body)
     await request.user!.update(fields_to_update)
 
@@ -68,7 +68,7 @@ export default class UserHandlers {
   }
 
   @requireScope("api:user.details.write")
-  static async checkUserIn(request: Request, response: Response) {
+  static async checkUserIn(request: Request & { user?: User }, response: Response) {
     const fields_to_update = UserHandlers.check_in_payload.parse(request.body)
     await request.user!.update(fields_to_update)
 

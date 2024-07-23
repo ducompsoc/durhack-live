@@ -1,5 +1,5 @@
 import createHttpError from "http-errors"
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Request, Response } from "@tinyhttp/app"
 import { ValueError } from "@/common/errors"
 
 export function handleMethodNotAllowed(...allowedMethods: string[]) {
@@ -14,7 +14,7 @@ export function handleNotImplemented() {
 }
 
 export function handleFailedAuthentication(request: Request) {
-  if (request.user) {
+  if ("user" in request) {
     throw new createHttpError.Forbidden()
   }
   throw new createHttpError.Unauthorized()

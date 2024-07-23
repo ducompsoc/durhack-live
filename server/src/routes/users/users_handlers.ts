@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
 
 import User from "@/database/tables/user"

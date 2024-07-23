@@ -1,16 +1,16 @@
-import { Router as ExpressRouter } from "express"
+import { App } from "@tinyhttp/app"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
 import handlers from "@/routes/auth/oauth/oauth_handlers"
 
-const oauth_router = ExpressRouter()
+const oauthApp = new App()
 
-oauth_router
+oauthApp
   .route("/authorize")
   .get(handlers.getAuthorize)
   .post(handlers.postAuthorize)
   .all(handleMethodNotAllowed("GET", "POST"))
 
-oauth_router.route("/token").post(handlers.postToken).all(handleMethodNotAllowed("POST"))
+oauthApp.route("/token").post(handlers.postToken).all(handleMethodNotAllowed("POST"))
 
-export default oauth_router
+export { oauthApp }

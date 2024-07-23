@@ -1,7 +1,8 @@
-import { NextFunction, Request, Response } from "express"
-import OAuth2Server from "@node-oauth/oauth2-server"
+import { NextFunction, Request, Response } from "@tinyhttp/app"
+import { type Token } from "@node-oauth/oauth2-server"
 
 import { UserRole } from "@/common/model_enums"
+import { User } from "@/database/tables";
 
 type ICondition = (request: Request, response: Response) => boolean
 
@@ -22,30 +23,26 @@ export function requireCondition(condition: ICondition) {
 }
 
 export function userIsRole(role: UserRole) {
-  return function (request: Request) {
+  return function (request: Request & { user?: User }) {
     return request.user?.role === role
   }
 }
 
-export function userIsLoggedIn(request: Request) {
+export function userIsLoggedIn(request: Request & { user?: User }) {
   return !!request.user
 }
 
 export function hasScope(scope: string | string[]) {
-  return function (request: Request, response: Response) {
+  return function (request: Request & { user?: User }, response: Response) {
     if (!request.user) return false
     if (typeof response.locals.oauth?.token !== "object") return true
 
-    const token = response.locals.oauth.token as OAuth2Server.Token
+    const token = response.locals.oauth.token as Token
     let tokenScope = token.scope
 
-    if (typeof scope === "string") {
-      scope = [scope]
-    }
-
     if (typeof tokenScope === "undefined") return false
-    if (typeof tokenScope === "string") {
-      tokenScope = [tokenScope]
+    if (typeof scope === "string") {
+      return tokenScope.includes(scope)
     }
 
     return scope.every(element => tokenScope?.includes(element))

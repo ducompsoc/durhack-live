@@ -1,10 +1,11 @@
 import { z } from "zod"
-import { Request, Response } from "express"
+import { Request, Response } from "@tinyhttp/app"
 import config from "config"
 import createHttpError from "http-errors"
 
 import { sendStandardResponse } from "@/common/response"
 import { requireLoggedIn } from "@/auth/decorators"
+import { User } from "@/database/tables";
 
 export default class DiscordHandlers {
   @requireLoggedIn
@@ -34,7 +35,7 @@ export default class DiscordHandlers {
   })
 
   @requireLoggedIn
-  static async handleDiscordOAuthCallback(request: Request, response: Response) {
+  static async handleDiscordOAuthCallback(request: Request & { user?: User }, response: Response) {
     const { code, state } = DiscordHandlers.discord_access_code_schema.parse(request.query)
 
     //todo: verify that `state` matches what was assigned on flow begin
