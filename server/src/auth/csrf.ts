@@ -1,5 +1,5 @@
-import { Request, Response } from "@tinyhttp/app"
-import { doubleCsrf, DoubleCsrfConfig } from "@otterjs/csrf-csrf"
+import { type DoubleCsrfConfig, doubleCsrf } from "@otterjs/csrf-csrf"
+import type { Request, Response } from "@tinyhttp/app"
 
 import { csrfConfig } from "@/config"
 

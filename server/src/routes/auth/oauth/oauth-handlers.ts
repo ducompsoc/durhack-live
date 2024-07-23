@@ -1,27 +1,20 @@
-import { NextFunction, Request, Response } from "@tinyhttp/app"
-import { z } from "zod"
 import { stringify as stringifyQuery } from "node:querystring"
+import type { NextFunction, Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
+import { z } from "zod"
 
-import { getSession } from "@/auth/session";
-import { OAuthClient, User } from "@/database/tables"
+import { getSession } from "@/auth/session"
 import { NullError } from "@/common/errors"
+import { OAuthClient, type User } from "@/database/tables"
 
 import { oauthModel } from "./model"
-import { oauthProvider, TinyHttpOAuthServer } from "./oauth-server"
+import { type TinyHttpOAuthServer, oauthProvider } from "./oauth-server"
 
 class OAuthHandlers {
   provider: TinyHttpOAuthServer
 
   constructor(provider: TinyHttpOAuthServer) {
     this.provider = provider
-
-    Object.getOwnPropertyNames(OAuthHandlers.prototype).forEach(key => {
-      if (key !== "constructor") {
-        // @ts-ignore
-        this[key] = this[key].bind(this)
-      }
-    })
   }
 
   static get_authorize_query_params_schema = z.object({
@@ -32,7 +25,7 @@ class OAuthHandlers {
   async getAuthorize(request: Request & { user?: User }, response: Response) {
     if (!request.user) {
       const session = await getSession(request, response)
-      session.redirect_to = "/login/authorize?" + stringifyQuery(request.query)
+      session.redirect_to = `/login/authorize?${stringifyQuery(request.query)}`
       response.redirect("/login")
       // we have to save session manually - as we redirect, save() is not called automatically
       await session.commit()
@@ -81,5 +74,4 @@ class OAuthHandlers {
   }
 }
 
-const handlersInstance = new OAuthHandlers(oauthProvider)
-export default handlersInstance
+export const oauthHandlers = new OAuthHandlers(oauthProvider)

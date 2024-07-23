@@ -1,14 +1,13 @@
-import { Response } from "@tinyhttp/app"
-import { HttpError } from "http-errors"
-import { STATUS_CODES } from "http"
-import { ZodError } from "zod"
-import { OAuthError } from "@node-oauth/oauth2-server"
+import { STATUS_CODES } from "node:http"
+import type { OAuthError } from "@node-oauth/oauth2-server"
+import type { Response } from "@tinyhttp/app"
+import type { HttpError } from "http-errors"
+import type { ZodError } from "zod"
 
-interface ResponseBody {
+type ResponseBody = Record<string, unknown> & {
   status: number
   message: string
   detail?: string | object
-  [key: string]: any
 }
 
 function makeHttpErrorResponseBody(error: HttpError): ResponseBody {

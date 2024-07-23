@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response, App } from "@tinyhttp/app"
+import { App, type NextFunction, type Request, type Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
 
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
 
-import handlers from "./user_handlers"
-import { User } from "@/database/tables";
+import type { User } from "@/database/tables"
+import { userHandlers } from "./user-handlers"
 
 const userApp = new App()
 
@@ -18,14 +18,14 @@ userApp.use((request: Request & { user?: User }, response: Response, next: NextF
 
 userApp
   .route("/")
-  .get(handlers.getUserWithDetails)
-  .get(handlers.getUserWithDetails, handlers.getUser)
-  .patch(handlers.patchUserDetails, handleFailedAuthentication)
+  .get(userHandlers.getUserWithDetails.bind(userHandlers))
+  .get(userHandlers.getUser.bind(userHandlers))
+  .patch(userHandlers.patchUserDetails.bind(userHandlers), handleFailedAuthentication)
   .all(handleMethodNotAllowed("GET", "PATCH"))
 
 userApp
   .route("/check-in")
-  .post(handlers.checkUserIn, handleFailedAuthentication)
+  .post(userHandlers.checkUserIn.bind(userHandlers), handleFailedAuthentication)
   .all(handleMethodNotAllowed("POST"))
 
 export { userApp }

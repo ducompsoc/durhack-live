@@ -2,18 +2,22 @@ import { App } from "@tinyhttp/app"
 
 import { handleMethodNotAllowed, parseRouteId } from "@/common/middleware"
 
-import handlers from "./users_handlers"
+import { usersHandlers } from "./users-handlers"
 
 const usersApp = new App()
 
-usersApp.route("/").get(handlers.getUsersList).post(handlers.createUser).all(handleMethodNotAllowed("GET", "POST"))
+usersApp
+  .route("/")
+  .get(usersHandlers.getUsersList.bind(usersHandlers))
+  .post(usersHandlers.createUser.bind(usersHandlers))
+  .all(handleMethodNotAllowed("GET", "POST"))
 
 usersApp
   .route("/:user_id")
   .all(parseRouteId("user_id"))
-  .get(handlers.getUserDetails)
-  .patch(handlers.patchUserDetails)
-  .delete(handlers.deleteUser)
+  .get(usersHandlers.getUserDetails.bind(usersHandlers))
+  .patch(usersHandlers.patchUserDetails.bind(usersHandlers))
+  .delete(usersHandlers.deleteUser.bind(usersHandlers))
   .all(handleMethodNotAllowed("GET", "PATCH", "DELETE"))
 
 export { usersApp }

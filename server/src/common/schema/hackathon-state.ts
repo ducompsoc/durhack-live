@@ -8,7 +8,7 @@ enum ScheduledEventState {
 
 const optionalDatetimeString = z.string().datetime().or(z.literal(""))
 
-const ScheduledEventSchema = z.object({
+const scheduledEventSchema = z.object({
   name: z.string(),
   icon: z.string(),
   liveLink: z.string().nullable(),
@@ -19,7 +19,7 @@ const ScheduledEventSchema = z.object({
   onStream: z.boolean(),
 })
 
-const OverlayStateSchema = z.object({
+const overlayStateSchema = z.object({
   currentScene: z.object({
     scene: z.string(),
     countdown: z.number(),
@@ -70,8 +70,8 @@ const OverlayStateSchema = z.object({
   }),
 })
 
-export const HackathonStateSchema = z.object({
-  schedule: z.array(ScheduledEventSchema),
+export const hackathonStateSchema = z.object({
+  schedule: z.array(scheduledEventSchema),
   announcement: z.object({
     enabled: z.boolean(),
     title: z.string(),
@@ -81,7 +81,7 @@ export const HackathonStateSchema = z.object({
   }),
   tips: z.array(z.string()),
   startedAt: z.string().datetime(),
-  overlay: OverlayStateSchema,
+  overlay: overlayStateSchema,
 })
 
-export type IHackathonState = z.infer<typeof HackathonStateSchema>
+export type IHackathonState = z.infer<typeof hackathonStateSchema>

@@ -1,7 +1,7 @@
-import { Model, DataType, Table, Column, BelongsTo, ForeignKey, PrimaryKey } from "sequelize-typescript"
+import { BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript"
 
-import User from "./user"
 import OAuthClient from "./oauth_client"
+import User from "./user"
 
 @Table
 export default class OAuthUser extends Model {

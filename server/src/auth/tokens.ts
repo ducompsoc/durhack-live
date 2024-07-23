@@ -1,16 +1,24 @@
-import { KeyObject } from "crypto"
-import { SignJWT, jwtVerify, generateKeyPair, importPKCS8, importSPKI, JWTVerifyResult, JWTPayload } from "jose"
-import { readFile, writeFile } from "fs/promises"
-import path from "path"
+import type { KeyObject } from "node:crypto"
+import { readFile, writeFile } from "node:fs/promises"
+import path from "node:path"
+import {
+  type JWTPayload,
+  type JWTVerifyResult,
+  SignJWT,
+  generateKeyPair,
+  importPKCS8,
+  importSPKI,
+  jwtVerify,
+} from "jose"
 
-import User from "@/database/tables/user"
-import { epoch } from "@/common/time"
 import { NullError } from "@/common/errors"
-import { jwtConfig, oauthConfig, type TokenAuthorityConfig } from "@/config"
-import { dirname } from "@/dirname";
+import { epoch } from "@/common/time"
+import { type TokenAuthorityConfig, jwtConfig, oauthConfig } from "@/config"
+import User from "@/database/tables/user"
+import { dirname } from "@/dirname"
 
-import { TokenError } from "./jwt_error"
-import TokenType from "./token_type"
+import { TokenError } from "./jwt-error"
+import TokenType from "./token-type"
 
 const { accessTokenLifetime, refreshTokenLifetime } = oauthConfig
 
@@ -89,7 +97,8 @@ class RSATokenAuthority implements TokenAuthority {
     publicKeyFilePath: string
     privateKeyFilePath: string
   }): Promise<RSATokenAuthority> {
-    let publicKey, privateKey
+    let publicKey: string
+    let privateKey: string
     try {
       ;[publicKey, privateKey] = await Promise.all([
         readFile(options.publicKeyFilePath, { encoding: "utf-8" }),
@@ -174,14 +183,13 @@ class TokenVault {
   }
 
   public async getUserAndScopeClaims(payload: JWTPayload): Promise<{ user: User; scope: string[] }> {
-    const user_id = payload["user_id"]
-    const scope = payload["scope"]
+    const { user_id, scope } = payload
 
     if (typeof user_id !== "number") {
       throw new TokenError("Invalid user ID")
     }
 
-    if (!(Array.isArray(scope) && scope.every(e => typeof e === "string"))) {
+    if (!(Array.isArray(scope) && scope.every((e) => typeof e === "string"))) {
       throw new TokenError("Invalid scope")
     }
 
@@ -275,9 +283,9 @@ async function getTokenVault(options: typeof jwtConfig): Promise<TokenVault> {
 
   const vault = new TokenVault()
 
-  authoritiesWithInfo.forEach(authorityWithInfo => {
+  for (const authorityWithInfo of authoritiesWithInfo) {
     vault.registerAuthority(authorityWithInfo.for, authorityWithInfo.authority)
-  })
+  }
 
   return vault
 }

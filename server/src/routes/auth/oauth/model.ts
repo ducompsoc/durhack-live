@@ -1,11 +1,12 @@
-import OAuth2Server, { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
-import { JWTPayload } from "jose"
+import type OAuth2Server from "@node-oauth/oauth2-server"
+import type { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
+import type { JWTPayload } from "jose"
 
+import { checkTextAgainstHash } from "@/auth/hashed-secrets"
+import TokenType from "@/auth/token-type"
 import TokenVault from "@/auth/tokens"
-import TokenType from "@/auth/token_type"
-import { User, OAuthUser, OAuthClient } from "@/database/tables"
-import { checkTextAgainstHash } from "@/auth/hashed_secrets"
-import { oauthConfig } from "@/config";
+import { oauthConfig } from "@/config"
+import { OAuthClient, OAuthUser, User } from "@/database/tables"
 
 class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async generateAccessToken(client: OAuth2Server.Client, user: User, scope: string | string[] | null): Promise<string> {
@@ -21,34 +22,34 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getAccessToken(accessToken: string): Promise<OAuth2Server.Token | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.accessToken, accessToken)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, accessToken)).payload
     } catch (error) {
       return
     }
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "number") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await User.findByPk(decodedPayload.user_id)
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkTokenRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       accessToken: accessToken,
       accessTokenExpiresAt: expiresAt,
-      scope: decoded_payload.scope,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
     }
@@ -71,34 +72,34 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getRefreshToken(refreshToken: string): Promise<OAuth2Server.RefreshToken | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.accessToken, refreshToken)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, refreshToken)).payload
     } catch (error) {
       return
     }
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "number") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await User.findByPk(decodedPayload.user_id)
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkTokenRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       refreshToken: refreshToken,
       refreshTokenExpiresAt: expiresAt,
-      scope: decoded_payload.scope,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
     }
@@ -165,43 +166,43 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getAuthorizationCode(authorizationCode: string): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.authorizationCode, authorizationCode)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.authorizationCode, authorizationCode)).payload
     } catch (error) {
       return false
     }
 
-    if (typeof decoded_payload.redirect_uri !== "string") return
-    if (decoded_payload.code_challenge != null && typeof decoded_payload.code_challenge !== "string") return
-    if (decoded_payload.code_challenge_method != null && typeof decoded_payload.code_challenge_method !== "string") return
+    if (typeof decodedPayload.redirect_uri !== "string") return
+    if (decodedPayload.code_challenge != null && typeof decodedPayload.code_challenge !== "string") return
+    if (decodedPayload.code_challenge_method != null && typeof decodedPayload.code_challenge_method !== "string") return
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "number") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await User.findByPk(decodedPayload.user_id)
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkAuthorizationCodeRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkAuthorizationCodeRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       authorizationCode: authorizationCode,
       expiresAt: expiresAt,
-      redirectUri: decoded_payload.redirect_uri,
-      scope: decoded_payload.scope,
+      redirectUri: decodedPayload.redirect_uri,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
-      codeChallenge: decoded_payload.code_challenge ?? undefined,
-      codeChallengeMethod: decoded_payload.code_challenge_method ?? undefined,
+      codeChallenge: decodedPayload.code_challenge ?? undefined,
+      codeChallengeMethod: decodedPayload.code_challenge_method ?? undefined,
     }
   }
 
@@ -306,10 +307,11 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     if (!Array.isArray(client.allowedScopes)) return
 
     if (typeof scope === "string") {
-      scope = [scope]
+      if (!client.allowedScopes.includes(scope)) return false
+      return [scope]
     }
 
-    if (!scope.every(element => client.allowedScopes.includes(element))) return false
+    if (!scope.every((element) => client.allowedScopes.includes(element))) return false
     return scope
   }
 
@@ -328,7 +330,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       return token.scope.includes(scope)
     }
 
-    return scope.every((element) => token.scope!.includes(element))
+    return scope.every((element) => token.scope?.includes(element) ?? false)
   }
 }
 

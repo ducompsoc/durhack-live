@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize-typescript"
 
 import { databaseConfig } from "@/config"
 
-import { User, OAuthUser, OAuthClient } from "./tables"
+import { OAuthClient, OAuthUser, User } from "./tables"
 
 export async function ensureDatabaseExists() {
   const { database: databaseName, username: user, ...connectOptions } = databaseConfig.data
@@ -12,7 +12,7 @@ export async function ensureDatabaseExists() {
     throw new Error("Database name cannot be null!")
   }
 
-  const connection = await mysql.createConnection({user, ...connectOptions})
+  const connection = await mysql.createConnection({ user, ...connectOptions })
 
   await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\`;`)
 
@@ -21,7 +21,7 @@ export async function ensureDatabaseExists() {
 
 const sequelize = new Sequelize({
   dialect: "mysql",
-  ...databaseConfig.data
+  ...databaseConfig.data,
 })
 
 sequelize.addModels([User, OAuthClient, OAuthUser])

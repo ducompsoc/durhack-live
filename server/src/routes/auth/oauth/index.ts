@@ -1,16 +1,16 @@
 import { App } from "@tinyhttp/app"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
-import handlers from "@/routes/auth/oauth/oauth_handlers"
+import { oauthHandlers } from "@/routes/auth/oauth/oauth-handlers"
 
 const oauthApp = new App()
 
 oauthApp
   .route("/authorize")
-  .get(handlers.getAuthorize)
-  .post(handlers.postAuthorize)
+  .get(oauthHandlers.getAuthorize.bind(oauthHandlers))
+  .post(oauthHandlers.postAuthorize.bind(oauthHandlers))
   .all(handleMethodNotAllowed("GET", "POST"))
 
-oauthApp.route("/token").post(handlers.postToken).all(handleMethodNotAllowed("POST"))
+oauthApp.route("/token").post(oauthHandlers.postToken.bind(oauthHandlers)).all(handleMethodNotAllowed("POST"))
 
 export { oauthApp }

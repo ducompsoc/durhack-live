@@ -1,6 +1,6 @@
+import { checkTextAgainstHash } from "@/auth/hashed-secrets"
+import { hackathonStateSocketConfig } from "@/config"
 import { OAuthClient } from "@/database/tables"
-import { checkTextAgainstHash } from "@/auth/hashed_secrets"
-import { hackathonStateSocketConfig } from "@/config";
 
 export default async function getStateSocketClient() {
   const [stateOAuthClient] = await OAuthClient.findOrCreate({

@@ -1,14 +1,14 @@
-import { NextFunction, Request, Response } from "@tinyhttp/app"
-import { type Token } from "@node-oauth/oauth2-server"
+import type { Token } from "@node-oauth/oauth2-server"
+import type { NextFunction, Request, Response } from "@tinyhttp/app"
 
-import { UserRole } from "@/common/model_enums"
-import { User } from "@/database/tables";
+import { UserRole } from "@/common/model-enums"
+import type { User } from "@/database/tables"
 
 type ICondition = (request: Request, response: Response) => boolean
 
 export function requireCondition(condition: ICondition) {
   /* eslint-disable @typescript-eslint/no-explicit-any */
-  return function (target: any, property_key: string, descriptor: PropertyDescriptor) {
+  return (target: unknown, property_key: string, descriptor: PropertyDescriptor) => {
     const old_function = descriptor.value
 
     async function wrapped_function(request: Request, response: Response, next: NextFunction) {
@@ -23,9 +23,7 @@ export function requireCondition(condition: ICondition) {
 }
 
 export function userIsRole(role: UserRole) {
-  return function (request: Request & { user?: User }) {
-    return request.user?.role === role
-  }
+  return (request: Request & { user?: User }) => request.user?.role === role
 }
 
 export function userIsLoggedIn(request: Request & { user?: User }) {
@@ -33,19 +31,19 @@ export function userIsLoggedIn(request: Request & { user?: User }) {
 }
 
 export function hasScope(scope: string | string[]) {
-  return function (request: Request & { user?: User }, response: Response) {
+  return (request: Request & { user?: User }, response: Response) => {
     if (!request.user) return false
     if (typeof response.locals.oauth?.token !== "object") return true
 
     const token = response.locals.oauth.token as Token
-    let tokenScope = token.scope
+    const tokenScope = token.scope
 
     if (typeof tokenScope === "undefined") return false
     if (typeof scope === "string") {
       return tokenScope.includes(scope)
     }
 
-    return scope.every(element => tokenScope?.includes(element))
+    return scope.every((element) => tokenScope?.includes(element))
   }
 }
 

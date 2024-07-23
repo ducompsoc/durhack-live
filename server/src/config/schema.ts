@@ -1,5 +1,5 @@
+import TokenType from "@/auth/token-type"
 import { z } from "zod"
-import TokenType from "@/auth/token_type"
 
 export const listenOptionsSchema = z.object({
   host: z.string(),

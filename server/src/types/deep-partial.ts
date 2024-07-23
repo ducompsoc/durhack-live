@@ -1,4 +1,4 @@
-export type DeepPartial<T> = T extends Function
+export type DeepPartial<T> = T extends (...rest: unknown[]) => unknown
   ? T
   : T extends object
     ? DeepPartialObject<T>

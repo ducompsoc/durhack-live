@@ -2,11 +2,11 @@ import { App } from "@tinyhttp/app"
 
 import { doubleCsrfProtection, handleGetCsrfToken } from "@/auth/csrf"
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
-import { csrfConfig } from "@/config";
+import { csrfConfig } from "@/config"
 
+import { authHandlers } from "./auth-handlers"
 import { discordApp } from "./discord"
 import { oauthApp } from "./oauth"
-import handlers from "./auth_handlers"
 
 const authApp = new App()
 
@@ -19,14 +19,14 @@ if (csrfConfig) {
 
 authApp
   .route("/login")
-  .get(handlers.handleLoginSuccess)
+  .get(authHandlers.handleLoginSuccess.bind(authHandlers))
   .all(handleMethodNotAllowed("GET", "POST"))
 
 authApp.route("/csrf-token").get(handleGetCsrfToken).all(handleMethodNotAllowed("GET"))
 
 authApp
   .route("/socket-token")
-  .get(handlers.handleGetSocketToken, handleFailedAuthentication)
+  .get(authHandlers.handleGetSocketToken.bind(authHandlers), handleFailedAuthentication)
   .all(handleMethodNotAllowed("GET"))
 
 export { authApp }

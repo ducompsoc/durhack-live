@@ -1,7 +1,7 @@
 enum TokenType {
   accessToken = "accessToken",
   refreshToken = "refreshToken",
-  "authorizationCode" = "authorizationCode",
+  authorizationCode = "authorizationCode",
 }
 
 export default TokenType

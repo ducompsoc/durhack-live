@@ -1,5 +1,5 @@
+import TokenType from "@/auth/token-type"
 import type { ConfigIn } from "./schema"
-import TokenType from "@/auth/token_type"
 
 export default {
   listen: {
@@ -38,7 +38,7 @@ export default {
     },
   },
   cookieParser: {
-    secret: "thebestsecretforcookies"
+    secret: "thebestsecretforcookies",
   },
   jsonwebtoken: {
     issuer: "http://localhost:8080",
@@ -72,16 +72,16 @@ export default {
   session: {
     name: "durhack-live-session",
     signingSecret: "session_cookie_secret",
-    cookie: { secure: false }
+    cookie: { secure: false },
   },
   discord: {
     apiEndpoint: "https://discord.com/api/v10",
     clientId: "yourDiscordAppClientIdHere",
     clientSecret: "yourDiscordAppClientSecretHere",
     redirectUri: "http://localhost:3001/api/auth/discord/redirect",
-    inviteLink: "https://discord.gg/f5euRmts"
+    inviteLink: "https://discord.gg/f5euRmts",
   },
   hackathonStateSocket: {
-    clientSecret: "the-best-ever-secret"
-  }
+    clientSecret: "the-best-ever-secret",
+  },
 } satisfies ConfigIn

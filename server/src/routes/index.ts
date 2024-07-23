@@ -1,21 +1,21 @@
-import { App, Request, Response } from "@tinyhttp/app"
-import { json, urlencoded } from "milliparsec"
-import createHttpError from "http-errors"
+import { App, type Request, type Response } from "@tinyhttp/app"
 import { cookieParser } from "@tinyhttp/cookie-parser"
+import createHttpError from "http-errors"
+import { json, urlencoded } from "milliparsec"
 
-import { handleMethodNotAllowed } from "@/common/middleware"
 import { doubleCsrfProtection } from "@/auth/csrf"
-import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
-import { Middleware } from "@/types/middleware"
+import { handleMethodNotAllowed } from "@/common/middleware"
 import { cookieParserConfig, csrfConfig } from "@/config"
+import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
+import type { Middleware } from "@/types/middleware"
 
 import { authApp } from "./auth"
+import apiErrorHandler from "./error-handler"
 import { userApp } from "./user"
 import { usersApp } from "./users"
-import apiErrorHandler from "./error-handler"
 
 const apiApp = new App({
-  onError: apiErrorHandler
+  onError: apiErrorHandler,
 })
 
 apiApp.use(json())

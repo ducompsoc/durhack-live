@@ -1,20 +1,26 @@
 import NodeOAuthServer, {
-  ServerOptions,
+  type ServerOptions,
   InvalidArgumentError,
   Request,
   Response,
+  UnauthorizedRequestError,
+  AccessDeniedError,
 } from "@node-oauth/oauth2-server"
-import type { Request as TinyHttpRequest, Response as TinyHttpResponse, NextFunction } from "@tinyhttp/app"
+import type { NextFunction, Request as TinyHttpRequest, Response as TinyHttpResponse } from "@tinyhttp/app"
 
 import { oauthConfig } from "@/config"
-import { User } from "@/database/tables";
+import type { User } from "@/database/tables"
 
-import { oauthModel } from "./model";
+import { oauthModel } from "./model"
 
-type TinyHttpMiddleware = (request: TinyHttpRequest & { user?: User }, res: TinyHttpResponse, next: NextFunction ) => void | Promise<void>
+type TinyHttpMiddleware = (
+  request: TinyHttpRequest & { user?: User },
+  res: TinyHttpResponse,
+  next: NextFunction,
+) => void | Promise<void>
 
 type TinyHttpOAuthServerOptions = ServerOptions & {
-  useErrorHandler?: boolean | undefined;
+  useErrorHandler?: boolean | undefined
 
   /**
    * The `authorize()` and `token()` middlewares will both render their
@@ -23,7 +29,7 @@ type TinyHttpOAuthServerOptions = ServerOptions & {
    * **Note:** You cannot modify the response since the headers have already been sent.
    * `authenticate()` does not modify the response and will always call next()
    */
-  continueMiddleware?: boolean | undefined;
+  continueMiddleware?: boolean | undefined
 }
 
 class TinyHttpOAuthServer {
@@ -40,16 +46,16 @@ class TinyHttpOAuthServer {
    */
   constructor(options: TinyHttpOAuthServerOptions) {
     if (!options.model) {
-      throw new InvalidArgumentError('Missing parameter: `model`');
+      throw new InvalidArgumentError("Missing parameter: `model`")
     }
 
-    this.useErrorHandler = !!options.useErrorHandler;
-    options.useErrorHandler = undefined;
+    this.useErrorHandler = !!options.useErrorHandler
+    options.useErrorHandler = undefined
 
-    this.continueMiddleware = !!options.continueMiddleware;
-    options.continueMiddleware = undefined;
+    this.continueMiddleware = !!options.continueMiddleware
+    options.continueMiddleware = undefined
 
-    this.server = new NodeOAuthServer(options);
+    this.server = new NodeOAuthServer(options)
   }
 
   /**
@@ -62,15 +68,29 @@ class TinyHttpOAuthServer {
    */
   authenticate(options: NodeOAuthServer.AuthenticateOptions): TinyHttpMiddleware {
     return async (req, res, next) => {
-      const request = new Request(req);
-      const response = new Response(res);
+      const request = new Request(req)
+      const response = new Response(res)
 
-      const token = await this.server.authenticate(request, response, options);
+      let token: NodeOAuthServer.Token
 
-      res.locals.oauth = { token };
-      req["user"] = token.user as User;
-      next();
-    };
+      try {
+        token = await this.server.authenticate(request, response, options)
+      } catch (error) {
+        if (error instanceof UnauthorizedRequestError) {
+          res.setHeader("WWW-Authenticate", 'Bearer realm="Service"')
+          return next()
+        }
+
+        if (error instanceof AccessDeniedError) {
+          return this.handleResponse(req, res, response)
+        }
+        throw error
+      }
+
+      res.locals.oauth = { token }
+      req.user = token.user as User
+      next()
+    }
   }
 
   /**
@@ -83,12 +103,12 @@ class TinyHttpOAuthServer {
    */
   authorize(options: NodeOAuthServer.AuthorizeOptions): TinyHttpMiddleware {
     return async (req, res, next) => {
-      const request = new Request(req);
-      const response = new Response(res);
+      const request = new Request(req)
+      const response = new Response(res)
 
       await this.server.authorize(request, response, options)
 
-      return this.handleResponse(req, res, response);
+      return this.handleResponse(req, res, response)
     }
   }
 
@@ -102,11 +122,11 @@ class TinyHttpOAuthServer {
    */
   token(options: NodeOAuthServer.TokenOptions): TinyHttpMiddleware {
     return async (req, res, next) => {
-      const request = new Request(req);
-      const response = new Response(res);
+      const request = new Request(req)
+      const response = new Response(res)
 
-      await this.server.token(request, response, options);
-      return this.handleResponse(req, res, response);
+      await this.server.token(request, response, options)
+      return this.handleResponse(req, res, response)
     }
   }
 
@@ -115,15 +135,14 @@ class TinyHttpOAuthServer {
    */
   private handleResponse(req: TinyHttpRequest, res: TinyHttpResponse, response: Response): void {
     if (response.status === 302 && response.headers?.location != null) {
-      const location = response.headers.location;
-      delete response.headers.location
-      res.set(response.headers);
-      res.redirect(location);
-      return;
+      const { location, ...headers } = response.headers
+      res.set(headers)
+      res.redirect(location)
+      return
     }
 
-    res.set(response.headers ?? {});
-    res.status(response.status ?? 500).send(response.body);
+    res.set(response.headers ?? {})
+    res.status(response.status ?? 500).send(response.body)
   }
 }
 

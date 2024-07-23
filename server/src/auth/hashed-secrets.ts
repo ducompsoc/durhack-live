@@ -1,5 +1,5 @@
-import { promisify } from "util"
-import { randomBytes, pbkdf2, timingSafeEqual } from "crypto"
+import { pbkdf2, randomBytes, timingSafeEqual } from "node:crypto"
+import { promisify } from "node:util"
 
 export const pbkdf2Async = promisify(pbkdf2)
 export const randomBytesAsync = promisify(randomBytes)

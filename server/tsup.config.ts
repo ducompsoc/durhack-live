@@ -1,10 +1,10 @@
-import { defineConfig } from "tsup";
-import * as glob from 'glob'
-import * as path from 'node:path'
+import * as path from "node:path"
+import * as glob from "glob"
+import { defineConfig } from "tsup"
 
-const configFilePaths = glob.sync('src/config/*.ts');
+const configFilePaths = glob.sync("src/config/*.ts")
 const configFileEntryArray = configFilePaths
-  .filter(filePath => !filePath.endsWith("index.ts") && !filePath.endsWith("schema.ts"))
+  .filter((filePath) => !filePath.endsWith("index.ts") && !filePath.endsWith("schema.ts"))
   .map((filePath) => {
     return [`config/${path.parse(filePath).name}`, filePath]
   })
@@ -14,7 +14,7 @@ export default defineConfig([
   {
     entry: {
       main: "src/main.ts",
-      ...configFileEntries
+      ...configFileEntries,
     },
     target: "esnext",
     format: "esm",
@@ -23,4 +23,4 @@ export default defineConfig([
     minify: false,
     outDir: "dist",
   },
-]);
+])

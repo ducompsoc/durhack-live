@@ -1,12 +1,13 @@
-import { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@tinyhttp/app"
 import { default as pick } from "lodash/pick.js"
 import { z } from "zod"
 
 import { requireScope } from "@/auth/decorators"
-import { Ethnicity, Gender } from "@/common/model_enums"
-import User from "@/database/tables/user"
+import { Ethnicity, Gender } from "@/common/model-enums"
+import type User from "@/database/tables/user"
+import createHttpError from "http-errors"
 
-export default class UserHandlers {
+export class UserHandlers {
   private static pickUserWithDetailsFields(user: User) {
     return pick(
       user,
@@ -30,14 +31,16 @@ export default class UserHandlers {
   }
 
   @requireScope("api:user.details")
-  static async getUserWithDetails(request: Request & { user?: User }, response: Response) {
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user!)
+  async getUserWithDetails(request: Request & { user?: User }, response: Response) {
+    if (request.user == null) throw createHttpError(500)
+    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
   }
 
-  static async getUser(request: Request & { user?: User }, response: Response) {
-    const payload = UserHandlers.pickIdentifyingFields(request.user!)
+  async getUser(request: Request & { user?: User }, response: Response) {
+    if (request.user == null) throw createHttpError(500)
+    const payload = UserHandlers.pickIdentifyingFields(request.user)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
   }
@@ -58,22 +61,26 @@ export default class UserHandlers {
   static update_details_payload = this.abstract_patch_payload.partial()
 
   @requireScope("api:user.details.write")
-  static async patchUserDetails(request: Request & { user?: User }, response: Response) {
+  async patchUserDetails(request: Request & { user?: User }, response: Response) {
+    if (request.user == null) throw createHttpError(500)
     const fields_to_update = UserHandlers.update_details_payload.parse(request.body)
-    await request.user!.update(fields_to_update)
+    await request.user.update(fields_to_update)
 
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user!)
+    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
   }
 
   @requireScope("api:user.details.write")
-  static async checkUserIn(request: Request & { user?: User }, response: Response) {
+  async checkUserIn(request: Request & { user?: User }, response: Response) {
+    if (request.user == null) throw createHttpError(500)
     const fields_to_update = UserHandlers.check_in_payload.parse(request.body)
-    await request.user!.update(fields_to_update)
+    await request.user.update(fields_to_update)
 
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user!)
+    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
     response.status(200)
     response.json({ status: response.statusCode, message: "OK", data: payload })
   }
 }
+
+export const userHandlers = new UserHandlers()

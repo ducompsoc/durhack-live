@@ -1,5 +1,5 @@
-import nextSession from "next-session"
 import { sign, unsign } from "@tinyhttp/cookie-signature"
+import nextSession from "next-session"
 
 import { sessionConfig } from "@/config"
 

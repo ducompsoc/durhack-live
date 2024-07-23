@@ -1,7 +1,7 @@
+import type { DeepPartial } from "@/types/deep-partial"
 import type { ConfigIn } from "./schema"
-import { DeepPartial } from "@/types/deep-partial";
 
 export default {
   flags: {},
-  oauth: {}
+  oauth: {},
 } satisfies DeepPartial<ConfigIn>

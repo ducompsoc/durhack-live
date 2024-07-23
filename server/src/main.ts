@@ -1,12 +1,12 @@
+import { type Server, createServer } from "node:http"
 import { App } from "@tinyhttp/app"
-import { type Server, createServer } from 'node:http'
 import { Server as SocketIO } from "socket.io"
 
 import { listenConfig } from "./config"
 import sequelize, { ensureDatabaseExists } from "./database"
 import { apiApp } from "./routes"
 import HackathonStateSocketManager from "./socket"
-import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth_client"
+import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth-client"
 
 const environment = process.env.NODE_ENV
 const dev = environment !== "production"
@@ -21,7 +21,7 @@ function getApp(): App {
 
 function getServer(app: App): Server {
   const server = createServer()
-  server.on('request', app.attach)
+  server.on("request", app.attach)
   const io = new SocketIO(server)
   HackathonStateSocketManager.initialise(io)
 
@@ -39,11 +39,13 @@ async function main() {
   const server = getServer(app)
 
   server.listen(listenConfig.port, listenConfig.host, () => {
-    console.log(`> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}`)
+    console.log(
+      `> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}`,
+    )
   })
 }
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error)
   process.exit(1)
 })

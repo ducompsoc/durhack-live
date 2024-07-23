@@ -1,5 +1,5 @@
-import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript"
-import { hashText, randomBytesAsync } from "@/auth/hashed_secrets"
+import { hashText, randomBytesAsync } from "@/auth/hashed-secrets"
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 
 import OAuthUser from "./oauth_user"
 

@@ -1,14 +1,14 @@
-import { ZodError } from "zod"
-import createHttpError, { isHttpError } from "http-errors"
-import { App, Request, Response } from "@tinyhttp/app"
 import { OAuthError } from "@node-oauth/oauth2-server"
+import type { App, Request, Response } from "@tinyhttp/app"
+import createHttpError, { isHttpError } from "http-errors"
+import { ZodError } from "zod"
 
-import { sendHttpErrorResponse, sendZodErrorResponse, sendOAuthErrorResponse } from "@/common/response"
 import { ConflictError, NullError, ValueError } from "@/common/errors"
+import { sendHttpErrorResponse, sendOAuthErrorResponse, sendZodErrorResponse } from "@/common/response"
 
 export default function apiErrorHandler(this: App, error: Error, request: Request, response: Response) {
   if (response.headersSent) {
-    return;
+    return
   }
 
   if (isHttpError(error)) {

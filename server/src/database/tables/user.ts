@@ -1,6 +1,6 @@
-import { Model, DataType, Table, Column, HasMany } from "sequelize-typescript"
+import { Ethnicity, Gender, UserRole } from "@/common/model-enums"
 import { Op } from "sequelize"
-import { Ethnicity, Gender, UserRole } from "@/common/model_enums"
+import { Column, DataType, HasMany, Model, Table } from "sequelize-typescript"
 
 import OAuthUser from "./oauth_user"
 

@@ -1,20 +1,18 @@
-import { z } from "zod"
-import { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
+import { z } from "zod"
 
 import { requireLoggedIn } from "@/auth/decorators"
-import { User } from "@/database/tables";
-import { discordConfig } from "@/config";
+import { discordConfig } from "@/config"
+import type { User } from "@/database/tables"
 
-export default class DiscordHandlers {
+export class DiscordHandlers {
   @requireLoggedIn
-  static async handleBeginDiscordOAuthFlow(request: Request, response: Response) {
+  async handleBeginDiscordOAuthFlow(request: Request, response: Response) {
     response.redirect(
-      `https://discord.com/oauth2/authorize?client_id=${
-        discordConfig.clientId
-      }&redirect_uri=${
-        encodeURIComponent(discordConfig.redirectUri)
-      }&response_type=code&scope=identify&state=dh`,
+      `https://discord.com/oauth2/authorize?client_id=${discordConfig.clientId}&redirect_uri=${encodeURIComponent(
+        discordConfig.redirectUri,
+      )}&response_type=code&scope=identify&state=dh`,
     )
   }
 
@@ -33,8 +31,16 @@ export default class DiscordHandlers {
     scope: z.string(),
   })
 
+  // a discord profile contains basic user information
+  static discordProfileSchema = z.object({
+    user: z.object({
+      id: z.string(),
+      username: z.string(),
+    }),
+  })
+
   @requireLoggedIn
-  static async handleDiscordOAuthCallback(request: Request & { user?: User }, response: Response) {
+  async handleDiscordOAuthCallback(request: Request & { user?: User }, response: Response) {
     const { code, state } = DiscordHandlers.discordAccessCodeSchema.parse(request.query)
 
     //todo: verify that `state` matches what was assigned on flow begin
@@ -59,9 +65,7 @@ export default class DiscordHandlers {
       throw new createHttpError.BadGateway("Couldn't exchange access code for access token.")
     }
 
-    const { access_token } = DiscordHandlers.discordAccessTokenSchema.parse(
-      await discordAccessTokenResponse.json(),
-    )
+    const { access_token } = DiscordHandlers.discordAccessTokenSchema.parse(await discordAccessTokenResponse.json())
 
     const discordProfileResponse = await fetch(`${discordApiBase}/oauth2/@me`, {
       headers: {
@@ -73,7 +77,8 @@ export default class DiscordHandlers {
       throw new createHttpError.BadGateway("Failed to read your Discord profile.")
     }
 
-    const discordProfile = (await discordProfileResponse.json()) as any
+    const rawDiscordProfile: unknown = await discordProfileResponse.json()
+    const discordProfile = DiscordHandlers.discordProfileSchema.parse(rawDiscordProfile)
 
     if (!request.user) throw new Error() // should never occur due to decorator
 
@@ -85,3 +90,5 @@ export default class DiscordHandlers {
     response.redirect(discordConfig.inviteLink)
   }
 }
+
+export const discordHandlers = new DiscordHandlers()
