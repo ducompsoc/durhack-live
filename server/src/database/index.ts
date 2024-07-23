@@ -6,13 +6,13 @@ import { databaseConfig } from "@/config"
 import { User, OAuthUser, OAuthClient } from "./tables"
 
 export async function ensureDatabaseExists() {
-  const { database: databaseName, ...connectOptions } = databaseConfig.data
+  const { database: databaseName, username: user, ...connectOptions } = databaseConfig.data
 
   if (!databaseName) {
     throw new Error("Database name cannot be null!")
   }
 
-  const connection = await mysql.createConnection(connectOptions)
+  const connection = await mysql.createConnection({user, ...connectOptions})
 
   await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\`;`)
 
