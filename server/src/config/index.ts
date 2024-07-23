@@ -1,6 +1,9 @@
 import { loadConfig } from "zod-config"
 import { directoryAdapter } from "zod-config/directory-adapter"
 import { scriptAdapter } from "zod-config/script-adapter"
+import path from "node:path"
+
+import { dirname } from "@/dirname";
 
 import { configSchema } from "./schema"
 export type * from "./schema"
@@ -8,10 +11,10 @@ export type * from "./schema"
 const config = await loadConfig({
   schema: configSchema,
   adapters: directoryAdapter({
-    paths: import.meta.dirname,
+    paths: path.join(dirname, "config"),
     adapters: [
       {
-        extensions: [".ts"],
+        extensions: [".ts", ".js"],
         adapterFactory: (filePath: string) => scriptAdapter({path: filePath})
       }
     ]

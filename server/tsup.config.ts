@@ -4,6 +4,7 @@ import * as path from 'node:path'
 
 const configFilePaths = glob.sync('src/config/*.ts');
 const configFileEntryArray = configFilePaths
+  .filter(filePath => !filePath.endsWith("index.ts") && !filePath.endsWith("schema.ts"))
   .map((filePath) => {
     return [`config/${path.parse(filePath).name}`, filePath]
   })

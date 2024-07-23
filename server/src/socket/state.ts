@@ -1,14 +1,15 @@
 import { readFile, writeFile } from "fs/promises"
-import { fileURLToPath } from "url"
+import path from "node:path"
 
 import { IHackathonState, HackathonStateSchema } from "@/common/schema/hackathon_state"
+import { dirname } from "@/dirname";
 
 interface IAugmentedHackathonState extends IHackathonState {
   milestoneMillis: number | null
 }
 
-const stateFile = fileURLToPath(new URL("../../state/cache.json", import.meta.url))
-const defaultStateFile = fileURLToPath(new URL("../../state/default.json", import.meta.url))
+const stateFile = path.resolve(path.join(dirname, "..", "state", "cache.json"))
+const defaultStateFile = path.resolve(path.join(dirname, "..", "state", "default.json"))
 
 async function loadStateFromFile(file: string): Promise<IHackathonState> {
   const file_contents = await readFile(file.toString())

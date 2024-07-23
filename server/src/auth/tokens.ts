@@ -1,14 +1,13 @@
-import { z } from "zod"
 import { KeyObject } from "crypto"
 import { SignJWT, jwtVerify, generateKeyPair, importPKCS8, importSPKI, JWTVerifyResult, JWTPayload } from "jose"
 import { readFile, writeFile } from "fs/promises"
 import path from "path"
-import { fileURLToPath } from "url"
 
 import User from "@/database/tables/user"
 import { epoch } from "@/common/time"
 import { NullError } from "@/common/errors"
 import { jwtConfig, oauthConfig, type TokenAuthorityConfig } from "@/config"
+import { dirname } from "@/dirname";
 
 import { TokenError } from "./jwt_error"
 import TokenType from "./token_type"
@@ -243,7 +242,7 @@ class TokenVault {
 }
 
 function resolveFilePathFromProjectRoot(path_to_resolve: string) {
-  return fileURLToPath(new URL(path.join("..", "..", path_to_resolve), import.meta.url))
+  return path.resolve(path.join(dirname, "..", path_to_resolve))
 }
 
 async function getAuthority(options: TokenAuthorityConfig) {

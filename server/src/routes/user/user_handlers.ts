@@ -1,5 +1,5 @@
 import { Request, Response } from "@tinyhttp/app"
-import pick from "lodash/pick"
+import { default as pick } from "lodash/pick.js"
 import { z } from "zod"
 
 import { requireScope } from "@/auth/decorators"
