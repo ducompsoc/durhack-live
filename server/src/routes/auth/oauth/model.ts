@@ -220,7 +220,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       TokenType.authorizationCode,
       user as { id: string | number },
       {
-        scope: code.scope === undefined ? [] : typeof code.scope === "string" ? [code.scope] : code.scope,
+        scope: code.scope == null ? [] : code.scope,
         lifetime: 60,
         claims: {
           code_challenge: code.codeChallenge,
