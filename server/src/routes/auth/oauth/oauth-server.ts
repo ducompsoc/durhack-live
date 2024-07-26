@@ -19,23 +19,10 @@ type TinyHttpMiddleware = (
   next: NextFunction,
 ) => void | Promise<void>
 
-type TinyHttpOAuthServerOptions = ServerOptions & {
-  useErrorHandler?: boolean | undefined
-
-  /**
-   * The `authorize()` and `token()` middlewares will both render their
-   * result to the response and end the pipeline.
-   * next() will only be called if this is set to true.
-   * **Note:** You cannot modify the response since the headers have already been sent.
-   * `authenticate()` does not modify the response and will always call next()
-   */
-  continueMiddleware?: boolean | undefined
-}
+export type TinyHttpOAuthServerOptions = ServerOptions
 
 class TinyHttpOAuthServer {
   server: NodeOAuthServer
-  private useErrorHandler: boolean
-  private continueMiddleware: boolean
 
   /**
    * Creates a new OAuth2 server that will be bound to this class' middlewares.
@@ -48,12 +35,6 @@ class TinyHttpOAuthServer {
     if (!options.model) {
       throw new InvalidArgumentError("Missing parameter: `model`")
     }
-
-    this.useErrorHandler = !!options.useErrorHandler
-    options.useErrorHandler = undefined
-
-    this.continueMiddleware = !!options.continueMiddleware
-    options.continueMiddleware = undefined
 
     this.server = new NodeOAuthServer(options)
   }
