@@ -23,7 +23,7 @@ apiApp.use(urlencoded())
 
 apiApp.use(
   oauthProvider.authenticate({
-    scope: ["api"],
+    scope: "api" as unknown as string[], // https://github.com/node-oauth/node-oauth2-server/pull/305
   }) as unknown as Middleware,
 )
 
