@@ -6,7 +6,7 @@ import { ZodError } from "zod"
 import { ConflictError, NullError, ValueError } from "@/common/errors"
 import { sendHttpErrorResponse, sendOAuthErrorResponse, sendZodErrorResponse } from "@/common/response"
 
-export default function apiErrorHandler(this: App, error: Error, request: Request, response: Response) {
+export default function apiErrorHandler(this: App, error: unknown, request: Request, response: Response) {
   if (response.headersSent) {
     return
   }
@@ -35,8 +35,13 @@ export default function apiErrorHandler(this: App, error: Error, request: Reques
     return sendHttpErrorResponse(response, new createHttpError.Conflict(error.message))
   }
 
-  console.error("Unexpected API error:")
-  Error.captureStackTrace(error)
-  console.error(error.stack)
+  if (error instanceof Error) {
+    console.error("Unexpected API error:")
+    console.error(error)
+    return sendHttpErrorResponse(response, new createHttpError.InternalServerError())
+  }
+
+  console.error("Unexpected throw:")
+  console.error(error)
   return sendHttpErrorResponse(response, new createHttpError.InternalServerError())
 }
