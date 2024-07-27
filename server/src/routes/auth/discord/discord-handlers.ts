@@ -4,6 +4,7 @@ import createHttpError from "http-errors"
 import { z } from "zod"
 
 import { requireLoggedIn } from "@/auth/decorators"
+import { getSession } from "@/auth/session";
 import { discordConfig } from "@/config"
 import type { User } from "@/database/tables"
 import type { Middleware } from "@/types/middleware"
@@ -12,11 +13,23 @@ export class DiscordHandlers {
   @requireLoggedIn
   handleBeginDiscordOAuthFlow(): Middleware {
     return async (request: Request, response: Response): Promise<void> => {
-      response.redirect(
-        `https://discord.com/oauth2/authorize?client_id=${discordConfig.clientId}&redirect_uri=${encodeURIComponent(
-          discordConfig.redirectUri,
-        )}&response_type=code&scope=identify&state=dh`,
-      )
+      const stateBuffer = await randomBytesAsync(16)
+      const state = stateBuffer.toString("hex")
+      
+      const session = await getSession(request, response)
+      session.discord_oauth2_flow_state = state
+      await session.commit()
+      
+      
+      const redirectParams = new URLSearchParams({
+        client_id: discordConfig.clientId,
+        redirect_uri: discordConfig.redirectUri,
+        response_type: "code",
+        scope: "identify",
+        state,
+      })
+      
+      response.redirect(`https://discord.com/oauth2/authorize?${redirectParams}`)
     }
   }
 
@@ -47,9 +60,18 @@ export class DiscordHandlers {
   handleDiscordOAuthCallback(): Middleware {
     return async (request: Request & { user?: User }, response: Response): Promise<void> => {
       const { code, state } = DiscordHandlers.discordAccessCodeSchema.parse(request.query)
-
-      //todo: verify that `state` matches what was assigned on flow begin
-
+      
+      const session = await getSession(request, response)
+      try {
+        if (session.discord_oauth2_flow_state !== state) {
+          throw new createHttpError.BadRequest("Discord OAuth flow state mismatch")
+        }
+      } 
+      finally {
+        session.discord_oauth2_flow_state = undefined
+        await session.commit()
+      }
+      
       const discordApiBase = discordConfig.apiEndpoint
 
       const accessCodeExchangePayload = {
