@@ -39,5 +39,5 @@ model OAuthUser {
   minimumTokenIssueTime    DateTime? @map("minimum_token_issue_time")
   minimumAuthCodeIssueTime DateTime? @map("minimum_auth_code_issue_time")
 
-  @@id([userId, clientId])
+  @@id(fields: [userId, clientId], name: "id", map: "user_and_client_id")
 }
