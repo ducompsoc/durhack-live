@@ -36,6 +36,7 @@
     "@types/lodash": "^4.17.7",
     "@types/node": "^20.14.11",
     "glob": "^11.0.0",
+    "prisma": "^5.17.0",
     "tsup": "^8.2.2",
     "tsx": "^4.16.2",
     "typescript": "^5.5.4",
@@ -44,6 +45,7 @@
   "dependencies": {
     "@node-oauth/oauth2-server": "^5.1.0",
     "@otterjs/csrf-csrf": "^1.1.0",
+    "@prisma/client": "5.17.0",
     "@tinyhttp/app": "^2.3.0",
     "@tinyhttp/cookie-parser": "^2.0.6",
     "@tinyhttp/cookie-signature": "^2.1.1",

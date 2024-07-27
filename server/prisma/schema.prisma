@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  keycloak_user_id       String      @id @map("keycloakUserId") @db.Uuid
+  keycloak_access_token  String?     @map("keycloakAccessToken")
+  keycloak_refresh_token String?     @map("keycloakRefreshToken")
+  oauth_sessions         OAuthUser[]
+}
+
+model OAuthClient {
+  client_id              String      @id @map("clientId") @db.VarChar(256)
+  name                   String      @db.VarChar(256)
+  grants                 Json        @default("[]")
+  allowed_scopes         Json        @default("[]") @map("allowedScopes")
+  redirect_uris          Json        @default("[]") @map("redirectUris")
+  access_token_lifetime  Int?        @map("accessTokenLifetime")
+  refresh_token_lifetime Int?        @map("refreshTokenLifetime")
+  hashed_secret          Bytes?      @map("hashedSecret")
+  secret_salt            Bytes?      @map("secretSalt")
+  users                  OAuthUser[]
+}
+
+model OAuthUser {
+  user_id   String      @map("userId") @db.Uuid
+  client_id String      @map("clientId") @db.VarChar(256)
+  user      User        @relation(fields: [user_id], references: [keycloak_user_id])
+  client    OAuthClient @relation(fields: [client_id], references: [client_id])
+
+  minimum_token_issue_time     DateTime? @map("minimumTokenIssueTime")
+  minimum_auth_code_issue_time DateTime? @map("minimumAuthCodeIssueTime")
+
+  @@id([user_id, client_id])
+}
