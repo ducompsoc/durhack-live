@@ -5,9 +5,10 @@ import { z } from "zod"
 
 import { getSession } from "@/auth/session"
 import { NullError } from "@/common/errors"
-import { OAuthClient, type User } from "@/database/tables"
+import { type User, prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
+import { adaptDatabaseOAuthClient } from "@/routes/auth/oauth/adapt-database-oauth-client"
 import { oauthModel } from "./model"
 import { type TinyHttpOAuthServer, oauthProvider } from "./oauth-server"
 
@@ -35,9 +36,16 @@ class OAuthHandlers {
       }
 
       const { client_id, redirect_uri } = OAuthHandlers.get_authorize_query_params_schema.parse(request.query)
-      const client = await OAuthClient.findByPk(client_id, { rejectOnEmpty: new NullError("OAuth client not found.") })
+      const client = await prisma.oAuthClient.findUnique({
+        where: {
+          clientId: client_id,
+        },
+      })
+      if (client == null) throw new NullError("OAuth client not found.")
 
-      if (redirect_uri && !(await oauthModel.validateRedirectUri(redirect_uri, client))) {
+      const oauth2ServerClient = adaptDatabaseOAuthClient(client)
+
+      if (redirect_uri && !(await oauthModel.validateRedirectUri(redirect_uri, oauth2ServerClient))) {
         throw new createHttpError.BadRequest("Invalid redirect URI.")
       }
 
@@ -46,11 +54,12 @@ class OAuthHandlers {
         status: response.statusCode,
         message: "OK",
         user: {
-          name: request.user.preferred_name,
+          // todo: keycloak API call to retrieve preferred name
+          name: request.user.keycloakUserId,
         },
         client: {
           name: client.name,
-          redirect_uri: redirect_uri || client.redirectUris[0],
+          redirect_uri: redirect_uri ?? (client.redirectUris as string[])[0] ?? null,
         },
       })
     }

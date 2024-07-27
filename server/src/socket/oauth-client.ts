@@ -1,16 +1,17 @@
 import { checkTextAgainstHash } from "@/auth/hashed-secrets"
 import { hackathonStateSocketConfig } from "@/config"
-import { OAuthClient } from "@/database/tables"
+import { type OAuthClient, prisma } from "@/database"
 
 export default async function getStateSocketClient() {
-  const [stateOAuthClient] = await OAuthClient.findOrCreate({
+  const stateOAuthClient = await prisma.oAuthClient.upsert({
     where: {
-      id: "state-socket",
+      clientId: "state-socket",
     },
-    defaults: {
-      id: "state-socket",
+    update: {},
+    create: {
+      clientId: "state-socket",
       name: "DurHack Live Event State",
-      grants: ["authorization_code"],
+      grants: ["authorization_code"] satisfies string[],
       accessTokenLifetime: 86400 * 3,
       allowedScopes: ["socket:state"],
       redirectUris: [],
@@ -35,5 +36,12 @@ export async function updateStateSocketSecret(client: OAuthClient) {
   )
     return
 
-  await client.updateSecret(clientSecret)
+  await prisma.oAuthClient.updateSecret({
+    where: {
+      clientId: client.clientId,
+    },
+    data: {
+      secret: clientSecret,
+    },
+  })
 }

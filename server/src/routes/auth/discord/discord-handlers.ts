@@ -4,9 +4,9 @@ import createHttpError from "http-errors"
 import { z } from "zod"
 
 import { requireLoggedIn } from "@/auth/decorators"
-import { getSession } from "@/auth/session";
+import { getSession } from "@/auth/session"
 import { discordConfig } from "@/config"
-import type { User } from "@/database/tables"
+import { type User, prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
 export class DiscordHandlers {
@@ -15,12 +15,11 @@ export class DiscordHandlers {
     return async (request: Request, response: Response): Promise<void> => {
       const stateBuffer = await randomBytesAsync(16)
       const state = stateBuffer.toString("hex")
-      
+
       const session = await getSession(request, response)
       session.discord_oauth2_flow_state = state
       await session.commit()
-      
-      
+
       const redirectParams = new URLSearchParams({
         client_id: discordConfig.clientId,
         redirect_uri: discordConfig.redirectUri,
@@ -28,7 +27,7 @@ export class DiscordHandlers {
         scope: "identify",
         state,
       })
-      
+
       response.redirect(`https://discord.com/oauth2/authorize?${redirectParams}`)
     }
   }
@@ -60,18 +59,17 @@ export class DiscordHandlers {
   handleDiscordOAuthCallback(): Middleware {
     return async (request: Request & { user?: User }, response: Response): Promise<void> => {
       const { code, state } = DiscordHandlers.discordAccessCodeSchema.parse(request.query)
-      
+
       const session = await getSession(request, response)
       try {
         if (session.discord_oauth2_flow_state !== state) {
           throw new createHttpError.BadRequest("Discord OAuth flow state mismatch")
         }
-      } 
-      finally {
+      } finally {
         session.discord_oauth2_flow_state = undefined
         await session.commit()
       }
-      
+
       const discordApiBase = discordConfig.apiEndpoint
 
       const accessCodeExchangePayload = {
@@ -109,10 +107,7 @@ export class DiscordHandlers {
 
       if (!request.user) throw new Error() // should never occur due to decorator
 
-      await request.user.update({
-        discord_id: discordProfile.user.id,
-        discord_name: discordProfile.user.username,
-      })
+      // todo: Keycloak API call to populate discord ID and name attributes
 
       response.redirect(discordConfig.inviteLink)
     }

@@ -2,16 +2,17 @@ import type { Token } from "@node-oauth/oauth2-server"
 import type { NextFunction, Request, Response } from "@tinyhttp/app"
 
 import { UserRole } from "@/common/model-enums"
-import type { User } from "@/database/tables"
+import type { User } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
-type Condition = (request: Request, response: Response) => boolean
+type Condition = (request: Request, response: Response) => boolean | Promise<boolean>
 
 /**
  * Factory that creates a TypeScript decorator for a condition.
- *
- * Decorated methods are expected to return a middleware function. The returned middleware will be decorated
- *
+ * Decorated methods are expected to return a middleware function;
+ * the decorated function will return the same middleware that will execute
+ * only if the condition evaluates true. If the condition evaluates false, the
+ * middleware will invoke next() and terminate.
  *
  * @param condition
  */
@@ -26,7 +27,8 @@ export function requireCondition(condition: Condition) {
       const middleware: Middleware = value.call(this, ...args)
 
       return async (request: Request, response: Response, next: NextFunction): Promise<void> => {
-        if (!condition(request, response)) {
+        const evaluatedCondition = await condition(request, response)
+        if (!evaluatedCondition) {
           next()
           return
         }
@@ -37,7 +39,9 @@ export function requireCondition(condition: Condition) {
 }
 
 export function userIsRole(role: UserRole) {
-  return (request: Request & { user?: User }) => request.user?.role === role
+  return (request: Request & { user?: User }) => {
+    throw new Error("Not implemented.")
+  }
 }
 
 export function userIsLoggedIn(request: Request & { user?: User }) {

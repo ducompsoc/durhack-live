@@ -1,10 +1,11 @@
 import type { Request, Response } from "@tinyhttp/app"
 
 import { requireLoggedIn } from "@/auth/decorators"
-import type { User } from "@/database/tables"
+import type { User } from "@/database"
 import getStateSocketClient from "@/socket/oauth-client"
 
 import { getSession } from "@/auth/session"
+import { adaptDatabaseOAuthClient } from "@/routes/auth/oauth/adapt-database-oauth-client"
 import type { Middleware } from "@/types/middleware"
 import createHttpError from "http-errors"
 import { oauthModel } from "./oauth/model"
@@ -29,8 +30,9 @@ export class AuthHandlers {
   handleGetSocketToken(): Middleware {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
+      const client = await getStateSocketClient()
       const auth_token = await oauthModel.generateAccessToken(
-        await getStateSocketClient(),
+        adaptDatabaseOAuthClient(client),
         request.user,
         "socket:state",
       )

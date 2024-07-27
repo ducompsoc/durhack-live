@@ -9,7 +9,7 @@ import NodeOAuthServer, {
 import type { NextFunction, Request as TinyHttpRequest, Response as TinyHttpResponse } from "@tinyhttp/app"
 
 import { oauthConfig } from "@/config"
-import type { User } from "@/database/tables"
+import type { User } from "@/database"
 
 import { oauthModel } from "./model"
 

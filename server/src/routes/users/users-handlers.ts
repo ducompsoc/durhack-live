@@ -1,7 +1,6 @@
 import type { Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
 
-import User from "@/database/tables/user"
 import type { Middleware } from "@/types/middleware"
 
 export class UsersHandlers {

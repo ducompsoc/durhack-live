@@ -14,7 +14,7 @@ import {
 import { NullError } from "@/common/errors"
 import { epoch } from "@/common/time"
 import { type TokenAuthorityConfig, jwtConfig, oauthConfig } from "@/config"
-import User from "@/database/tables/user"
+import { type User, prisma } from "@/database"
 import { dirname } from "@/dirname"
 
 import { TokenError } from "./jwt-error"
@@ -185,7 +185,7 @@ class TokenVault {
   public async getUserAndScopeClaims(payload: JWTPayload): Promise<{ user: User; scope: string[] }> {
     const { user_id, scope } = payload
 
-    if (typeof user_id !== "number") {
+    if (typeof user_id !== "string") {
       throw new TokenError("Invalid user ID")
     }
 
@@ -193,16 +193,22 @@ class TokenVault {
       throw new TokenError("Invalid scope")
     }
 
-    const user = await User.findByPk(user_id, { rejectOnEmpty: new NullError("User not found") })
+    const user = await prisma.user.findUnique({
+      where: {
+        keycloakUserId: user_id,
+      },
+    })
+    if (user == null) throw new NullError("User not found")
+
     return { user, scope }
   }
 
   public async createAccessToken(user: User, options: TokenOptions): Promise<string> {
-    return await this.createToken(TokenType.accessToken, user, options)
+    return await this.createToken(TokenType.accessToken, { id: user.keycloakUserId }, options)
   }
 
   public async createRefreshToken(user: User, options: TokenOptions): Promise<string> {
-    return await this.createToken(TokenType.refreshToken, user, options)
+    return await this.createToken(TokenType.refreshToken, { id: user.keycloakUserId }, options)
   }
 
   private getDefaultTokenScope(type: TokenType): string[] {

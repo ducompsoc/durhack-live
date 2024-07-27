@@ -3,7 +3,6 @@ import { App } from "@tinyhttp/app"
 import { Server as SocketIO } from "socket.io"
 
 import { listenConfig } from "./config"
-import sequelize, { ensureDatabaseExists } from "./database"
 import { apiApp } from "./routes"
 import HackathonStateSocketManager from "./socket"
 import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth-client"
@@ -29,9 +28,6 @@ function getServer(app: App): Server {
 }
 
 async function main() {
-  await ensureDatabaseExists()
-  await sequelize.sync({ force: false })
-
   const client = await getStateSocketClient()
   await updateStateSocketSecret(client)
 

@@ -5,7 +5,7 @@ import { ZodError } from "zod"
 import TokenType from "@/auth/token-type"
 import TokenVault from "@/auth/tokens"
 import { type IHackathonState, hackathonStateSchema } from "@/common/schema/hackathon-state"
-import type User from "@/database/tables/user"
+import type { User } from "@/database"
 
 import { getHackathonState, setHackathonState } from "./state"
 import "./oauth-client"
@@ -27,7 +27,7 @@ class HackathonStateSocketConnection {
     this.socket.on("disconnect", this.onDisconnect.bind(this))
   }
 
-  private async onAuthenticate(token: unknown, cb: (err: string | null, role?: string | null) => void) {
+  private async onAuthenticate(token: unknown, cb: (err: string | null) => void) {
     if (this.connectedUser) return
     if (typeof token !== "string" || typeof cb !== "function") return
 
@@ -51,15 +51,16 @@ class HackathonStateSocketConnection {
     this.connectedUser = user
 
     this.socket.join("state:global")
-    this.socket.join(`state:user:${this.connectedUser.id}`)
+    this.socket.join(`state:user:${this.connectedUser.keycloakUserId}`)
     this.socket.emit("userState", {})
 
-    cb(null, this.connectedUser ? this.connectedUser.role : null)
+    cb(null)
     this.socket.emit("globalState", getHackathonState())
   }
 
   private async onPushState(state: unknown, cb: (error: Error | null) => void) {
-    if (!this.connectedUser || this.connectedUser.role !== "admin") return
+    // todo: ensure the connected user is an administrator using KeyCloak
+    if (!this.connectedUser) return
     if (this.manager.server == null) return
 
     let parsedState: IHackathonState

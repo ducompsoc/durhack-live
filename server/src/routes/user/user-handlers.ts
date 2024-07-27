@@ -5,30 +5,18 @@ import { z } from "zod"
 
 import { requireScope } from "@/auth/decorators"
 import { Ethnicity, Gender } from "@/common/model-enums"
-import type User from "@/database/tables/user"
+import type { User } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
 export class UserHandlers {
   private static pickUserWithDetailsFields(user: User) {
-    return pick(
-      user,
-      "email",
-      "preferred_name",
-      "role",
-      "age",
-      "phone_number",
-      "university",
-      "graduation_year",
-      "ethnicity",
-      "gender",
-      "h_UK_consent",
-      "h_UK_marketing",
-      "checked_in",
-    )
+    // todo: keycloak API call
+    return {}
   }
 
   private static pickIdentifyingFields(user: User) {
-    return pick(user, "email", "preferred_name", "role")
+    // todo: keycloak API call
+    return {}
   }
 
   @requireScope("api:user.details")
@@ -70,7 +58,8 @@ export class UserHandlers {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
       const fields_to_update = UserHandlers.update_details_payload.parse(request.body)
-      await request.user.update(fields_to_update)
+
+      // todo: keycloak API call to apply patches
 
       const payload = UserHandlers.pickUserWithDetailsFields(request.user)
       response.status(200)
@@ -83,7 +72,8 @@ export class UserHandlers {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
       const fields_to_update = UserHandlers.check_in_payload.parse(request.body)
-      await request.user.update(fields_to_update)
+
+      // todo: keycloak API call to apply patches
 
       const payload = UserHandlers.pickUserWithDetailsFields(request.user)
       response.status(200)

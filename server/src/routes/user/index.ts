@@ -3,7 +3,7 @@ import createHttpError from "http-errors"
 
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
 
-import type { User } from "@/database/tables"
+import type { User } from "@/database"
 import { userHandlers } from "./user-handlers"
 
 const userApp = new App()
