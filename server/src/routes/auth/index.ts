@@ -17,16 +17,13 @@ if (csrfConfig) {
   authApp.use(doubleCsrfProtection)
 }
 
-authApp
-  .route("/login")
-  .get(authHandlers.handleLoginSuccess.bind(authHandlers))
-  .all(handleMethodNotAllowed("GET", "POST"))
+authApp.route("/login").get(authHandlers.handleLoginSuccess()).all(handleMethodNotAllowed("GET", "POST"))
 
 authApp.route("/csrf-token").get(handleGetCsrfToken).all(handleMethodNotAllowed("GET"))
 
 authApp
   .route("/socket-token")
-  .get(authHandlers.handleGetSocketToken.bind(authHandlers), handleFailedAuthentication)
+  .get(authHandlers.handleGetSocketToken(), handleFailedAuthentication)
   .all(handleMethodNotAllowed("GET"))
 
 export { authApp }

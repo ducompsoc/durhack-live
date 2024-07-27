@@ -1,11 +1,12 @@
 import type { Request, Response } from "@tinyhttp/app"
+import createHttpError from "http-errors"
 import { default as pick } from "lodash/pick.js"
 import { z } from "zod"
 
 import { requireScope } from "@/auth/decorators"
 import { Ethnicity, Gender } from "@/common/model-enums"
 import type User from "@/database/tables/user"
-import createHttpError from "http-errors"
+import type { Middleware } from "@/types/middleware"
 
 export class UserHandlers {
   private static pickUserWithDetailsFields(user: User) {
@@ -31,18 +32,22 @@ export class UserHandlers {
   }
 
   @requireScope("api:user.details")
-  async getUserWithDetails(request: Request & { user?: User }, response: Response) {
-    if (request.user == null) throw createHttpError(500)
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
-    response.status(200)
-    response.json({ status: response.statusCode, message: "OK", data: payload })
+  getUserWithDetails(): Middleware {
+    return async (request: Request & { user?: User }, response: Response) => {
+      if (request.user == null) throw createHttpError(500)
+      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      response.status(200)
+      response.json({ status: response.statusCode, message: "OK", data: payload })
+    }
   }
 
-  async getUser(request: Request & { user?: User }, response: Response) {
-    if (request.user == null) throw createHttpError(500)
-    const payload = UserHandlers.pickIdentifyingFields(request.user)
-    response.status(200)
-    response.json({ status: response.statusCode, message: "OK", data: payload })
+  getUser(): Middleware {
+    return async (request: Request & { user?: User }, response: Response) => {
+      if (request.user == null) throw createHttpError(500)
+      const payload = UserHandlers.pickIdentifyingFields(request.user)
+      response.status(200)
+      response.json({ status: response.statusCode, message: "OK", data: payload })
+    }
   }
 
   static abstract_patch_payload = z.object({
@@ -61,25 +66,29 @@ export class UserHandlers {
   static update_details_payload = this.abstract_patch_payload.partial()
 
   @requireScope("api:user.details.write")
-  async patchUserDetails(request: Request & { user?: User }, response: Response) {
-    if (request.user == null) throw createHttpError(500)
-    const fields_to_update = UserHandlers.update_details_payload.parse(request.body)
-    await request.user.update(fields_to_update)
+  patchUserDetails(): Middleware {
+    return async (request: Request & { user?: User }, response: Response) => {
+      if (request.user == null) throw createHttpError(500)
+      const fields_to_update = UserHandlers.update_details_payload.parse(request.body)
+      await request.user.update(fields_to_update)
 
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
-    response.status(200)
-    response.json({ status: response.statusCode, message: "OK", data: payload })
+      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      response.status(200)
+      response.json({ status: response.statusCode, message: "OK", data: payload })
+    }
   }
 
   @requireScope("api:user.details.write")
-  async checkUserIn(request: Request & { user?: User }, response: Response) {
-    if (request.user == null) throw createHttpError(500)
-    const fields_to_update = UserHandlers.check_in_payload.parse(request.body)
-    await request.user.update(fields_to_update)
+  checkUserIn(): Middleware {
+    return async (request: Request & { user?: User }, response: Response) => {
+      if (request.user == null) throw createHttpError(500)
+      const fields_to_update = UserHandlers.check_in_payload.parse(request.body)
+      await request.user.update(fields_to_update)
 
-    const payload = UserHandlers.pickUserWithDetailsFields(request.user)
-    response.status(200)
-    response.json({ status: response.statusCode, message: "OK", data: payload })
+      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      response.status(200)
+      response.json({ status: response.statusCode, message: "OK", data: payload })
+    }
   }
 }
 

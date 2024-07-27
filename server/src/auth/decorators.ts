@@ -3,22 +3,36 @@ import type { NextFunction, Request, Response } from "@tinyhttp/app"
 
 import { UserRole } from "@/common/model-enums"
 import type { User } from "@/database/tables"
+import type { Middleware } from "@/types/middleware"
 
-type ICondition = (request: Request, response: Response) => boolean
+type Condition = (request: Request, response: Response) => boolean
 
-export function requireCondition(condition: ICondition) {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  return (target: unknown, property_key: string, descriptor: PropertyDescriptor) => {
-    const old_function = descriptor.value
+/**
+ * Factory that creates a TypeScript decorator for a condition.
+ *
+ * Decorated methods are expected to return a middleware function. The returned middleware will be decorated
+ *
+ *
+ * @param condition
+ */
+export function requireCondition(condition: Condition) {
+  return (
+    value: (this: unknown, ...rest: unknown[]) => Middleware,
+    _: {
+      kind: "method"
+    },
+  ) => {
+    return function wrapped_function(this: unknown, ...args: unknown[]): Middleware {
+      const middleware: Middleware = value.call(this, ...args)
 
-    async function wrapped_function(request: Request, response: Response, next: NextFunction) {
-      if (!condition(request, response)) {
-        return next()
+      return async (request: Request, response: Response, next: NextFunction): Promise<void> => {
+        if (!condition(request, response)) {
+          next()
+          return
+        }
+        await middleware.call(value, request, response, next)
       }
-      return await old_function.apply(target, [request, response, next])
     }
-
-    descriptor.value = wrapped_function
   }
 }
 

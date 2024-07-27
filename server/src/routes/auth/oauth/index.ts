@@ -7,10 +7,10 @@ const oauthApp = new App()
 
 oauthApp
   .route("/authorize")
-  .get(oauthHandlers.getAuthorize.bind(oauthHandlers))
-  .post(oauthHandlers.postAuthorize.bind(oauthHandlers))
+  .get(oauthHandlers.getAuthorize())
+  .post(oauthHandlers.postAuthorize())
   .all(handleMethodNotAllowed("GET", "POST"))
 
-oauthApp.route("/token").post(oauthHandlers.postToken.bind(oauthHandlers)).all(handleMethodNotAllowed("POST"))
+oauthApp.route("/token").post(oauthHandlers.postToken()).all(handleMethodNotAllowed("POST"))
 
 export { oauthApp }

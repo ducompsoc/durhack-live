@@ -8,16 +8,16 @@ const usersApp = new App()
 
 usersApp
   .route("/")
-  .get(usersHandlers.getUsersList.bind(usersHandlers))
-  .post(usersHandlers.createUser.bind(usersHandlers))
+  .get(usersHandlers.getUsersList())
+  .post(usersHandlers.createUser())
   .all(handleMethodNotAllowed("GET", "POST"))
 
 usersApp
   .route("/:user_id")
   .all(parseRouteId("user_id"))
-  .get(usersHandlers.getUserDetails.bind(usersHandlers))
-  .patch(usersHandlers.patchUserDetails.bind(usersHandlers))
-  .delete(usersHandlers.deleteUser.bind(usersHandlers))
+  .get(usersHandlers.getUserDetails())
+  .patch(usersHandlers.patchUserDetails())
+  .delete(usersHandlers.deleteUser())
   .all(handleMethodNotAllowed("GET", "PATCH", "DELETE"))
 
 export { usersApp }

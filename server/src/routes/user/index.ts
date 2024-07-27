@@ -18,14 +18,14 @@ userApp.use((request: Request & { user?: User }, response: Response, next: NextF
 
 userApp
   .route("/")
-  .get(userHandlers.getUserWithDetails.bind(userHandlers))
-  .get(userHandlers.getUser.bind(userHandlers))
-  .patch(userHandlers.patchUserDetails.bind(userHandlers), handleFailedAuthentication)
+  .get(userHandlers.getUserWithDetails())
+  .get(userHandlers.getUser())
+  .patch(userHandlers.patchUserDetails(), handleFailedAuthentication)
   .all(handleMethodNotAllowed("GET", "PATCH"))
 
 userApp
   .route("/check-in")
-  .post(userHandlers.checkUserIn.bind(userHandlers), handleFailedAuthentication)
+  .post(userHandlers.checkUserIn(), handleFailedAuthentication)
   .all(handleMethodNotAllowed("POST"))
 
 export { userApp }
