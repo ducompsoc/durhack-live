@@ -11,33 +11,33 @@ datasource db {
 }
 
 model User {
-  keycloak_user_id       String      @id @map("keycloakUserId") @db.Uuid
-  keycloak_access_token  String?     @map("keycloakAccessToken")
-  keycloak_refresh_token String?     @map("keycloakRefreshToken")
-  oauth_sessions         OAuthUser[]
+  keycloakUserId       String      @id @map("keycloak_user_id") @db.Uuid
+  keycloakAccessToken  String?     @map("keycloak_access_token")
+  keycloakRefreshToken String?     @map("keycloak_refresh_token")
+  oauth_sessions       OAuthUser[]
 }
 
 model OAuthClient {
-  client_id              String      @id @map("clientId") @db.VarChar(256)
-  name                   String      @db.VarChar(256)
-  grants                 Json        @default("[]")
-  allowed_scopes         Json        @default("[]") @map("allowedScopes")
-  redirect_uris          Json        @default("[]") @map("redirectUris")
-  access_token_lifetime  Int?        @map("accessTokenLifetime")
-  refresh_token_lifetime Int?        @map("refreshTokenLifetime")
-  hashed_secret          Bytes?      @map("hashedSecret")
-  secret_salt            Bytes?      @map("secretSalt")
-  users                  OAuthUser[]
+  clientId             String      @id @map("client_id") @db.VarChar(256)
+  name                 String      @db.VarChar(256)
+  grants               Json        @default("[]")
+  allowedScopes        Json        @default("[]") @map("allowed_scopes")
+  redirectUris         Json        @default("[]") @map("redirect_uris")
+  accessTokenLifetime  Int?        @map("access_token_lifetime")
+  refreshTokenLifetime Int?        @map("refresh_token_lifetime")
+  hashedSecret         Bytes?      @map("hashed_secret")
+  secretSalt           Bytes?      @map("secret_salt")
+  users                OAuthUser[]
 }
 
 model OAuthUser {
-  user_id   String      @map("userId") @db.Uuid
-  client_id String      @map("clientId") @db.VarChar(256)
-  user      User        @relation(fields: [user_id], references: [keycloak_user_id])
-  client    OAuthClient @relation(fields: [client_id], references: [client_id])
+  userId   String      @map("user_id") @db.Uuid
+  clientId String      @map("client_id") @db.VarChar(256)
+  user     User        @relation(fields: [userId], references: [keycloakUserId])
+  client   OAuthClient @relation(fields: [clientId], references: [clientId])
 
-  minimum_token_issue_time     DateTime? @map("minimumTokenIssueTime")
-  minimum_auth_code_issue_time DateTime? @map("minimumAuthCodeIssueTime")
+  minimumTokenIssueTime    DateTime? @map("minimum_token_issue_time")
+  minimumAuthCodeIssueTime DateTime? @map("minimum_auth_code_issue_time")
 
-  @@id([user_id, client_id])
+  @@id([userId, clientId])
 }
