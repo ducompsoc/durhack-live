@@ -31,6 +31,8 @@ export const {
   oauth: oauthConfig,
   session: sessionConfig,
   discord: discordConfig,
+  keycloak: keycloakConfig,
+  hostname,
   hackathonStateSocket: hackathonStateSocketConfig,
 } = config
 

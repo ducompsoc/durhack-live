@@ -6,11 +6,12 @@ import { csrfConfig } from "@/config"
 
 import { authHandlers } from "./auth-handlers"
 import { discordApp } from "./discord"
-
+import { keycloakApp } from "./keycloak";
 
 const authApp = new App()
 
 authApp.use("/discord", discordApp)
+authApp.use("/keycloak", keycloakApp)
 
 if (csrfConfig) {
   authApp.use(doubleCsrfProtection)

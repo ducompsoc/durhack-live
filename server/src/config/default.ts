@@ -6,6 +6,7 @@ export default {
     host: "127.0.0.1",
     port: 3001,
   },
+  hostname: "http://localhost:3001",
   flags: {
     skipEmailVerification: false,
   },
@@ -80,6 +81,13 @@ export default {
     clientSecret: "yourDiscordAppClientSecretHere",
     redirectUri: "http://localhost:3001/api/auth/discord/redirect",
     inviteLink: "https://discord.gg/f5euRmts",
+  },
+  keycloak: {
+    url: "https://auth.durhack.com/realms/durhack",
+    clientId: "not-a-real-client-id",
+    clientSecret: "not-a-real-client-secret",
+    responseTypes: ["code"],
+    redirectUris: ["https://live.durhack.com/api/auth/keycloak/callback"],
   },
   hackathonStateSocket: {
     clientSecret: "the-best-ever-secret",

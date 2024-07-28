@@ -73,8 +73,22 @@ export const oauthOptionsSchema = z.object({
   continueMiddleware: z.boolean(),
 })
 
+export const keycloakOptionsSchema = z.object({
+  url: z.string().url(),
+  clientId: z.string(),
+  clientSecret: z.string(),
+  redirectUris: z.array(z.string()),
+  responseTypes: z.array(z.union([
+    z.literal("code"),
+    z.literal("token"),
+    z.literal("id_token"),
+    z.literal("none"),
+  ])),
+})
+
 export const configSchema = z.object({
   listen: listenOptionsSchema,
+  hostname: z.string().url(),
   flags: z.object({}),
   database: z.object({
     data: databaseOptionsSchema,
@@ -92,6 +106,7 @@ export const configSchema = z.object({
   oauth: oauthOptionsSchema,
   session: sessionOptionsSchema,
   discord: discordOptionsSchema,
+  keycloak: keycloakOptionsSchema,
   hackathonStateSocket: z.object({
     clientSecret: z.string(),
   }),
