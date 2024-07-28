@@ -53,6 +53,8 @@ export class KeycloakHandlers {
       const tokenSet = await this.client.callback(KeycloakHandlers.redirectUri, params, { code_verifier: codeVerifier })
       console.log(`received and validated tokens ${JSON.stringify(tokenSet)}`)
       console.log(`validated ID Token claims ${JSON.stringify(tokenSet.claims())}`)
+      
+      tokenSet
 
       const userProfile: unknown = await this.client.userinfo(tokenSet)
       console.log(`received user profile: ${JSON.stringify(userProfile)}`)

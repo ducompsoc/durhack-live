@@ -11,10 +11,9 @@ datasource db {
 }
 
 model User {
-  keycloakUserId       String      @id @map("keycloak_user_id") @db.Uuid
-  keycloakAccessToken  String?     @map("keycloak_access_token")
-  keycloakRefreshToken String?     @map("keycloak_refresh_token")
-  oauth_sessions       OAuthUser[]
+  keycloakUserId String      @id @map("keycloak_user_id") @db.Uuid
+  oauth_sessions OAuthUser[]
+  tokenSet       TokenSet?
 }
 
 model OAuthClient {
@@ -40,4 +39,17 @@ model OAuthUser {
   minimumAuthCodeIssueTime DateTime? @map("minimum_auth_code_issue_time")
 
   @@id(fields: [userId, clientId], name: "id", map: "user_and_client_id")
+}
+
+model TokenSet {
+  userId String @id @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [keycloakUserId])
+
+  tokenType    String?   @map("token_type")
+  accessToken  String?   @map("access_token")
+  idToken      String?   @map("id_token")
+  refreshToken String?   @map("refresh_token")
+  scope        String?
+  accessExpiry DateTime? @db.Timestamp(0)
+  sessionState String?
 }
