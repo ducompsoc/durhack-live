@@ -5,6 +5,6 @@ export default {
   flags: {},
   oauth: {},
   keycloak: {
-    redirectUris: ["http://localhost:3001/api/auth/keycloak/callback"]
-  }
+    redirectUris: ["http://localhost:3001/api/auth/keycloak/callback"],
+  },
 } satisfies DeepPartial<ConfigIn>

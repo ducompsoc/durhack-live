@@ -6,7 +6,7 @@ import { csrfConfig } from "@/config"
 
 import { authHandlers } from "./auth-handlers"
 import { discordApp } from "./discord"
-import { keycloakApp } from "./keycloak";
+import { keycloakApp } from "./keycloak"
 
 const authApp = new App()
 

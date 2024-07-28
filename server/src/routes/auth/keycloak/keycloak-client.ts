@@ -1,6 +1,6 @@
-import { Issuer, type ClientMetadata } from "openid-client"
+import { type ClientMetadata, Issuer } from "openid-client"
 
-import { keycloakConfig } from "@/config";
+import { keycloakConfig } from "@/config"
 
 function adaptClientConfig(clientConfig: typeof keycloakConfig): ClientMetadata {
   return {

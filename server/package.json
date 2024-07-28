@@ -24,10 +24,7 @@
     "node": ">=20"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
-  "contributors": [
-    "Joe Clack <durhack@joeclack.me.uk>",
-    "Jacob Wrenn <jacob@wrenn.me>"
-  ],
+  "contributors": ["Joe Clack <durhack@joeclack.me.uk>", "Jacob Wrenn <jacob@wrenn.me>"],
   "license": "UNLICENSED",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
