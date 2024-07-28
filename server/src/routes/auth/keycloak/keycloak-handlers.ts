@@ -1,11 +1,10 @@
-import type { Prisma } from "@prisma/client"
 import type { NextFunction, Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
 import { type Client, generators } from "openid-client"
 
 import { getSession } from "@/auth/session"
 import { hostname } from "@/config"
-import { prisma } from "@/database"
+import { prisma, type User} from "@/database"
 import type { Middleware } from "@/types/middleware"
 
 import { adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
@@ -40,7 +39,7 @@ export class KeycloakHandlers {
   static redirectUri = new URL("/api/auth/keycloak/callback", hostname).toString()
 
   oauth2FlowCallback(): Middleware {
-    return async (request: Request, response: Response, next: NextFunction) => {
+    return async (request: Request & { user?: User }, response: Response, next: NextFunction) => {
       const session = await getSession(request, response)
       let codeVerifier: unknown
       try {
@@ -58,7 +57,7 @@ export class KeycloakHandlers {
       const userId = tokenSet.claims().sub
       const serializedTokenSet = adaptTokenSetToDatabase(tokenSet)
 
-      await prisma.user.upsert({
+      const user = await prisma.user.upsert({
         where: {
           keycloakUserId: userId,
         },
@@ -80,6 +79,7 @@ export class KeycloakHandlers {
 
       session.userId = userId
       await session.commit()
+      request.user = user 
 
       next()
     }
