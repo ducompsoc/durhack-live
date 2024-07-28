@@ -4,8 +4,10 @@ import createHttpError from "http-errors"
 import { json, urlencoded } from "milliparsec"
 
 import { doubleCsrfProtection } from "@/auth/csrf"
+import { getSession } from "@/auth/session"
 import { handleMethodNotAllowed } from "@/common/middleware"
 import { cookieParserConfig, csrfConfig } from "@/config"
+import { type User, prisma } from "@/database"
 import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
 import type { Middleware } from "@/types/middleware"
 
@@ -26,6 +28,23 @@ apiApp.use(
     scope: "api" as unknown as string[], // https://github.com/node-oauth/node-oauth2-server/pull/305
   }) as unknown as Middleware,
 )
+apiApp.use(async (request: Request & { user?: User }, response, next): Promise<void> => {
+  const session = await getSession(request, response)
+  const userId: unknown = session.userId
+  if (typeof userId !== "string") {
+    next()
+    return
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      keycloakUserId: userId,
+    },
+  })
+  request.user = user ?? undefined
+
+  next()
+})
 
 apiApp.use(cookieParser(cookieParserConfig.secret))
 

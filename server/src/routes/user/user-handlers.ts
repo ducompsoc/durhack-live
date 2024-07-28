@@ -1,29 +1,42 @@
 import type { Request, Response } from "@tinyhttp/app"
 import createHttpError from "http-errors"
 import { default as pick } from "lodash/pick.js"
+import type { UserinfoResponse } from "openid-client"
 import { z } from "zod"
 
+import { adaptTokenSetToClient } from "@/auth/adapt-token-set"
 import { requireScope } from "@/auth/decorators"
 import { Ethnicity, Gender } from "@/common/model-enums"
-import type { User } from "@/database"
+import { type User, prisma } from "@/database"
+import { keycloakClient } from "@/routes/auth/keycloak/keycloak-client"
 import type { Middleware } from "@/types/middleware"
 
 export class UserHandlers {
-  private static pickUserWithDetailsFields(user: User) {
-    // todo: keycloak API call
-    return {}
+  private static async getUserProfile(user: User) {
+    const prismaTokenSet = await prisma.tokenSet.findUnique({
+      where: {
+        userId: user.keycloakUserId,
+      },
+    })
+    if (prismaTokenSet == null) throw new createHttpError.InternalServerError()
+    const tokenSet = adaptTokenSetToClient(prismaTokenSet)
+    return await keycloakClient.userinfo(tokenSet)
   }
 
-  private static pickIdentifyingFields(user: User) {
-    // todo: keycloak API call
-    return {}
+  private static pickUserWithDetailsFields(profile: UserinfoResponse) {
+    return { email: profile.email }
+  }
+
+  private static pickIdentifyingFields(profile: UserinfoResponse) {
+    return { email: profile.email }
   }
 
   @requireScope("api:user.details")
   getUserWithDetails(): Middleware {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
-      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      const profile = await UserHandlers.getUserProfile(request.user)
+      const payload = UserHandlers.pickUserWithDetailsFields(profile)
       response.status(200)
       response.json({ status: response.statusCode, message: "OK", data: payload })
     }
@@ -32,7 +45,8 @@ export class UserHandlers {
   getUser(): Middleware {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
-      const payload = UserHandlers.pickIdentifyingFields(request.user)
+      const profile = await UserHandlers.getUserProfile(request.user)
+      const payload = UserHandlers.pickIdentifyingFields(profile)
       response.status(200)
       response.json({ status: response.statusCode, message: "OK", data: payload })
     }
@@ -61,7 +75,8 @@ export class UserHandlers {
 
       // todo: keycloak API call to apply patches
 
-      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      const profile = await UserHandlers.getUserProfile(request.user)
+      const payload = UserHandlers.pickUserWithDetailsFields(profile)
       response.status(200)
       response.json({ status: response.statusCode, message: "OK", data: payload })
     }
@@ -75,7 +90,8 @@ export class UserHandlers {
 
       // todo: keycloak API call to apply patches
 
-      const payload = UserHandlers.pickUserWithDetailsFields(request.user)
+      const profile = await UserHandlers.getUserProfile(request.user)
+      const payload = UserHandlers.pickUserWithDetailsFields(profile)
       response.status(200)
       response.json({ status: response.statusCode, message: "OK", data: payload })
     }

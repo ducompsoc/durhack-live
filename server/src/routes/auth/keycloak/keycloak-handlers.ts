@@ -8,8 +8,8 @@ import { hostname } from "@/config"
 import { prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
+import { adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
 import { keycloakClient } from "./keycloak-client"
-import {adaptTokenSetToDatabase} from "@/auth/adapt-token-set";
 
 export class KeycloakHandlers {
   client: Client
@@ -73,10 +73,13 @@ export class KeycloakHandlers {
             upsert: {
               create: serializedTokenSet,
               update: serializedTokenSet,
-            }
-          }
-        }
+            },
+          },
+        },
       })
+
+      session.userId = userId
+      await session.commit()
 
       next()
     }

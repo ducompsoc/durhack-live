@@ -1,7 +1,6 @@
 import { TokenSet as ClientTokenSet } from "openid-client"
 
-import { TokenSet as PrismaTokenSet } from "@/database";
-
+import type { TokenSet as PrismaTokenSet } from "@/database"
 
 export function adaptTokenSetToClient(tokenSet: PrismaTokenSet): ClientTokenSet {
   return new ClientTokenSet({
