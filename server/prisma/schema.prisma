@@ -12,7 +12,7 @@ datasource db {
 
 model User {
   keycloakUserId String      @id @map("keycloak_user_id") @db.Uuid
-  oauth_sessions OAuthUser[]
+  oauthSessions  OAuthUser[]
   tokenSet       TokenSet?
 }
 
