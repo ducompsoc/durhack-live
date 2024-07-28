@@ -6,6 +6,7 @@ const basePrisma = new PrismaClient()
 export type User = Prisma.UserGetPayload<{ select: undefined }>
 export type OAuthClient = Prisma.OAuthClientGetPayload<{ select: undefined }>
 export type OAuthUser = Prisma.OAuthUserGetPayload<{ select: undefined }>
+export type TokenSet = Prisma.TokenSetGetPayload<{ select: undefined }>
 
 const extension = Prisma.defineExtension({
   name: "durhack-live",
