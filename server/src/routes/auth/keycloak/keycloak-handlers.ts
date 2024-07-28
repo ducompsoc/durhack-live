@@ -1,12 +1,15 @@
+import type { Prisma } from "@prisma/client"
 import type { NextFunction, Request, Response } from "@tinyhttp/app"
+import createHttpError from "http-errors"
 import { type Client, generators } from "openid-client"
 
 import { getSession } from "@/auth/session"
 import { hostname } from "@/config"
+import { prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
-import createHttpError from "http-errors"
 import { keycloakClient } from "./keycloak-client"
+import {adaptTokenSetToDatabase} from "@/auth/adapt-token-set";
 
 export class KeycloakHandlers {
   client: Client
@@ -51,13 +54,29 @@ export class KeycloakHandlers {
       const params = this.client.callbackParams(request)
       // todo: get URL from `req` once tinyhttp is fixed
       const tokenSet = await this.client.callback(KeycloakHandlers.redirectUri, params, { code_verifier: codeVerifier })
-      console.log(`received and validated tokens ${JSON.stringify(tokenSet)}`)
-      console.log(`validated ID Token claims ${JSON.stringify(tokenSet.claims())}`)
-      
-      tokenSet
 
-      const userProfile: unknown = await this.client.userinfo(tokenSet)
-      console.log(`received user profile: ${JSON.stringify(userProfile)}`)
+      const userId = tokenSet.claims().sub
+      const serializedTokenSet = adaptTokenSetToDatabase(tokenSet)
+
+      await prisma.user.upsert({
+        where: {
+          keycloakUserId: userId,
+        },
+        create: {
+          keycloakUserId: userId,
+          tokenSet: {
+            create: serializedTokenSet,
+          },
+        },
+        update: {
+          tokenSet: {
+            upsert: {
+              create: serializedTokenSet,
+              update: serializedTokenSet,
+            }
+          }
+        }
+      })
 
       next()
     }
