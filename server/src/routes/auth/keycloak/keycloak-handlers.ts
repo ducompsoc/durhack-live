@@ -4,7 +4,7 @@ import { type Client, generators } from "openid-client"
 
 import { getSession } from "@/auth/session"
 import { hostname } from "@/config"
-import { prisma, type User} from "@/database"
+import { type User, prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
 import { adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
@@ -79,7 +79,7 @@ export class KeycloakHandlers {
 
       session.userId = userId
       await session.commit()
-      request.user = user 
+      request.user = user
 
       next()
     }
