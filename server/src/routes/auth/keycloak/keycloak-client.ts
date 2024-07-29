@@ -41,3 +41,23 @@ export async function fetchWithClientCredentials(input: string | URL | Request, 
     ...restInit,
   })
 }
+
+const userResponse = await fetchWithClientCredentials("https://admin.auth.durhack.com/admin/realms/durhack/users/4118845c-09dc-4cdf-a242-3d1d8808c8d9")
+const user = await userResponse.json()
+const { attributes, ...restUser } = user
+console.log(attributes)
+
+const resp = await fetchWithClientCredentials("https://admin.auth.durhack.com/admin/realms/durhack/users/4118845c-09dc-4cdf-a242-3d1d8808c8d9", {
+  method: "PUT",
+  headers: {
+    "content-type": "application/json",
+  },
+  body: JSON.stringify({
+    attributes: {
+      ...attributes,
+      firstNames: "Some Guy",
+    },
+    ...restUser,
+  })
+})
+console.log(resp)
