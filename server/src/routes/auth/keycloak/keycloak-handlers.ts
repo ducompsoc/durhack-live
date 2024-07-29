@@ -27,7 +27,7 @@ export class KeycloakHandlers {
       const codeChallenge = generators.codeChallenge(codeVerifier)
 
       const url = this.client.authorizationUrl({
-        scope: "openid email profile",
+        scope: "openid email profile roles",
         code_challenge: codeChallenge,
         code_challenge_method: "S256",
       })
