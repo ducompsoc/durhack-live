@@ -10,7 +10,7 @@ import { type User, prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
 
 export class DiscordHandlers {
-  @requireLoggedIn
+  @requireLoggedIn()
   handleBeginDiscordOAuthFlow(): Middleware {
     return async (request: Request, response: Response): Promise<void> => {
       const stateBuffer = await randomBytesAsync(16)
@@ -55,7 +55,7 @@ export class DiscordHandlers {
     }),
   })
 
-  @requireLoggedIn
+  @requireLoggedIn()
   handleDiscordOAuthCallback(): Middleware {
     return async (request: Request & { user?: User }, response: Response): Promise<void> => {
       const { code, state } = DiscordHandlers.discordAccessCodeSchema.parse(request.query)

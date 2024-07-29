@@ -26,7 +26,7 @@ export class AuthHandlers {
     }
   }
 
-  @requireLoggedIn
+  @requireLoggedIn()
   handleGetSocketToken(): Middleware {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)

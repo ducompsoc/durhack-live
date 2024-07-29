@@ -1,9 +1,10 @@
 import type { Token } from "@node-oauth/oauth2-server"
 import type { NextFunction, Request, Response } from "@tinyhttp/app"
 
-import { UserRole } from "@/common/model-enums"
-import type { User } from "@/database"
+import { adaptTokenSetToClient } from "@/auth/adapt-token-set"
+import { type User, prisma } from "@/database"
 import type { Middleware } from "@/types/middleware"
+import createHttpError from "http-errors"
 
 type Condition = (request: Request, response: Response) => boolean | Promise<boolean>
 
@@ -38,17 +39,27 @@ export function requireCondition(condition: Condition) {
   }
 }
 
-export function userIsRole(role: UserRole) {
-  return (request: Request & { user?: User }) => {
-    throw new Error("Not implemented.")
+export function userHasRole(role: string): Condition {
+  return async (request: Request & { user?: User }): Promise<boolean> => {
+    if (request.user == null) return false
+    const prismaTokenSet = await prisma.tokenSet.findUnique({
+      where: {
+        userId: request.user.keycloakUserId,
+      },
+    })
+    if (prismaTokenSet == null) throw new createHttpError.InternalServerError()
+    const tokenSet = adaptTokenSetToClient(prismaTokenSet)
+    const { groups } = tokenSet.claims()
+    if (groups == null || !Array.isArray(groups)) return false
+    return groups.includes(role)
   }
 }
 
-export function userIsLoggedIn(request: Request & { user?: User }) {
-  return !!request.user
+export function userIsLoggedIn(): Condition {
+  return (request: Request & { user?: User }) => request.user != null
 }
 
-export function hasScope(scope: string | string[]) {
+export function hasScope(scope: string | string[]): Condition {
   return (request: Request & { user?: User }, response: Response) => {
     if (!request.user) return false
     if (typeof response.locals.oauth?.token !== "object") return true
@@ -65,8 +76,12 @@ export function hasScope(scope: string | string[]) {
   }
 }
 
-export const requireUserIsAdmin = requireCondition(userIsRole(UserRole.admin))
-export const requireLoggedIn = requireCondition(userIsLoggedIn)
+export function requireRole(role: string) {
+  return requireCondition(userHasRole(role))
+}
+export function requireLoggedIn() {
+  return requireCondition(userIsLoggedIn())
+}
 export function requireScope(scope: string | string[]) {
   return requireCondition(hasScope(scope))
 }
