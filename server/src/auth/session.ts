@@ -11,5 +11,6 @@ export const getSession = nextSession<DurHackLiveSessionRecord>({
   store: undefined,
   encode: (raw: string): string => `s:${sign(raw, signingSecret)}`,
   decode: (signed: string): string | null => unsign(signed.slice(2), signingSecret) || null,
+  autoCommit: false,
   ...sessionOptions,
 })
