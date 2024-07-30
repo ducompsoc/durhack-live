@@ -1,9 +1,9 @@
 import type OAuth2Server from "@node-oauth/oauth2-server"
 import type { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
 import type { JWTPayload } from "jose"
+import { TokenType } from "@durhack/token-vault/lib"
 
 import { checkTextAgainstHash } from "@/auth/hashed-secrets"
-import TokenType from "@/auth/token-type"
 import TokenVault from "@/auth/tokens"
 import { oauthConfig } from "@/config"
 import { type User, prisma } from "@/database"
@@ -14,7 +14,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     return await TokenVault.createToken(
       TokenType.accessToken,
-      { id: user.keycloakUserId },
+      user,
       {
         scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
         lifetime: token_lifetime,
@@ -70,7 +70,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     return await TokenVault.createToken(
       TokenType.refreshToken,
-      { id: user.keycloakUserId },
+      user,
       {
         scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
         lifetime: token_lifetime,
@@ -234,13 +234,11 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       "authorizationCode" | "expiresAt" | "redirectUri" | "scope" | "codeChallenge" | "codeChallengeMethod"
     >,
     client: OAuth2Server.Client,
-    user: OAuth2Server.User,
+    user: User,
   ): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-    if (!user.id) return false
-
     code.authorizationCode = await TokenVault.createToken(
       TokenType.authorizationCode,
-      user as { id: string | number },
+      user,
       {
         scope: code.scope == null ? [] : code.scope,
         lifetime: 60,

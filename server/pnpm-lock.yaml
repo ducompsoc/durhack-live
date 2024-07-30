@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@durhack/token-vault':
+        specifier: ^0.0.1
+        version: 0.0.1(jose@4.15.9)(zod@3.23.8)
       '@node-oauth/oauth2-server':
         specifier: ^5.1.0
         version: 5.1.0
@@ -158,6 +161,16 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@durhack/token-vault@0.0.1':
+    resolution: {integrity: sha512-4niqmt7eSdMilsI90AleUmMcdgvPj0g5qzU++U5Hooqa3c13hT1vTGJYkS66FC2XZ/eHgYmCF6WBVcU7hilxZg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      jose: ^4
+      zod: ^3
+    peerDependenciesMeta:
+      zod:
+        optional: true
 
   '@esbuild/aix-ppc64@0.21.5':
     resolution: {integrity: sha512-1SDgH6ZSPTlggy1yI6+Dbkiz8xzpHJEVAlF/AM1tHPLsf5STom9rwtjE4hKAF20FfXXNTFqEYXyJNWh1GiZedQ==}
@@ -1069,6 +1082,10 @@ packages:
     resolution: {integrity: sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==}
     engines: {node: '>=16 || 14 >=14.17'}
 
+  module-error@1.0.2:
+    resolution: {integrity: sha512-0yuvsqSCv8LbaOKhnsQ/T5JhyFlCYLPXK3U2sgV10zoKQwzs/MyfuQUOZQ1V/6OCOJsK/TRgNVrPuPDqtdMFtA==}
+    engines: {node: '>=10'}
+
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
 
@@ -1573,6 +1590,13 @@ snapshots:
 
   '@biomejs/cli-win32-x64@1.8.3':
     optional: true
+
+  '@durhack/token-vault@0.0.1(jose@4.15.9)(zod@3.23.8)':
+    dependencies:
+      jose: 4.15.9
+      module-error: 1.0.2
+    optionalDependencies:
+      zod: 3.23.8
 
   '@esbuild/aix-ppc64@0.21.5':
     optional: true
@@ -2343,6 +2367,8 @@ snapshots:
       brace-expansion: 2.0.1
 
   minipass@7.1.2: {}
+
+  module-error@1.0.2: {}
 
   ms@2.1.2: {}
 

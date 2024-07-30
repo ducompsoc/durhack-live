@@ -24,7 +24,10 @@
     "node": ">=20"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
-  "contributors": ["Joe Clack <durhack@joeclack.me.uk>", "Jacob Wrenn <jacob@wrenn.me>"],
+  "contributors": [
+    "Joe Clack <durhack@joeclack.me.uk>",
+    "Jacob Wrenn <jacob@wrenn.me>"
+  ],
   "license": "UNLICENSED",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
@@ -40,6 +43,7 @@
     "vitest": "^2.0.4"
   },
   "dependencies": {
+    "@durhack/token-vault": "^0.0.1",
     "@node-oauth/oauth2-server": "^5.1.0",
     "@otterjs/csrf-csrf": "^1.1.0",
     "@prisma/client": "5.17.0",

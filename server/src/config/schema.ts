@@ -1,5 +1,5 @@
-import TokenType from "@/auth/token-type"
 import { z } from "zod"
+import { tokenVaultOptionsSchema } from "@durhack/token-vault/config-schema"
 
 export const listenOptionsSchema = z.object({
   host: z.string(),
@@ -41,29 +41,6 @@ export const discordOptionsSchema = z.object({
   inviteLink: z.string().url(),
 })
 
-const rsaTokenAuthoritySchema = z.object({
-  for: z.nativeEnum(TokenType),
-  algorithm: z.literal("rsa"),
-  publicKeyFilePath: z.string(),
-  privateKeyFilePath: z.string(),
-})
-
-const hsaTokenAuthoritySchema = z.object({
-  for: z.nativeEnum(TokenType),
-  algorithm: z.literal("hsa"),
-  secret: z.string(),
-})
-
-export const tokenAuthoritySchema = z.union([rsaTokenAuthoritySchema, hsaTokenAuthoritySchema])
-
-export type TokenAuthorityConfig = z.infer<typeof tokenAuthoritySchema>
-
-export const jwtOptionsSchema = z.object({
-  issuer: z.string().url(),
-  audience: z.string().url(),
-  authorities: z.array(tokenAuthoritySchema),
-})
-
 export const oauthOptionsSchema = z.object({
   accessTokenLifetime: z.number().positive(),
   refreshTokenLifetime: z.number().positive(),
@@ -97,7 +74,7 @@ export const configSchema = z.object({
   cookieParser: z.object({
     secret: z.string(),
   }),
-  jsonwebtoken: jwtOptionsSchema,
+  jsonwebtoken: tokenVaultOptionsSchema,
   oauth: oauthOptionsSchema,
   session: sessionOptionsSchema,
   discord: discordOptionsSchema,

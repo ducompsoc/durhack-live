@@ -1,4 +1,5 @@
-import TokenType from "@/auth/token-type"
+import { TokenType } from "@durhack/token-vault/lib"
+
 import type { DeepPartial } from "@/types/deep-partial"
 import type { ConfigIn } from "./schema"
 

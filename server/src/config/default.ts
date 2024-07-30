@@ -1,4 +1,4 @@
-import TokenType from "@/auth/token-type"
+import { TokenType } from "@durhack/token-vault/lib"
 import type { ConfigIn } from "./schema"
 
 export default {
@@ -42,6 +42,8 @@ export default {
     secret: "thebestsecretforcookies",
   },
   jsonwebtoken: {
+    accessTokenLifetime: 1800,
+    refreshTokenLifetime: 1209600,
     issuer: "http://localhost:8080",
     audience: "http://localhost:8080",
     authorities: [
