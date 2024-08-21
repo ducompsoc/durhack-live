@@ -1,5 +1,5 @@
 import { randomBytesAsync } from "@/auth/hashed-secrets"
-import type { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { z } from "zod"
 

@@ -1,4 +1,4 @@
-import type { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { default as pick } from "lodash/pick.js"
 import type { UserinfoResponse } from "openid-client"

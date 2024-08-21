@@ -1,5 +1,5 @@
 import { OAuthError } from "@node-oauth/oauth2-server"
-import type { App, Request, Response } from "@tinyhttp/app"
+import type { App, Request, Response } from "@otterhttp/app"
 import createHttpError, { isHttpError } from "http-errors"
 import { ZodError } from "zod"
 

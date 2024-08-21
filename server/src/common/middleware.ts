@@ -1,5 +1,5 @@
 import { ValueError } from "@/common/errors"
-import type { NextFunction, Request, Response } from "@tinyhttp/app"
+import type { NextFunction, Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 
 export function handleMethodNotAllowed(...allowedMethods: string[]) {

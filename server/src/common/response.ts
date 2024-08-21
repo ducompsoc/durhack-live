@@ -1,6 +1,6 @@
 import { STATUS_CODES } from "node:http"
 import type { OAuthError } from "@node-oauth/oauth2-server"
-import type { Response } from "@tinyhttp/app"
+import type { Response } from "@otterhttp/app"
 import type { HttpError } from "http-errors"
 import type { ZodError } from "zod"
 

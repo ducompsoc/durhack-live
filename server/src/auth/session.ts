@@ -1,4 +1,4 @@
-import { sign, unsign } from "@tinyhttp/cookie-signature"
+import { sign, unsign } from "@otterhttp/cookie-signature"
 import nextSession from "next-session"
 
 import { sessionConfig } from "@/config"

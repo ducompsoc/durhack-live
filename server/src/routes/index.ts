@@ -1,4 +1,4 @@
-import { App, type Request, type Response } from "@tinyhttp/app"
+import { App, type Request, type Response } from "@otterhttp/app"
 import { cookieParser } from "@tinyhttp/cookie-parser"
 import createHttpError from "http-errors"
 import { json, urlencoded } from "milliparsec"

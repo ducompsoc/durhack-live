@@ -1,7 +1,7 @@
+import { TokenType } from "@durhack/token-vault/lib"
 import type { JWTPayload } from "jose"
 import type { Server, Socket } from "socket.io"
 import { ZodError } from "zod"
-import { TokenType } from "@durhack/token-vault/lib"
 
 import TokenVault from "@/auth/tokens"
 import { type IHackathonState, hackathonStateSchema } from "@/common/schema/hackathon-state"

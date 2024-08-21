@@ -1,9 +1,9 @@
 import path from "node:path"
 import { getTokenVault } from "@durhack/token-vault"
 
-import { dirname } from "@/dirname";
-import { jwtConfig } from "@/config";
-import { prisma, type User } from "@/database";
+import { jwtConfig } from "@/config"
+import { type User, prisma } from "@/database"
+import { dirname } from "@/dirname"
 
 function resolveFilePathFromProjectRoot(path_to_resolve: string): string {
   return path.resolve(path.join(dirname, "..", path_to_resolve))
@@ -20,5 +20,5 @@ export default await getTokenVault<User>({
     })
   },
   filePathResolver: resolveFilePathFromProjectRoot,
-  ...jwtConfig
+  ...jwtConfig,
 })

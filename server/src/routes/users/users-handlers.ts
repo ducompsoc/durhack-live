@@ -1,4 +1,4 @@
-import type { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 
 import type { Middleware } from "@/types/middleware"

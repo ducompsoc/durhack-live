@@ -1,4 +1,4 @@
-import { App } from "@tinyhttp/app"
+import { App } from "@otterhttp/app"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
 import { authHandlers } from "@/routes/auth/auth-handlers"

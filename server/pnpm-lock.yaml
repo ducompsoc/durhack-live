@@ -14,21 +14,21 @@ importers:
       '@node-oauth/oauth2-server':
         specifier: ^5.1.0
         version: 5.1.0
-      '@otterjs/csrf-csrf':
-        specifier: ^1.1.0
-        version: 1.1.0
+      '@otterhttp/app':
+        specifier: ^3.0.2
+        version: 3.0.2
+      '@otterhttp/cookie-signature':
+        specifier: ^3.0.0
+        version: 3.0.0
+      '@otterhttp/csrf-csrf':
+        specifier: ^2.0.0
+        version: 2.0.0
       '@prisma/client':
         specifier: 5.17.0
         version: 5.17.0(prisma@5.17.0)
-      '@tinyhttp/app':
-        specifier: ^2.3.0
-        version: 2.3.1
       '@tinyhttp/cookie-parser':
         specifier: ^2.0.6
         version: 2.0.6
-      '@tinyhttp/cookie-signature':
-        specifier: ^2.1.1
-        version: 2.1.1
       email-validator:
         specifier: ^2.0.4
         version: 2.0.4
@@ -495,9 +495,85 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@otterjs/csrf-csrf@1.1.0':
-    resolution: {integrity: sha512-nAD6CdbRrkw8kIW+oU6etrMSirfQPv87Quhk1N5hE8bNLeddQjXB5wzls/WGz6BNQQNmPQzPDXb2rFRovXu+FQ==}
+  '@otterhttp/accepts@3.0.0':
+    resolution: {integrity: sha512-8G9vqGrmEarsIPI0jyPyuPRxnRQMvQpbAUuoXPZNIz569ypy0qGBs3YPTxtQiRy4Q2KDTNMa8PRLMQhkz4I8Gw==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/app@3.0.2':
+    resolution: {integrity: sha512-VpG5Tilx1ZpLpAkS1+MTiHehVyD+vOr1eDzzjG/5SYtp9iA8PiEBroSjY2/FK3SJKRdGnF6G5wRA/bnuuJFLxQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/content-disposition@3.1.0':
+    resolution: {integrity: sha512-2fK3d2eIdMttd9/wdWf1F14N/rgYBFPabTuL31pbJzDhmYJYzqgod7RJw1eqwEEBZTmcfAh+OuacyCadGE/Bqg==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/content-type@0.4.0':
+    resolution: {integrity: sha512-BNK3Ow+m5zasu7cdNGHbLUAQim4h9t2OVqTnMslpB6bdIVzllRsS6GSJZ+LPsb5AyTEaFQ+6uh+0P0xmM0EY+A==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/cookie-signature@3.0.0':
+    resolution: {integrity: sha512-AcWQokILP5/oz4Nw5cj5d4UYCrhTaMupQ30eVcDJrNt06+MCJQ+NGgob3xsJJMXUxuUkOVu8eVgchatOqKvGQw==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/cookie@3.0.0':
+    resolution: {integrity: sha512-D1/bN2s985/5wSZ0Bn3F3I7HZW3vNCIg/Pthrk7dIiwg3Y1flPrlwQOK84aNk4C2w19QGgqccuDHSIPJtoNsHg==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/csrf-csrf@2.0.0':
+    resolution: {integrity: sha512-topdek6tzaRmUMNGWC9o32PtetrH9sSRavAjhIYZzOvn7QbDv8MQkxu2os60i2WGYuq4cvb+0M4YA840ZNog7A==}
     engines: {node: '>= 20'}
+
+  '@otterhttp/encode-url@3.0.0':
+    resolution: {integrity: sha512-cXz8E2IawDYIUNBqsEN+kQNn/ErBZMQ4uJhVQQSrcPFKoCiuE9gqTlAGnQ3hJTjGjQE/02hR3Cq0KptaXzjW5Q==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/errors@0.2.0':
+    resolution: {integrity: sha512-QaUyvfOI6DBqiMTVDC6UpmtcaNXi672leKIOdI4r5WdjXTGCxHoP66VMHpb3XEOETTrSMBfFq63M6Md79CBOKQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/etag@3.0.0':
+    resolution: {integrity: sha512-Kz2Hgvqy2PgbxXbx67YbRbuqK0xguGbuiWBBO/gsdmuzu05laYqRYEQANihoE/khgbPErOoUcimLy66QAEI4dA==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/forwarded@3.0.0':
+    resolution: {integrity: sha512-wzYuiXu8rk0cQfIbjaheIoIHvGrM/6DjnZth0lNvtm94QbHb74k2F/zqYbR0N0pMa7QOGm6P9f4dsVD8qR5SRQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/parameters@0.1.0':
+    resolution: {integrity: sha512-yhqvMwsEZNA5iSssRzcjxi+sDUWg1TUyvxe6P5EeMgHFprsLoqh1TJgQO6Vji0wciHgkZduNzKSrlPdjyV7qyA==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/proxy-address@3.0.0':
+    resolution: {integrity: sha512-FVD/OTmlyQbD9MfPjgTcdLpglEmJknIXSc8KBGtdgmnfx+nAahy9tZt7JFWQKR/K9nzDreBO6FQD5Bg9YhhmuQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/request@3.0.2':
+    resolution: {integrity: sha512-U9p6foMZvZitcrmy/yoBM8np3DHJA03y+EYZfFHP0JSNNBuDMbd2kA2iXM4JOpCLgAOY8kFA+EISfcRcZARZxA==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/response@3.0.2':
+    resolution: {integrity: sha512-83wS3pnhGUFPhAwC2KzMC1vwyiOM4K5ArQFbrYA3T4LbOhD0UPI2vKhLquzAIjhmEPlOTKlPUMCgZLwDJVr3vQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/router@3.0.0':
+    resolution: {integrity: sha512-L+pUl5qvD8gmDY32XpAFmrGpFUX/jpI6Y2Feoos/0rvCyc7Znc7XN9I+1XcXzp6lSqmWwVF8Eoj7JEHPeMsGnQ==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/send@3.0.0':
+    resolution: {integrity: sha512-L8FFBbRToFSrYbk5Mr/vyi8rES7KJABlcxejIO3SZvUaSDs4PuS82wCvNJ7x2Z+gtMZoHFMFT1J5NFalDD17QA==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/type-is@4.0.0':
+    resolution: {integrity: sha512-geGG/LyoddMY7JdcX7SM5ygdzgBmCvb2TKiFmAm6mQNprryEQ7IaOIkNj9golIDKZ7LRoXimN926d0VAGcJl+w==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/url@3.0.0':
+    resolution: {integrity: sha512-z/nh6ZacQiPihuah6gsMbcs4EYL9wAzd/VoNAAliwnpMylJayOm46eJtfEn6dlH4L0M6ic89zCI39Qnb5qNx/w==}
+    engines: {node: '>=20.16.0'}
+
+  '@otterhttp/vary@0.2.0':
+    resolution: {integrity: sha512-6aA82LdTy3+WeWOqUaYCLk8FD1Ll1LbSdAzUfFgPZ03JhGQU0lkEqiCf/fKZ0ZQBISlaXl/Qqi12TYiB5hcjUA==}
+    engines: {node: '>=20.16.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -610,22 +686,6 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-  '@tinyhttp/accepts@2.2.2':
-    resolution: {integrity: sha512-DmngnwOaPgNUGgTpX1UdlNrXaGG6k5rHFzslcYlvSQIg7s0PI6bF86U0fYq3q+yhJhKbnwzFez0wU1lAP+bKvA==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/app@2.3.1':
-    resolution: {integrity: sha512-46sHcWTERHAHaBWRypXLH+qRXoYq1j9GfXr/TR2HIsuXWbXlirD77JbwabbTuGHFb5Cg8cisWEa+pTU7lp9t5A==}
-    engines: {node: '>=14.21.3'}
-
-  '@tinyhttp/content-disposition@2.2.1':
-    resolution: {integrity: sha512-PQ5IWdOn7arScqTV+usIDJvwbanoAXtaopzgxjMS9y7TFwLSIelCblihRBEVIPIkIpsdhSJFH3RF+Daosyj+Aw==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/content-type@0.1.4':
-    resolution: {integrity: sha512-dl6f3SHIJPYbhsW1oXdrqOmLSQF/Ctlv3JnNfXAE22kIP7FosqJHxkz/qj2gv465prG8ODKH5KEyhBkvwrueKQ==}
-    engines: {node: '>=12.4'}
-
   '@tinyhttp/cookie-parser@2.0.6':
     resolution: {integrity: sha512-hLcFr3ml6MBU71URUutvzh8p0PgqGpmTMcorUrRS+Fck0/q3tzScE+ghhocgIoSx/F6GRtS/TYJkJrjL/ickBw==}
     engines: {node: '>=12.4 || 14.x || >=16'}
@@ -637,50 +697,6 @@ packages:
   '@tinyhttp/cookie@2.1.1':
     resolution: {integrity: sha512-h/kL9jY0e0Dvad+/QU3efKZww0aTvZJslaHj3JTPmIPC9Oan9+kYqmh3M6L5JUQRuTJYFK2nzgL2iJtH2S+6dA==}
     engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/encode-url@2.1.1':
-    resolution: {integrity: sha512-AhY+JqdZ56qV77tzrBm0qThXORbsVjs/IOPgGCS7x/wWnsa/Bx30zDUU/jPAUcSzNOzt860x9fhdGpzdqbUeUw==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/etag@2.1.2':
-    resolution: {integrity: sha512-j80fPKimGqdmMh6962y+BtQsnYPVCzZfJw0HXjyH70VaJBHLKGF+iYhcKqzI3yef6QBNa8DKIPsbEYpuwApXTw==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/forwarded@2.1.1':
-    resolution: {integrity: sha512-nO3kq0R1LRl2+CAMlnggm22zE6sT8gfvGbNvSitV6F9eaUSurHP0A8YZFMihSkugHxK+uIegh1TKrqgD8+lyGQ==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/proxy-addr@2.2.0':
-    resolution: {integrity: sha512-WM/PPL9xNvrs7/8Om5nhKbke5FHrP3EfjOOR+wBnjgESfibqn0K7wdUTnzSLp1lBmemr88os1XvzwymSgaibyA==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/req@2.2.3':
-    resolution: {integrity: sha512-HtIa4Gaa8QFTlmsvoif/B7yMK5H0WBUegH2kKW6scNwOpFXyxEk+VsctrIVgORrP5lybXAIRXlRhGuBBAMlVhw==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/res@2.2.3':
-    resolution: {integrity: sha512-PGl88OOdmMcOuKZaTbhGKAWPoJJf3+EfKIad8ydzjdenVjrTZZjIYJtmwYiUBeEice+YkOCO67qCIekVO5mHlw==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/router@2.2.2':
-    resolution: {integrity: sha512-i+1ouhPyTqcuJuOsKqmo7i+YD++0RF2lQLhBpcTnsaegD2gTEa3xW2Pcz7spYQGo7K8PQYtOrL7m9b14+BEXqg==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/send@2.2.2':
-    resolution: {integrity: sha512-TZkGy9EdGk+vwYWQnjArQftaXAUIgp/fFlgaxlpamsCZKy7o+CNJ75xty4H3SaY3ZPgN47wv8rnJ50rDRQdFFQ==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/type-is@2.2.3':
-    resolution: {integrity: sha512-RsZ4+or5xI+wrTlrd+/cLZELoJDMd1HSp+1P23VOZSu1xPAsO1XLf1FgluO8GbEW9Ll/l2yC7mO6diKzjc06HA==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/url@2.1.1':
-    resolution: {integrity: sha512-POJeq2GQ5jI7Zrdmj22JqOijB5/GeX+LEX7DUdml1hUnGbJOTWDx7zf2b5cCERj7RoXL67zTgyzVblBJC+NJWg==}
-    engines: {node: '>=12.20.0'}
-
-  '@tinyhttp/vary@0.1.3':
-    resolution: {integrity: sha512-SoL83sQXAGiHN1jm2VwLUWQSQeDAAl1ywOm6T0b0Cg1CZhVsjoiZadmjhxF6FHCCY7OHHVaLnTgSMxTPIDLxMg==}
-    engines: {node: '>=12.20'}
 
   '@types/cookie@0.4.1':
     resolution: {integrity: sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==}
@@ -1137,13 +1153,8 @@ packages:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
 
-  mime@4.0.0-beta.1:
-    resolution: {integrity: sha512-8/p99P1RV17prytee/A6D+8shNqdDzyvGJ/CVfiuXwh4cTsv3P3qGyaYSx2hdqnqbKKqYUfTC5zAjCtcd1BShw==}
-    engines: {node: '>=16'}
-    hasBin: true
-
-  mime@4.0.1:
-    resolution: {integrity: sha512-5lZ5tyrIfliMXzFtkYyekWbtRXObT9OWa8IwQ5uxTBDHucNNwniRqo0yInflj+iYi5CBa6qxadGzGarDfuEOxA==}
+  mime@4.0.4:
+    resolution: {integrity: sha512-v8yqInVjhXyqP6+Kw4fV3ZzeMRqEW6FotRsKXjRS5VMTNIuXsdRoAvklpoRgSqXm6o9VNH4/C0mgedko9DdLsQ==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -1874,11 +1885,95 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@otterjs/csrf-csrf@1.1.0':
+  '@otterhttp/accepts@3.0.0':
     dependencies:
-      '@tinyhttp/cookie': 2.1.1
-      '@tinyhttp/cookie-signature': 2.1.1
-      http-errors: 2.0.0
+      mime: 4.0.4
+      negotiator: 0.6.3
+
+  '@otterhttp/app@3.0.2':
+    dependencies:
+      '@otterhttp/cookie': 3.0.0
+      '@otterhttp/proxy-address': 3.0.0
+      '@otterhttp/request': 3.0.2
+      '@otterhttp/response': 3.0.2
+      '@otterhttp/router': 3.0.0
+      '@otterhttp/url': 3.0.0
+      header-range-parser: 1.1.3
+      regexparam: 2.0.2
+
+  '@otterhttp/content-disposition@3.1.0':
+    dependencies:
+      '@otterhttp/parameters': 0.1.0
+
+  '@otterhttp/content-type@0.4.0':
+    dependencies:
+      '@otterhttp/parameters': 0.1.0
+
+  '@otterhttp/cookie-signature@3.0.0': {}
+
+  '@otterhttp/cookie@3.0.0': {}
+
+  '@otterhttp/csrf-csrf@2.0.0':
+    dependencies:
+      '@otterhttp/cookie': 3.0.0
+      '@otterhttp/cookie-signature': 3.0.0
+      '@otterhttp/errors': 0.2.0
+
+  '@otterhttp/encode-url@3.0.0': {}
+
+  '@otterhttp/errors@0.2.0':
+    dependencies:
+      module-error: 1.0.2
+
+  '@otterhttp/etag@3.0.0': {}
+
+  '@otterhttp/forwarded@3.0.0': {}
+
+  '@otterhttp/parameters@0.1.0': {}
+
+  '@otterhttp/proxy-address@3.0.0':
+    dependencies:
+      '@otterhttp/forwarded': 3.0.0
+      ipaddr.js: 2.2.0
+
+  '@otterhttp/request@3.0.2':
+    dependencies:
+      '@otterhttp/accepts': 3.0.0
+      '@otterhttp/proxy-address': 3.0.0
+      '@otterhttp/router': 3.0.0
+      '@otterhttp/type-is': 4.0.0
+      '@otterhttp/url': 3.0.0
+      header-range-parser: 1.1.3
+
+  '@otterhttp/response@3.0.2':
+    dependencies:
+      '@otterhttp/content-disposition': 3.1.0
+      '@otterhttp/content-type': 0.4.0
+      '@otterhttp/cookie': 3.0.0
+      '@otterhttp/encode-url': 3.0.0
+      '@otterhttp/errors': 0.2.0
+      '@otterhttp/request': 3.0.2
+      '@otterhttp/send': 3.0.0
+      '@otterhttp/vary': 0.2.0
+      es-escape-html: 0.1.1
+      mime: 4.0.4
+
+  '@otterhttp/router@3.0.0': {}
+
+  '@otterhttp/send@3.0.0':
+    dependencies:
+      '@otterhttp/errors': 0.2.0
+      '@otterhttp/etag': 3.0.0
+      mime: 4.0.4
+
+  '@otterhttp/type-is@4.0.0':
+    dependencies:
+      '@otterhttp/content-type': 0.4.0
+      mime: 4.0.4
+
+  '@otterhttp/url@3.0.0': {}
+
+  '@otterhttp/vary@0.2.0': {}
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -1958,25 +2053,6 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@tinyhttp/accepts@2.2.2':
-    dependencies:
-      mime: 4.0.1
-      negotiator: 0.6.3
-
-  '@tinyhttp/app@2.3.1':
-    dependencies:
-      '@tinyhttp/cookie': 2.1.1
-      '@tinyhttp/proxy-addr': 2.2.0
-      '@tinyhttp/req': 2.2.3
-      '@tinyhttp/res': 2.2.3
-      '@tinyhttp/router': 2.2.2
-      header-range-parser: 1.1.3
-      regexparam: 2.0.2
-
-  '@tinyhttp/content-disposition@2.2.1': {}
-
-  '@tinyhttp/content-type@0.1.4': {}
-
   '@tinyhttp/cookie-parser@2.0.6':
     dependencies:
       '@tinyhttp/cookie': 2.1.1
@@ -1985,53 +2061,6 @@ snapshots:
   '@tinyhttp/cookie-signature@2.1.1': {}
 
   '@tinyhttp/cookie@2.1.1': {}
-
-  '@tinyhttp/encode-url@2.1.1': {}
-
-  '@tinyhttp/etag@2.1.2': {}
-
-  '@tinyhttp/forwarded@2.1.1': {}
-
-  '@tinyhttp/proxy-addr@2.2.0':
-    dependencies:
-      '@tinyhttp/forwarded': 2.1.1
-      ipaddr.js: 2.2.0
-
-  '@tinyhttp/req@2.2.3':
-    dependencies:
-      '@tinyhttp/accepts': 2.2.2
-      '@tinyhttp/type-is': 2.2.3
-      '@tinyhttp/url': 2.1.1
-      header-range-parser: 1.1.3
-
-  '@tinyhttp/res@2.2.3':
-    dependencies:
-      '@tinyhttp/content-disposition': 2.2.1
-      '@tinyhttp/cookie': 2.1.1
-      '@tinyhttp/cookie-signature': 2.1.1
-      '@tinyhttp/encode-url': 2.1.1
-      '@tinyhttp/req': 2.2.3
-      '@tinyhttp/send': 2.2.2
-      '@tinyhttp/vary': 0.1.3
-      es-escape-html: 0.1.1
-      mime: 4.0.0-beta.1
-
-  '@tinyhttp/router@2.2.2': {}
-
-  '@tinyhttp/send@2.2.2':
-    dependencies:
-      '@tinyhttp/content-type': 0.1.4
-      '@tinyhttp/etag': 2.1.2
-      mime: 4.0.0-beta.1
-
-  '@tinyhttp/type-is@2.2.3':
-    dependencies:
-      '@tinyhttp/content-type': 0.1.4
-      mime: 4.0.1
-
-  '@tinyhttp/url@2.1.1': {}
-
-  '@tinyhttp/vary@0.1.3': {}
 
   '@types/cookie@0.4.1': {}
 
@@ -2517,9 +2546,7 @@ snapshots:
     dependencies:
       mime-db: 1.52.0
 
-  mime@4.0.0-beta.1: {}
-
-  mime@4.0.1: {}
+  mime@4.0.4: {}
 
   mimic-fn@2.1.0: {}
 

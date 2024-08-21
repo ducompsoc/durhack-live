@@ -1,5 +1,5 @@
 import { type Server, createServer } from "node:http"
-import { App } from "@tinyhttp/app"
+import { App } from "@otterhttp/app"
 import { Server as SocketIO } from "socket.io"
 
 import { listenConfig } from "./config"

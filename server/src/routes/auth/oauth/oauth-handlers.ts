@@ -1,5 +1,5 @@
 import { stringify as stringifyQuery } from "node:querystring"
-import type { NextFunction, Request, Response } from "@tinyhttp/app"
+import type { NextFunction, Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { z } from "zod"
 

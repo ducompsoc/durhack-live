@@ -1,5 +1,5 @@
 import type { Token } from "@node-oauth/oauth2-server"
-import type { NextFunction, Request, Response } from "@tinyhttp/app"
+import type { NextFunction, Request, Response } from "@otterhttp/app"
 
 import { adaptTokenSetToClient } from "@/auth/adapt-token-set"
 import { type User, prisma } from "@/database"
@@ -60,11 +60,11 @@ export function userIsLoggedIn(): Condition {
 }
 
 export function hasScope(scope: string | string[]): Condition {
-  return (request: Request & { user?: User }, response: Response) => {
+  return (request: Request & { user?: User }, response: Response & { locals: { oauth?: { token: Token } } }) => {
     if (!request.user) return false
     if (typeof response.locals.oauth?.token !== "object") return true
 
-    const token = response.locals.oauth.token as Token
+    const token = response.locals.oauth.token
     const tokenScope = token.scope
 
     if (typeof tokenScope === "undefined") return false

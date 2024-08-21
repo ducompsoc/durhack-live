@@ -1,4 +1,4 @@
-import type { NextFunction, Request, Response } from "@tinyhttp/app"
+import type { NextFunction, Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { type Client, generators } from "openid-client"
 

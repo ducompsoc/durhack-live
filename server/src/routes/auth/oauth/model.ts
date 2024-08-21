@@ -1,7 +1,7 @@
+import { TokenType } from "@durhack/token-vault/lib"
 import type OAuth2Server from "@node-oauth/oauth2-server"
 import type { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
 import type { JWTPayload } from "jose"
-import { TokenType } from "@durhack/token-vault/lib"
 
 import { checkTextAgainstHash } from "@/auth/hashed-secrets"
 import TokenVault from "@/auth/tokens"
@@ -12,17 +12,13 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async generateAccessToken(client: OAuth2Server.Client, user: User, scope: string | string[] | null): Promise<string> {
     const token_lifetime = client.accessTokenLifetime || oauthConfig.accessTokenLifetime
 
-    return await TokenVault.createToken(
-      TokenType.accessToken,
-      user,
-      {
-        scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
-        lifetime: token_lifetime,
-        claims: {
-          client_id: client.id,
-        },
+    return await TokenVault.createToken(TokenType.accessToken, user, {
+      scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
+      lifetime: token_lifetime,
+      claims: {
+        client_id: client.id,
       },
-    )
+    })
   }
 
   async getAccessToken(accessToken: string): Promise<OAuth2Server.Token | OAuth2Server.Falsey> {
@@ -68,17 +64,13 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   ): Promise<string> {
     const token_lifetime = client.refreshTokenLifetime || oauthConfig.refreshTokenLifetime
 
-    return await TokenVault.createToken(
-      TokenType.refreshToken,
-      user,
-      {
-        scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
-        lifetime: token_lifetime,
-        claims: {
-          client_id: client.id,
-        },
+    return await TokenVault.createToken(TokenType.refreshToken, user, {
+      scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
+      lifetime: token_lifetime,
+      claims: {
+        client_id: client.id,
       },
-    )
+    })
   }
 
   async getRefreshToken(refreshToken: string): Promise<OAuth2Server.RefreshToken | OAuth2Server.Falsey> {
@@ -236,20 +228,16 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     client: OAuth2Server.Client,
     user: User,
   ): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-    code.authorizationCode = await TokenVault.createToken(
-      TokenType.authorizationCode,
-      user,
-      {
-        scope: code.scope == null ? [] : code.scope,
-        lifetime: 60,
-        claims: {
-          code_challenge: code.codeChallenge,
-          code_challenge_method: code.codeChallengeMethod,
-          redirect_uri: code.redirectUri,
-          client_id: client.id,
-        },
+    code.authorizationCode = await TokenVault.createToken(TokenType.authorizationCode, user, {
+      scope: code.scope == null ? [] : code.scope,
+      lifetime: 60,
+      claims: {
+        code_challenge: code.codeChallenge,
+        code_challenge_method: code.codeChallengeMethod,
+        redirect_uri: code.redirectUri,
+        client_id: client.id,
       },
-    )
+    })
 
     return {
       ...code,

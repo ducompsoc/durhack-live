@@ -6,7 +6,7 @@ import NodeOAuthServer, {
   UnauthorizedRequestError,
   AccessDeniedError,
 } from "@node-oauth/oauth2-server"
-import type { NextFunction, Request as TinyHttpRequest, Response as TinyHttpResponse } from "@tinyhttp/app"
+import type { NextFunction, Request as TinyHttpRequest, Response as TinyHttpResponse } from "@otterhttp/app"
 
 import { oauthConfig } from "@/config"
 import type { User } from "@/database"
@@ -117,12 +117,12 @@ class TinyHttpOAuthServer {
   private handleResponse(req: TinyHttpRequest, res: TinyHttpResponse, response: Response): void {
     if (response.status === 302 && response.headers?.location != null) {
       const { location, ...headers } = response.headers
-      res.set(headers)
+      res.setHeaders(headers)
       res.redirect(location)
       return
     }
 
-    res.set(response.headers ?? {})
+    res.setHeaders(response.headers ?? {})
     res.status(response.status ?? 500).send(response.body)
   }
 }

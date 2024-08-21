@@ -1,5 +1,5 @@
-import { z } from "zod"
 import { tokenVaultOptionsSchema } from "@durhack/token-vault/config-schema"
+import { z } from "zod"
 
 export const listenOptionsSchema = z.object({
   host: z.string(),

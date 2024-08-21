@@ -1,4 +1,4 @@
-import type { Request, Response } from "@tinyhttp/app"
+import type { Request, Response } from "@otterhttp/app"
 
 import { requireLoggedIn } from "@/auth/decorators"
 import type { User } from "@/database"

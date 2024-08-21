@@ -1,4 +1,4 @@
-import { App, type NextFunction, type Request, type Response } from "@tinyhttp/app"
+import { App, type NextFunction, type Request, type Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"

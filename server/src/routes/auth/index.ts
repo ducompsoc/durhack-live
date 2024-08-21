@@ -1,4 +1,4 @@
-import { App } from "@tinyhttp/app"
+import { App } from "@otterhttp/app"
 
 import { doubleCsrfProtection, handleGetCsrfToken } from "@/auth/csrf"
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
@@ -13,7 +13,7 @@ const authApp = new App()
 authApp.use("/discord", discordApp)
 authApp.use("/keycloak", keycloakApp)
 
-if (csrfConfig) {
+if (csrfConfig.enabled) {
   authApp.use(doubleCsrfProtection)
 }
 
