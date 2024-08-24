@@ -6,22 +6,24 @@ import NodeOAuthServer, {
   UnauthorizedRequestError,
   AccessDeniedError,
 } from "@node-oauth/oauth2-server"
-import type { NextFunction, Request as TinyHttpRequest, Response as TinyHttpResponse } from "@otterhttp/app"
+import type { NextFunction } from "@otterhttp/app"
 
+import type { Request as OtterHttpRequest } from "@/request"
+import type { Response as OtterHttpResponse } from "@/response"
 import { oauthConfig } from "@/config"
 import type { User } from "@/database"
 
 import { oauthModel } from "./model"
 
-type TinyHttpMiddleware = (
-  request: TinyHttpRequest & { user?: User },
-  res: TinyHttpResponse,
+type OtterHttpMiddleware = (
+  request: OtterHttpRequest & { user?: User },
+  res: OtterHttpResponse,
   next: NextFunction,
 ) => void | Promise<void>
 
-export type TinyHttpOAuthServerOptions = ServerOptions
+export type OtterHttpOAuthServerOptions = ServerOptions
 
-class TinyHttpOAuthServer {
+class OtterHttpOAuthServer {
   server: NodeOAuthServer
 
   /**
@@ -31,7 +33,7 @@ class TinyHttpOAuthServer {
    * For all other options, please read the docs from `@node-oauth/oauth2-server`:
    * @see https://node-oauthoauth2-server.readthedocs.io/en/master/api/oauth2-server.html
    */
-  constructor(options: TinyHttpOAuthServerOptions) {
+  constructor(options: OtterHttpOAuthServerOptions) {
     if (!options.model) {
       throw new InvalidArgumentError("Missing parameter: `model`")
     }
@@ -47,7 +49,7 @@ class TinyHttpOAuthServer {
    * @see https://node-oauthoauth2-server.readthedocs.io/en/master/api/oauth2-server.html#authenticate-request-response-options
    * @see https://tools.ietf.org/html/rfc6749#section-7
    */
-  authenticate(options: NodeOAuthServer.AuthenticateOptions): TinyHttpMiddleware {
+  authenticate(options: NodeOAuthServer.AuthenticateOptions): OtterHttpMiddleware {
     return async (req, res, next) => {
       const request = new Request(req)
       const response = new Response(res)
@@ -82,7 +84,7 @@ class TinyHttpOAuthServer {
    * @see https://node-oauthoauth2-server.readthedocs.io/en/master/api/oauth2-server.html#authorize-request-response-options
    * @see https://tools.ietf.org/html/rfc6749#section-3.1
    */
-  authorize(options: NodeOAuthServer.AuthorizeOptions): TinyHttpMiddleware {
+  authorize(options: NodeOAuthServer.AuthorizeOptions): OtterHttpMiddleware {
     return async (req, res, next) => {
       const request = new Request(req)
       const response = new Response(res)
@@ -101,7 +103,7 @@ class TinyHttpOAuthServer {
    * @see https://node-oauthoauth2-server.readthedocs.io/en/master/api/oauth2-server.html#token-request-response-options
    * @see https://tools.ietf.org/html/rfc6749#section-3.2
    */
-  token(options: NodeOAuthServer.TokenOptions): TinyHttpMiddleware {
+  token(options: NodeOAuthServer.TokenOptions): OtterHttpMiddleware {
     return async (req, res, next) => {
       const request = new Request(req)
       const response = new Response(res)
@@ -114,7 +116,7 @@ class TinyHttpOAuthServer {
   /**
    * Handle response.
    */
-  private handleResponse(req: TinyHttpRequest, res: TinyHttpResponse, response: Response): void {
+  private handleResponse(req: OtterHttpRequest, res: OtterHttpResponse, response: Response): void {
     if (response.status === 302 && response.headers?.location != null) {
       const { location, ...headers } = response.headers
       res.setHeaders(headers)
@@ -127,9 +129,9 @@ class TinyHttpOAuthServer {
   }
 }
 
-const oauthProvider = new TinyHttpOAuthServer({
+const oauthProvider = new OtterHttpOAuthServer({
   model: oauthModel,
   ...oauthConfig,
 })
 
-export { oauthProvider, TinyHttpOAuthServer }
+export { oauthProvider, OtterHttpOAuthServer }

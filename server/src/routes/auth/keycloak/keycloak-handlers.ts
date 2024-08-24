@@ -1,7 +1,9 @@
-import type { NextFunction, Request, Response } from "@otterhttp/app"
+import type { NextFunction } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { type Client, generators } from "openid-client"
 
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import { getSession } from "@/auth/session"
 import { hostname } from "@/config"
 import { type User, prisma } from "@/database"

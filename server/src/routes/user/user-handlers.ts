@@ -1,9 +1,10 @@
-import type { Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { default as pick } from "lodash/pick.js"
 import type { UserinfoResponse } from "openid-client"
 import { z } from "zod"
 
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import { adaptTokenSetToClient } from "@/auth/adapt-token-set"
 import { requireScope } from "@/auth/decorators"
 import { Ethnicity, Gender } from "@/common/model-enums"

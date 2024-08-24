@@ -1,6 +1,7 @@
-import type { Request, Response } from "@otterhttp/app"
 import createHttpError from "http-errors"
 
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
 
 export class UsersHandlers {

@@ -1,6 +1,9 @@
 import { ValueError } from "@/common/errors"
-import type { NextFunction, Request, Response } from "@otterhttp/app"
+import type { NextFunction } from "@otterhttp/app"
 import createHttpError from "http-errors"
+
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
 export function handleMethodNotAllowed(...allowedMethods: string[]) {
   return (request: Request, response: Response) => {
