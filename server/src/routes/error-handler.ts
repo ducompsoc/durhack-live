@@ -1,12 +1,20 @@
 import { OAuthError } from "@node-oauth/oauth2-server"
-import type { App, Request, Response } from "@otterhttp/app"
+import type { App } from "@otterhttp/app"
 import createHttpError, { isHttpError } from "http-errors"
 import { ZodError } from "zod"
+
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
 import { ConflictError, NullError, ValueError } from "@/common/errors"
 import { sendHttpErrorResponse, sendOAuthErrorResponse, sendZodErrorResponse } from "@/common/response"
 
-export default function apiErrorHandler(this: App, error: unknown, request: Request, response: Response) {
+export default function apiErrorHandler(
+  this: App<Request, Response>,
+  error: unknown,
+  request: Request,
+  response: Response,
+) {
   if (response.headersSent) {
     return
   }

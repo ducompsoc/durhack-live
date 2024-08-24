@@ -23,7 +23,6 @@ export const cookieOptionsSchema = z.object({
 export const doubleCsrfOptionsSchema = z.object({
   cookieOptions: cookieOptionsSchema.extend({
     name: z.string().optional(),
-    signed: z.boolean().optional(),
   }),
 })
 

@@ -1,23 +1,18 @@
-import type { Request, Response } from "@otterhttp/app"
-import { type CsrfSecretRetriever, type DoubleCsrfConfig, doubleCsrf } from "@otterhttp/csrf-csrf"
+import { type DoubleCsrfConfig, doubleCsrf } from "@otterhttp/csrf-csrf"
 
+import { getSession } from "@/auth/session"
 import { csrfConfig } from "@/config"
-
-const {
-  cookieOptions: { signed, ...cookieOptions },
-  ...rest
-} = csrfConfig.options
-
-const cookieSigningOptions: { signed: true; getSigningSecret: CsrfSecretRetriever } | { signed: false } = signed
-  ? { signed: true, getSigningSecret: () => "" }
-  : { signed: false }
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
 const options = {
-  cookieOptions: Object.assign({}, cookieOptions, cookieSigningOptions),
-  ...rest,
-  getSessionIdentifier: () => "uh oh",
+  ...csrfConfig.options,
+  getSessionIdentifier: async (req, res) => {
+    const session = await getSession(req, res)
+    return session.id
+  },
   getSecret: () => csrfConfig.secret,
-} satisfies DoubleCsrfConfig
+} satisfies DoubleCsrfConfig<Request, Response>
 
 export const { generateToken, doubleCsrfProtection } = doubleCsrf(options)
 

@@ -1,5 +1,4 @@
-import { App, type Request, type Response } from "@otterhttp/app"
-import { cookieParser } from "@tinyhttp/cookie-parser"
+import { App } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { json, urlencoded } from "milliparsec"
 
@@ -8,6 +7,8 @@ import { getSession } from "@/auth/session"
 import { handleMethodNotAllowed } from "@/common/middleware"
 import { cookieParserConfig, csrfConfig } from "@/config"
 import { type User, prisma } from "@/database"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
 import type { Middleware } from "@/types/middleware"
 
@@ -16,7 +17,7 @@ import apiErrorHandler from "./error-handler"
 import { userApp } from "./user"
 import { usersApp } from "./users"
 
-const apiApp = new App({
+const apiApp = new App<Request, Response>({
   onError: apiErrorHandler,
 })
 
@@ -45,8 +46,6 @@ apiApp.use(async (request: Request & { user?: User }, response, next): Promise<v
 
   next()
 })
-
-apiApp.use(cookieParser(cookieParserConfig.secret))
 
 function handle_root_request(request: Request, response: Response) {
   response.status(200)

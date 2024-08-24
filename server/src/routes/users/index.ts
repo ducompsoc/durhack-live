@@ -1,10 +1,12 @@
 import { App } from "@otterhttp/app"
 
 import { handleMethodNotAllowed, parseRouteId } from "@/common/middleware"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
 import { usersHandlers } from "./users-handlers"
 
-const usersApp = new App()
+const usersApp = new App<Request, Response>()
 
 usersApp
   .route("/")
