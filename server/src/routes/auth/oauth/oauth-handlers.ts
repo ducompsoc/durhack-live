@@ -3,21 +3,21 @@ import type { NextFunction } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { z } from "zod"
 
-import type { Request } from "@/request"
-import type { Response } from "@/response"
 import { getSession } from "@/auth/session"
 import { NullError } from "@/common/errors"
 import { type User, prisma } from "@/database"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
 
 import { adaptDatabaseOAuthClient } from "@/routes/auth/oauth/adapt-database-oauth-client"
 import { oauthModel } from "./model"
-import { type OTterHttpOAuthServer, oauthProvider } from "./oauth-server"
+import { type OtterHttpOAuthServer, oauthProvider } from "./oauth-server"
 
 class OAuthHandlers {
-  provider: OTterHttpOAuthServer
+  provider: OtterHttpOAuthServer
 
-  constructor(provider: OTterHttpOAuthServer) {
+  constructor(provider: OtterHttpOAuthServer) {
     this.provider = provider
   }
 

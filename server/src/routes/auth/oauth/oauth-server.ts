@@ -8,10 +8,10 @@ import NodeOAuthServer, {
 } from "@node-oauth/oauth2-server"
 import type { NextFunction } from "@otterhttp/app"
 
-import type { Request as OtterHttpRequest } from "@/request"
-import type { Response as OtterHttpResponse } from "@/response"
 import { oauthConfig } from "@/config"
 import type { User } from "@/database"
+import type { Request as OtterHttpRequest } from "@/request"
+import type { Response as OtterHttpResponse } from "@/response"
 
 import { oauthModel } from "./model"
 

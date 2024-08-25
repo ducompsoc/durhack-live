@@ -2,12 +2,12 @@ import { randomBytesAsync } from "@/auth/hashed-secrets"
 import createHttpError from "http-errors"
 import { z } from "zod"
 
-import type { Request } from "@/request"
-import type { Response } from "@/response"
 import { requireLoggedIn } from "@/auth/decorators"
 import { getSession } from "@/auth/session"
 import { discordConfig } from "@/config"
 import { type User, prisma } from "@/database"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
 
 export class DiscordHandlers {

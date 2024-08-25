@@ -14,7 +14,7 @@ import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth-cl
 const environment = process.env.NODE_ENV
 const dev = environment !== "production"
 
-function getApp(): App {
+function getApp(): App<Request, Response> {
   const app = new App<Request, Response>({
     settings: {
       setCookieOptions: {
@@ -33,7 +33,7 @@ function getApp(): App {
 }
 
 // @ts-expect-error
-function getServer(app: App): Server<typeof Request, typeof Response> {
+function getServer(app: App<Request, Response>): Server<typeof Request, typeof Response> {
   // @ts-expect-error
   const server = createServer<typeof Request, typeof Response>({
     IncomingRequest: Request,

@@ -1,10 +1,10 @@
 import type { Token } from "@node-oauth/oauth2-server"
 import type { NextFunction } from "@otterhttp/app"
 
-import type { Request } from "@/request"
-import type { Response } from "@/response"
 import { adaptTokenSetToClient } from "@/auth/adapt-token-set"
 import { type User, prisma } from "@/database"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
 import createHttpError from "http-errors"
 
