@@ -3,7 +3,7 @@ import { sign, unsign } from "@otterhttp/cookie-signature"
 import { cookieParserConfig } from "@/config"
 
 export function signCookie(value: string): string {
-  return encodeURIComponent(sign(value, cookieParserConfig.secret))
+  return encodeURIComponent(`s:${sign(value, cookieParserConfig.secret)}`)
 }
 
 export function matchSignedCookie(value: string): boolean {
