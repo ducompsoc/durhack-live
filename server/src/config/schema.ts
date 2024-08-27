@@ -27,9 +27,9 @@ export const doubleCsrfOptionsSchema = z.object({
 })
 
 export const sessionOptionsSchema = z.object({
-  name: z.string(),
-  signingSecret: z.string(),
-  cookie: cookieOptionsSchema,
+  cookie: cookieOptionsSchema.extend({
+    name: z.string().optional(),
+  }),
 })
 
 export const discordOptionsSchema = z.object({

@@ -18,11 +18,11 @@ function getApp(): App<Request, Response> {
   const app = new App<Request, Response>({
     settings: {
       setCookieOptions: {
-        encode: signCookie,
+        sign: signCookie,
       },
       cookieParsing: {
-        encodedCookieMatcher: matchSignedCookie,
-        cookieDecoder: unsignCookie,
+        signedCookieMatcher: matchSignedCookie,
+        cookieUnsigner: unsignCookie,
       },
     },
   })
