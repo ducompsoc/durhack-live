@@ -73,9 +73,10 @@ export default {
     continueMiddleware: false,
   },
   session: {
-    name: "durhack-live-session",
-    signingSecret: "session_cookie_secret",
-    cookie: { secure: false },
+    cookie: {
+      name: "durhack-live-session",
+      secure: false,
+    },
   },
   discord: {
     apiEndpoint: "https://discord.com/api/v10",
