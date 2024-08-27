@@ -42,7 +42,7 @@
   "dependencies": {
     "@durhack/token-vault": "^0.1.1",
     "@node-oauth/oauth2-server": "^5.1.0",
-    "@otterhttp/app": "^3.4.3",
+    "@otterhttp/app": "^3.4.4",
     "@otterhttp/cookie-signature": "^3.0.0",
     "@otterhttp/csrf-csrf": "^3.2.0",
     "@otterhttp/session": "^0.3.0",
