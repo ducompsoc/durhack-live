@@ -2,13 +2,13 @@ import type { NextFunction } from "@otterhttp/app"
 import createHttpError from "http-errors"
 import { type Client, generators } from "openid-client"
 
+import { adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
 import { getSession } from "@/auth/session"
 import { hostname } from "@/config"
 import { type User, prisma } from "@/database"
 import type { Request } from "@/request"
 import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
-import { adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
 
 import { keycloakClient } from "./keycloak-client"
 
@@ -18,7 +18,7 @@ export class KeycloakHandlers {
   constructor(client: Client) {
     this.client = client
   }
-  
+
   async getOrGenerateCodeVerifier(request: Request, response: Response): Promise<string> {
     const session = await getSession(request, response)
     if (typeof session.keycloakOAuth2FlowCodeVerifier === "string") return session.keycloakOAuth2FlowCodeVerifier
