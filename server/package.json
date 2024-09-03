@@ -24,7 +24,10 @@
     "node": ">=20"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
-  "contributors": ["Joe Clack <durhack@joeclack.me.uk>", "Jacob Wrenn <jacob@wrenn.me>"],
+  "contributors": [
+    "Joe Clack <durhack@joeclack.me.uk>",
+    "Jacob Wrenn <jacob@wrenn.me>"
+  ],
   "license": "UNLICENSED",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
@@ -45,7 +48,7 @@
     "@otterhttp/app": "^3.4.4",
     "@otterhttp/cookie-signature": "^3.0.0",
     "@otterhttp/csrf-csrf": "^3.2.0",
-    "@otterhttp/session": "^0.3.0",
+    "@otterhttp/session": "^0.3.1",
     "@prisma/client": "5.17.0",
     "email-validator": "^2.0.4",
     "form-data": "^4.0.0",
