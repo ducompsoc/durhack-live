@@ -35,7 +35,10 @@ class PrismaSessionStore implements SessionStore {
     return sessionData
   }
 
-  async set(sid: string, sess: SessionData<Record<string, Prisma.InputJsonValue>> & { userId?: string }): Promise<void> {
+  async set(
+    sid: string,
+    sess: SessionData<Record<string, Prisma.InputJsonValue>> & { userId?: string },
+  ): Promise<void> {
     await prisma.sessionRecord.upsert({
       where: { sessionRecordId: sid },
       update: {
