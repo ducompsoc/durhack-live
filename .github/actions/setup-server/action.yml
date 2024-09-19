@@ -18,3 +18,8 @@ runs:
       shell: bash
       working-directory: server
       run: pnpm install
+
+    - name: Generate sources
+      shell: bash
+      working-directory: server
+      run: pnpm generate
