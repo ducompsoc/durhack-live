@@ -1,34 +1,51 @@
-import config from "config"
-import { Router as ExpressRouter, Request, Response } from "express"
-import bodyParser from "body-parser"
-import methodOverride from "method-override"
+import { App } from "@otterhttp/app"
 import createHttpError from "http-errors"
-import cookie_parser from "cookie-parser"
-import passport from "passport"
+import { json, urlencoded } from "milliparsec"
 
-import { handleMethodNotAllowed } from "@/common/middleware"
 import { doubleCsrfProtection } from "@/auth/csrf"
-import wrapped_oauth_provider from "@/routes/auth/oauth/wrapper"
+import { getSession } from "@/auth/session"
+import { handleMethodNotAllowed } from "@/common/middleware"
+import { cookieParserConfig, csrfConfig } from "@/config"
+import { type User, prisma } from "@/database"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
+import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
+import type { Middleware } from "@/types/middleware"
 
-import auth_router from "./auth"
-import user_router from "./user"
-import users_router from "./users"
-import api_error_handler from "./error_handling"
+import { authApp } from "./auth"
+import apiErrorHandler from "./error-handler"
+import { userApp } from "./user"
+import { usersApp } from "./users"
 
-const api_router = ExpressRouter()
+const apiApp = new App<Request, Response>({
+  onError: apiErrorHandler,
+})
 
-api_router.use(bodyParser.json())
-api_router.use(bodyParser.urlencoded({ extended: true }))
+apiApp.use(json())
+apiApp.use(urlencoded())
 
-api_router.use(passport.session())
-api_router.use(
-  wrapped_oauth_provider.authenticate({
-    scope: ["api"],
-  }),
+apiApp.use(
+  oauthProvider.authenticate({
+    scope: "api" as unknown as string[], // https://github.com/node-oauth/node-oauth2-server/pull/305
+  }) as unknown as Middleware,
 )
-api_router.use(wrapped_oauth_provider.copyUserFromOAuthToken)
+apiApp.use(async (request: Request & { user?: User }, response, next): Promise<void> => {
+  const session = await getSession(request, response)
+  const userId: unknown = session.userId
+  if (typeof userId !== "string") {
+    next()
+    return
+  }
 
-api_router.use(cookie_parser(config.get("cookie-parser.secret")))
+  const user = await prisma.user.findUnique({
+    where: {
+      keycloakUserId: userId,
+    },
+  })
+  request.user = user ?? undefined
+
+  next()
+})
 
 function handle_root_request(request: Request, response: Response) {
   response.status(200)
@@ -39,20 +56,17 @@ function handle_unhandled_request() {
   throw new createHttpError.NotFound("Unknown API route.")
 }
 
-api_router.route("/").get(handle_root_request).all(handleMethodNotAllowed("GET"))
+apiApp.route("/").get(handle_root_request).all(handleMethodNotAllowed("GET"))
 
-api_router.use("/auth", auth_router)
+apiApp.use("/auth", authApp)
 
-if (config.get("csrf.enabled")) {
-  api_router.use(doubleCsrfProtection)
+if (csrfConfig.enabled) {
+  apiApp.use(doubleCsrfProtection)
 }
 
-api_router.use("/user", user_router)
-api_router.use("/users", users_router)
+apiApp.use("/user", userApp)
+apiApp.use("/users", usersApp)
 
-api_router.use(handle_unhandled_request)
+apiApp.use(handle_unhandled_request)
 
-api_router.use(methodOverride())
-api_router.use(api_error_handler)
-
-export default api_router
+export { apiApp }

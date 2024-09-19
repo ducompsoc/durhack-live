@@ -1,18 +1,16 @@
-import OAuth2Server, { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
-import config from "config"
-import { JWTPayload } from "jose"
+import { TokenType } from "@durhack/token-vault/lib"
+import type OAuth2Server from "@node-oauth/oauth2-server"
+import type { AuthorizationCodeModel, RefreshTokenModel } from "@node-oauth/oauth2-server"
+import type { JWTPayload } from "jose"
 
+import { checkTextAgainstHash } from "@/auth/hashed-secrets"
 import TokenVault from "@/auth/tokens"
-import TokenType from "@/auth/token_type"
-import { oauth_options_schema } from "@/common/schema/config"
-import { User, OAuthUser, OAuthClient } from "@/database/tables"
-import { checkTextAgainstHash } from "@/auth/hashed_secrets"
-
-export const oauth_config = oauth_options_schema.parse(config.get("oauth"))
+import { oauthConfig } from "@/config"
+import { type User, prisma } from "@/database"
 
 class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   async generateAccessToken(client: OAuth2Server.Client, user: User, scope: string | string[] | null): Promise<string> {
-    const token_lifetime = client.accessTokenLifetime || oauth_config.accessTokenLifetime
+    const token_lifetime = client.accessTokenLifetime || oauthConfig.accessTokenLifetime
 
     return await TokenVault.createToken(TokenType.accessToken, user, {
       scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
@@ -24,34 +22,36 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getAccessToken(accessToken: string): Promise<OAuth2Server.Token | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.accessToken, accessToken)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, accessToken)).payload
     } catch (error) {
       return
     }
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "string") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await prisma.user.findUnique({
+      where: { keycloakUserId: decodedPayload.client_id },
+    })
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkTokenRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       accessToken: accessToken,
       accessTokenExpiresAt: expiresAt,
-      scope: decoded_payload.scope,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
     }
@@ -62,7 +62,7 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     user: User,
     scope: string | string[] | null,
   ): Promise<string> {
-    const token_lifetime = client.refreshTokenLifetime || oauth_config.refreshTokenLifetime
+    const token_lifetime = client.refreshTokenLifetime || oauthConfig.refreshTokenLifetime
 
     return await TokenVault.createToken(TokenType.refreshToken, user, {
       scope: scope === null ? [] : typeof scope === "string" ? [scope] : scope,
@@ -74,34 +74,36 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getRefreshToken(refreshToken: string): Promise<OAuth2Server.RefreshToken | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.accessToken, refreshToken)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, refreshToken)).payload
     } catch (error) {
       return
     }
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "string") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await prisma.user.findUnique({
+      where: { keycloakUserId: decodedPayload.client_id },
+    })
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkTokenRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkTokenRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       refreshToken: refreshToken,
       refreshTokenExpiresAt: expiresAt,
-      scope: decoded_payload.scope,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
     }
@@ -124,34 +126,40 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     user: OAuth2Server.User,
     token_issued_at: number,
   ): Promise<boolean> {
-    const oauth_user = await OAuthUser.findOne({
+    const oauthUser = await prisma.oAuthUser.findUnique({
       where: {
-        client_id: client.id,
-        user_id: user.id,
+        id: {
+          clientId: client.id,
+          userId: user.id,
+        },
       },
     })
 
     return (
-      !!oauth_user &&
-      !!oauth_user.minimum_token_issue_time &&
-      oauth_user.minimum_token_issue_time.getSeconds() >= token_issued_at
+      oauthUser != null &&
+      oauthUser.minimumTokenIssueTime != null &&
+      oauthUser.minimumTokenIssueTime.getSeconds() >= token_issued_at
     )
   }
 
   async revokeToken(token: OAuth2Server.RefreshToken | OAuth2Server.Token): Promise<boolean> {
-    const [oauth_user] = await OAuthUser.findOrCreate({
-      where: {
-        client_id: token.client.id,
-        user_id: token.user.id,
-      },
-      defaults: {
-        client_id: token.client.id,
-        user_id: token.user.id,
-      },
-    })
+    const now = new Date()
 
-    await oauth_user.update({
-      minimum_token_issue_time: new Date(),
+    await prisma.oAuthUser.upsert({
+      where: {
+        id: {
+          clientId: token.client.id,
+          userId: token.user.id,
+        },
+      },
+      create: {
+        clientId: token.client.id,
+        userId: token.user.id,
+        minimumTokenIssueTime: now,
+      },
+      update: {
+        minimumTokenIssueTime: now,
+      },
     })
 
     return true
@@ -168,50 +176,47 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
   }
 
   async getAuthorizationCode(authorizationCode: string): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-    let decoded_payload: JWTPayload
+    let decodedPayload: JWTPayload
     try {
-      decoded_payload = (await TokenVault.decodeToken(TokenType.authorizationCode, authorizationCode)).payload
+      decodedPayload = (await TokenVault.decodeToken(TokenType.authorizationCode, authorizationCode)).payload
     } catch (error) {
       return false
     }
 
-    if (typeof decoded_payload.client_id !== "string") return
-    if (typeof decoded_payload.user_id !== "number") return
-    if (typeof decoded_payload.redirect_uri !== "string") return
-    if (
-      typeof decoded_payload.code_challenge !== "string" &&
-      typeof decoded_payload.code_challenge_method !== "undefined"
-    )
-      return
-    if (
-      typeof decoded_payload.code_challenge_method !== "string" &&
-      typeof decoded_payload.code_challenge_method !== "undefined"
-    )
-      return
-    if (typeof decoded_payload.exp !== "number") return
-    if (typeof decoded_payload.iat !== "number") return
-    if (!Array.isArray(decoded_payload.scope)) return
+    if (typeof decodedPayload.redirect_uri !== "string") return
+    if (decodedPayload.code_challenge != null && typeof decodedPayload.code_challenge !== "string") return
+    if (decodedPayload.code_challenge_method != null && typeof decodedPayload.code_challenge_method !== "string") return
 
-    const client = await this.getClient(decoded_payload.client_id, null)
-    const user = await User.findByPk(decoded_payload.user_id)
+    if (typeof decodedPayload.client_id !== "string") return
+    if (typeof decodedPayload.user_id !== "string") return
+    if (typeof decodedPayload.exp !== "number") return
+    if (typeof decodedPayload.iat !== "number") return
+    if (!Array.isArray(decodedPayload.scope)) return
+
+    const client = await this.getClient(decodedPayload.client_id, null)
+    const user = await prisma.user.findUnique({
+      where: {
+        keycloakUserId: decodedPayload.user_id,
+      },
+    })
 
     if (!client) return
     if (!user) return
 
-    if (await this.checkAuthorizationCodeRevoked(client, user, decoded_payload.iat)) return
+    if (await this.checkAuthorizationCodeRevoked(client, user, decodedPayload.iat)) return
 
     const expiresAt = new Date(0)
-    expiresAt.setSeconds(decoded_payload.exp)
+    expiresAt.setSeconds(decodedPayload.exp)
 
     return {
       authorizationCode: authorizationCode,
       expiresAt: expiresAt,
-      redirectUri: decoded_payload.redirect_uri,
-      scope: decoded_payload.scope,
+      redirectUri: decodedPayload.redirect_uri,
+      scope: decodedPayload.scope,
       client: client,
       user: user,
-      codeChallenge: decoded_payload.code_challenge as string | undefined,
-      codeChallengeMethod: decoded_payload.code_challenge_method as string | undefined,
+      codeChallenge: decodedPayload.code_challenge ?? undefined,
+      codeChallengeMethod: decodedPayload.code_challenge_method ?? undefined,
     }
   }
 
@@ -221,24 +226,18 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
       "authorizationCode" | "expiresAt" | "redirectUri" | "scope" | "codeChallenge" | "codeChallengeMethod"
     >,
     client: OAuth2Server.Client,
-    user: OAuth2Server.User,
+    user: User,
   ): Promise<OAuth2Server.AuthorizationCode | OAuth2Server.Falsey> {
-    if (!user.id) return false
-
-    code.authorizationCode = await TokenVault.createToken(
-      TokenType.authorizationCode,
-      user as { id: string | number },
-      {
-        scope: code.scope === undefined ? [] : typeof code.scope === "string" ? [code.scope] : code.scope,
-        lifetime: 60,
-        claims: {
-          code_challenge: code.codeChallenge,
-          code_challenge_method: code.codeChallengeMethod,
-          redirect_uri: code.redirectUri,
-          client_id: client.id,
-        },
+    code.authorizationCode = await TokenVault.createToken(TokenType.authorizationCode, user, {
+      scope: code.scope == null ? [] : code.scope,
+      lifetime: 60,
+      claims: {
+        code_challenge: code.codeChallenge,
+        code_challenge_method: code.codeChallengeMethod,
+        redirect_uri: code.redirectUri,
+        client_id: client.id,
       },
-    )
+    })
 
     return {
       ...code,
@@ -252,45 +251,66 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
     user: OAuth2Server.User,
     code_issued_at: number,
   ): Promise<boolean> {
-    const oauth_user = await OAuthUser.findOne({
+    const oauthUser = await prisma.oAuthUser.findUnique({
       where: {
-        client_id: client.id,
-        user_id: user.id,
+        id: {
+          clientId: client.id,
+          userId: user.id,
+        },
       },
     })
 
     return (
-      !!oauth_user &&
-      !!oauth_user.minimum_auth_code_issue_time &&
-      oauth_user.minimum_auth_code_issue_time.getSeconds() >= code_issued_at
+      oauthUser != null &&
+      oauthUser.minimumAuthCodeIssueTime != null &&
+      oauthUser.minimumAuthCodeIssueTime.getSeconds() >= code_issued_at
     )
   }
 
   async revokeAuthorizationCode(code: OAuth2Server.AuthorizationCode): Promise<boolean> {
-    const [oauth_user] = await OAuthUser.findOrCreate({
-      where: {
-        client_id: code.client.id,
-        user_id: code.user.id,
-      },
-      defaults: {
-        client_id: code.client.id,
-        user_id: code.user.id,
-      },
-    })
+    const now = new Date()
 
-    await oauth_user.update({
-      minimum_auth_code_issue_time: new Date(),
+    await prisma.oAuthUser.upsert({
+      where: {
+        id: {
+          clientId: code.client.id,
+          userId: code.user.id,
+        },
+      },
+      create: {
+        clientId: code.client.id,
+        userId: code.user.id,
+        minimumAuthCodeIssueTime: now,
+      },
+      update: {
+        minimumAuthCodeIssueTime: now,
+      },
     })
 
     return true
   }
 
   async getClient(clientId: string, clientSecret: string | null): Promise<OAuth2Server.Client | OAuth2Server.Falsey> {
-    const client = await OAuthClient.findByPk(clientId)
+    const client = await prisma.oAuthClient.findUnique({
+      where: {
+        clientId: clientId,
+      },
+    })
 
-    if (!client) return false
-    if (clientSecret === null) return client
-    if (!client) return
+    if (client == null) return false
+
+    const oauth2ServerClient = {
+      id: client.clientId,
+      grants: client.grants as string[],
+      redirectUris: client.redirectUris as string[],
+      accessTokenLifetime: client.accessTokenLifetime ?? undefined,
+      refreshTokenLifetime: client.refreshTokenLifetime ?? undefined,
+    } satisfies OAuth2Server.Client
+
+    if (clientSecret === null) return oauth2ServerClient
+    if (client.hashedSecret == null || client.secretSalt == null) {
+      throw new Error(`Client secret not initialized for OAuth client ${client.clientId}`)
+    }
 
     const secretMatches = await checkTextAgainstHash(
       {
@@ -302,24 +322,25 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
     if (!secretMatches) return
 
-    return client
+    return oauth2ServerClient
   }
 
   async validateScope(
     user: User,
     client: OAuth2Server.Client,
-    scope: string | string[],
-  ): Promise<string | string[] | OAuth2Server.Falsey> {
+    scope?: string | string[],
+  ): Promise<string[] | OAuth2Server.Falsey> {
     if (typeof scope === "undefined") return
     if (scope === "") return
     if (Array.isArray(scope) && scope.length === 0) return
     if (!Array.isArray(client.allowedScopes)) return
 
     if (typeof scope === "string") {
-      scope = [scope]
+      if (!client.allowedScopes.includes(scope)) return false
+      return [scope]
     }
 
-    if (!scope.every(element => client.allowedScopes.includes(element))) return false
+    if (!scope.every((element) => client.allowedScopes.includes(element))) return false
     return scope
   }
 
@@ -331,27 +352,15 @@ class OAuthModel implements AuthorizationCodeModel, RefreshTokenModel {
 
   async verifyScope(token: OAuth2Server.Token, scope: string | string[]): Promise<boolean> {
     if ((Array.isArray(scope) && scope.length === 0) || scope === "" || typeof scope === "undefined") return true
-    if (typeof token.scope === "undefined") return false
-    if (
-      (Array.isArray(token.scope) && token.scope.length === 0) ||
-      token.scope === "" ||
-      typeof token.scope === "undefined"
-    )
-      return false
+    if (token.scope == null) return false
+    if (token.scope.length === 0) return false
 
     if (typeof scope === "string") {
-      if (typeof token.scope === "string") {
-        if (scope.length > 1) return false
-        return token.scope === scope
-      }
-
-      scope = [scope]
+      return token.scope.includes(scope)
     }
 
-    const tokenScope = typeof token.scope === "string" ? [token.scope] : token.scope
-
-    return scope.every(element => tokenScope.includes(element))
+    return scope.every((element) => token.scope?.includes(element) ?? false)
   }
 }
 
-export default new OAuthModel()
+export const oauthModel = new OAuthModel()

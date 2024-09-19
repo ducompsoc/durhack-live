@@ -1,13 +1,15 @@
-import { Router as ExpressRouter } from "express"
+import { App } from "@otterhttp/app"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
-import handlers from "./discord_handlers"
+import { discordHandlers } from "./discord-handlers"
 
-const discord_router = ExpressRouter()
+const discordApp = new App<Request, Response>()
 
-discord_router.route("/").get(handlers.handleBeginDiscordOAuthFlow).all(handleMethodNotAllowed("GET"))
+discordApp.route("/").get(discordHandlers.handleBeginDiscordOAuthFlow()).all(handleMethodNotAllowed("GET"))
 
-discord_router.route("/redirect").get(handlers.handleDiscordOAuthCallback).all(handleMethodNotAllowed("GET"))
+discordApp.route("/redirect").get(discordHandlers.handleDiscordOAuthCallback()).all(handleMethodNotAllowed("GET"))
 
-export default discord_router
+export { discordApp }

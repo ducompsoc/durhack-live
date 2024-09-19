@@ -1,13 +1,16 @@
-import { NextFunction, Request, Response, Router as ExpressRouter } from "express"
+import { App, type NextFunction } from "@otterhttp/app"
 import createHttpError from "http-errors"
 
 import { handleFailedAuthentication, handleMethodNotAllowed } from "@/common/middleware"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
-import handlers from "./user_handlers"
+import type { User } from "@/database"
+import { userHandlers } from "./user-handlers"
 
-const user_router = ExpressRouter()
+const userApp = new App<Request, Response>()
 
-user_router.use((request: Request, response: Response, next: NextFunction) => {
+userApp.use((request: Request & { user?: User }, response: Response, next: NextFunction) => {
   if (!request.user) {
     throw new createHttpError.Unauthorized()
   }
@@ -15,15 +18,16 @@ user_router.use((request: Request, response: Response, next: NextFunction) => {
   next()
 })
 
-user_router
+userApp
   .route("/")
-  .get(handlers.getUserWithDetails, handlers.getUser)
-  .patch(handlers.patchUserDetails, handleFailedAuthentication)
+  .get(userHandlers.getUserWithDetails())
+  .get(userHandlers.getUser())
+  .patch(userHandlers.patchUserDetails(), handleFailedAuthentication)
   .all(handleMethodNotAllowed("GET", "PATCH"))
 
-user_router
+userApp
   .route("/check-in")
-  .post(handlers.checkUserIn, handleFailedAuthentication)
+  .post(userHandlers.checkUserIn(), handleFailedAuthentication)
   .all(handleMethodNotAllowed("POST"))
 
-export default user_router
+export { userApp }

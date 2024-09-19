@@ -1,19 +1,25 @@
-import { Router as ExpressRouter } from "express"
+import { App } from "@otterhttp/app"
 
 import { handleMethodNotAllowed, parseRouteId } from "@/common/middleware"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
-import handlers from "./users_handlers"
+import { usersHandlers } from "./users-handlers"
 
-const users_router = ExpressRouter()
+const usersApp = new App<Request, Response>()
 
-users_router.route("/").get(handlers.getUsersList).post(handlers.createUser).all(handleMethodNotAllowed("GET", "POST"))
+usersApp
+  .route("/")
+  .get(usersHandlers.getUsersList())
+  .post(usersHandlers.createUser())
+  .all(handleMethodNotAllowed("GET", "POST"))
 
-users_router
+usersApp
   .route("/:user_id")
   .all(parseRouteId("user_id"))
-  .get(handlers.getUserDetails)
-  .patch(handlers.patchUserDetails)
-  .delete(handlers.deleteUser)
+  .get(usersHandlers.getUserDetails())
+  .patch(usersHandlers.patchUserDetails())
+  .delete(usersHandlers.deleteUser())
   .all(handleMethodNotAllowed("GET", "PATCH", "DELETE"))
 
-export default users_router
+export { usersApp }

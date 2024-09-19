@@ -1,17 +1,23 @@
-import config from "config"
-import { Request, Response } from "express"
-import { doubleCsrf, DoubleCsrfConfig } from "csrf-csrf"
+import { type DoubleCsrfConfig, doubleCsrf } from "@otterhttp/csrf-csrf"
 
-import { double_csrf_options_schema } from "@/common/schema/config"
+import { getSession } from "@/auth/session"
+import { csrfConfig } from "@/config"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-const options = double_csrf_options_schema.parse(config.get("csrf.options")) as DoubleCsrfConfig
-options.getSecret = () => config.get("csrf.secret")
+const options = {
+  ...csrfConfig.options,
+  getSessionIdentifier: async (req, res) => {
+    const session = await getSession(req, res)
+    return session.id
+  },
+  getSecret: () => csrfConfig.secret,
+} satisfies DoubleCsrfConfig<Request, Response>
 
 export const { generateToken, doubleCsrfProtection } = doubleCsrf(options)
 
-export function handleGetCsrfToken(request: Request, response: Response): void {
-  const csrfToken = generateToken(response, request)
+export async function handleGetCsrfToken(request: Request, response: Response): Promise<void> {
+  const csrfToken = await generateToken(request, response)
   response.status(200)
   response.json({ status: 200, message: "Token generation OK", token: csrfToken })
 }

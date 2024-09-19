@@ -1,0 +1,25 @@
+name: 'Setup'
+description: 'Prepares a local copy of the `server` project for CI actions'
+runs:
+  using: composite
+  steps:
+    - name: Enable corepack
+      shell: bash
+      run: corepack enable pnpm
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: server/.node-version
+        cache-dependency-path: server/pnpm-lock.yaml
+        registry-url: https://registry.npmjs.org/
+        cache: 'pnpm'
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: server
+      run: pnpm install
+
+    - name: Generate sources
+      shell: bash
+      working-directory: server
+      run: pnpm generate

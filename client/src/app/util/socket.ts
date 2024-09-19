@@ -117,7 +117,7 @@ export async function attemptStateSocketAuth() {
   const retrieveRole = new Promise<string>((resolve, reject) => {
     if (!socket) return;
 
-    function authenticateCallback(err: Error | string | null, role: string | null): void {
+    function authenticateCallback(err: Error | string | null): void {
       if (err) {
         if (err === "Auth failed.") {
           sessionStorage.removeItem("durhack-live-socket-token-2023");
@@ -129,18 +129,14 @@ export async function attemptStateSocketAuth() {
         return reject(err);
       }
 
-      if (!role) {
-        return reject(new Error("User role is null"));
-      }
+      // todo: replace with keycloak
+      return reject(new Error("User role is null"));
 
-      userRole = role;
       if (lastConnection.connected) {
-        lastConnection.role = role;
         events.emit("connection", lastConnection);
       }
 
       console.info("Authenticated.");
-      resolve(role);
     }
 
     socket.emit("authenticate", sessionStorage.getItem("durhack-live-socket-token-2023"), authenticateCallback);

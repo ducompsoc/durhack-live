@@ -1,13 +1,14 @@
-import { Server, Socket } from "socket.io"
+import { TokenType } from "@durhack/token-vault/lib"
+import type { JWTPayload } from "jose"
+import type { Server, Socket } from "socket.io"
 import { ZodError } from "zod"
 
-import User from "@/database/tables/user"
 import TokenVault from "@/auth/tokens"
-import TokenType from "@/auth/token_type"
-import { HackathonStateSchema } from "@/common/schema/hackathon_state"
+import { type IHackathonState, hackathonStateSchema } from "@/common/schema/hackathon-state"
+import type { User } from "@/database"
 
 import { getHackathonState, setHackathonState } from "./state"
-import "./oauth_client"
+import "./oauth-client"
 
 class HackathonStateSocketConnection {
   declare connectedUser?: User
@@ -26,11 +27,11 @@ class HackathonStateSocketConnection {
     this.socket.on("disconnect", this.onDisconnect.bind(this))
   }
 
-  private async onAuthenticate(token: unknown, cb: (err: string | null, role?: string | null) => void) {
+  private async onAuthenticate(token: unknown, cb: (err: string | null) => void) {
     if (this.connectedUser) return
     if (typeof token !== "string" || typeof cb !== "function") return
 
-    let decodedPayload
+    let decodedPayload: JWTPayload
     try {
       decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, token)).payload
     } catch (error) {
@@ -50,26 +51,27 @@ class HackathonStateSocketConnection {
     this.connectedUser = user
 
     this.socket.join("state:global")
-    this.socket.join(`state:user:${this.connectedUser.id}`)
+    this.socket.join(`state:user:${this.connectedUser.keycloakUserId}`)
     this.socket.emit("userState", {})
 
-    cb(null, this.connectedUser ? this.connectedUser.role : null)
+    cb(null)
     this.socket.emit("globalState", getHackathonState())
   }
 
   private async onPushState(state: unknown, cb: (error: Error | null) => void) {
-    if (!this.connectedUser || this.connectedUser.role !== "admin") {
-      return
-    }
-    let parsed_state
+    // todo: ensure the connected user is an administrator using KeyCloak
+    if (!this.connectedUser) return
+    if (this.manager.server == null) return
+
+    let parsedState: IHackathonState
     try {
-      parsed_state = HackathonStateSchema.parse(state)
+      parsedState = hackathonStateSchema.parse(state)
     } catch (error) {
       if (!(error instanceof ZodError)) return console.error(error)
       return cb(error)
     }
-    await setHackathonState(parsed_state)
-    this.manager.server!.to("state:global").emit("globalState", getHackathonState())
+    await setHackathonState(parsedState)
+    this.manager.server.to("state:global").emit("globalState", getHackathonState())
     return cb(null)
   }
 

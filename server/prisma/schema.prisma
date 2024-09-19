@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  keycloakUserId String          @id @map("keycloak_user_id") @db.Uuid
+  oauthSessions  OAuthUser[]
+  tokenSet       TokenSet?
+  sessions       SessionRecord[]
+}
+
+model OAuthClient {
+  clientId             String      @id @map("client_id") @db.VarChar(256)
+  name                 String      @db.VarChar(256)
+  grants               Json        @default("[]")
+  allowedScopes        Json        @default("[]") @map("allowed_scopes")
+  redirectUris         Json        @default("[]") @map("redirect_uris")
+  accessTokenLifetime  Int?        @map("access_token_lifetime")
+  refreshTokenLifetime Int?        @map("refresh_token_lifetime")
+  hashedSecret         Bytes?      @map("hashed_secret")
+  secretSalt           Bytes?      @map("secret_salt")
+  users                OAuthUser[]
+}
+
+model OAuthUser {
+  userId   String      @map("user_id") @db.Uuid
+  clientId String      @map("client_id") @db.VarChar(256)
+  user     User        @relation(fields: [userId], references: [keycloakUserId])
+  client   OAuthClient @relation(fields: [clientId], references: [clientId])
+
+  minimumTokenIssueTime    DateTime? @map("minimum_token_issue_time")
+  minimumAuthCodeIssueTime DateTime? @map("minimum_auth_code_issue_time")
+
+  @@id(fields: [userId, clientId], name: "id", map: "user_and_client_id")
+}
+
+model TokenSet {
+  userId String @id @map("user_id") @db.Uuid
+  user   User   @relation(fields: [userId], references: [keycloakUserId])
+
+  tokenType    String?   @map("token_type")
+  accessToken  String?   @map("access_token")
+  idToken      String?   @map("id_token")
+  refreshToken String?   @map("refresh_token")
+  scope        String?
+  accessExpiry DateTime? @db.Timestamp(0)
+  sessionState String?
+}
+
+model SessionRecord {
+  sessionRecordId String    @id @map("session_record_id")
+  userId          String?   @map("user_id") @db.Uuid
+  user            User?     @relation(fields: [userId], references: [keycloakUserId])
+  data            Json
+  expiresAt       DateTime?
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([userId])
+}

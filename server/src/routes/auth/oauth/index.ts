@@ -1,16 +1,18 @@
-import { Router as ExpressRouter } from "express"
+import { App } from "@otterhttp/app"
 
 import { handleMethodNotAllowed } from "@/common/middleware"
-import handlers from "@/routes/auth/oauth/oauth_handlers"
+import type { Request } from "@/request"
+import type { Response } from "@/response"
+import { oauthHandlers } from "@/routes/auth/oauth/oauth-handlers"
 
-const oauth_router = ExpressRouter()
+const oauthApp = new App<Request, Response>()
 
-oauth_router
+oauthApp
   .route("/authorize")
-  .get(handlers.getAuthorize)
-  .post(handlers.postAuthorize)
+  .get(oauthHandlers.getAuthorize())
+  .post(oauthHandlers.postAuthorize())
   .all(handleMethodNotAllowed("GET", "POST"))
 
-oauth_router.route("/token").post(handlers.postToken).all(handleMethodNotAllowed("POST"))
+oauthApp.route("/token").post(oauthHandlers.postToken()).all(handleMethodNotAllowed("POST"))
 
-export default oauth_router
+export { oauthApp }

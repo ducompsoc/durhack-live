@@ -1,31 +1,35 @@
-import config from "config"
-import mysql, { ConnectionOptions as MySqlConnectionOptions } from "mysql2/promise"
-import { Sequelize, SequelizeOptions } from "sequelize-typescript"
+import { hashText, randomBytesAsync } from "@/auth/hashed-secrets"
+import { Prisma, PrismaClient } from "@prisma/client"
 
-import { mysql_options_schema, sequelize_options_schema } from "@/common/schema/config"
+const basePrisma = new PrismaClient()
 
-import { User, OAuthUser, OAuthClient } from "./tables"
+export type User = Prisma.UserGetPayload<{ select: undefined }>
+export type OAuthClient = Prisma.OAuthClientGetPayload<{ select: undefined }>
+export type OAuthUser = Prisma.OAuthUserGetPayload<{ select: undefined }>
+export type TokenSet = Prisma.TokenSetGetPayload<{ select: undefined }>
 
-export async function ensureDatabaseExists() {
-  const initialConnectOptions = mysql_options_schema.parse(config.get("mysql.data")) as MySqlConnectionOptions
-  const database_name = initialConnectOptions.database
+const extension = Prisma.defineExtension({
+  name: "durhack-live",
+  model: {
+    oAuthClient: {
+      async updateSecret({
+        where,
+        data,
+      }: {
+        where: Prisma.Args<typeof basePrisma.oAuthClient, "update">["where"]
+        data: { secret: string }
+      }): Promise<void> {
+        const secretSalt = await randomBytesAsync(16)
+        const hashedSecret = await hashText(data.secret, secretSalt)
+        await basePrisma.oAuthClient.update({
+          where: where,
+          data: { hashedSecret, secretSalt },
+        })
+      },
+    },
+  },
+})
 
-  if (!database_name) {
-    throw new Error("Database name cannot be null!")
-  }
+const prisma = basePrisma.$extends(extension)
 
-  delete initialConnectOptions.database
-  const connection = await mysql.createConnection(initialConnectOptions)
-
-  await connection.execute(`CREATE DATABASE IF NOT EXISTS \`${database_name}\`;`)
-
-  await connection.destroy()
-}
-
-const sequelizeConnectOptions = sequelize_options_schema.parse(config.get("mysql.data")) as SequelizeOptions
-
-const sequelize = new Sequelize(sequelizeConnectOptions)
-
-sequelize.addModels([User, OAuthClient, OAuthUser])
-
-export default sequelize
+export { prisma }

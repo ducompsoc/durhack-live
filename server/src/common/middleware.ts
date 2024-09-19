@@ -1,9 +1,12 @@
-import createHttpError from "http-errors"
-import { NextFunction, Request, Response } from "express"
 import { ValueError } from "@/common/errors"
+import type { NextFunction } from "@otterhttp/app"
+import createHttpError from "http-errors"
+
+import type { Request } from "@/request"
+import type { Response } from "@/response"
 
 export function handleMethodNotAllowed(...allowedMethods: string[]) {
-  return function (request: Request, response: Response) {
+  return (request: Request, response: Response) => {
     response.setHeader("Allow", allowedMethods.join(", "))
     throw new createHttpError.MethodNotAllowed()
   }
@@ -14,7 +17,7 @@ export function handleNotImplemented() {
 }
 
 export function handleFailedAuthentication(request: Request) {
-  if (request.user) {
+  if ("user" in request) {
     throw new createHttpError.Forbidden()
   }
   throw new createHttpError.Unauthorized()
@@ -25,7 +28,7 @@ export function mutateRequestValue<T>(
   mutator: (value: unknown) => T,
   setter: (response: Response, value: T) => void,
 ) {
-  return function (request: Request, response: Response, next: NextFunction) {
+  return (request: Request, response: Response, next: NextFunction) => {
     const valueToMutate = getter(request)
     const mutatedValue = mutator(valueToMutate)
     setter(response, mutatedValue)
@@ -34,19 +37,15 @@ export function mutateRequestValue<T>(
 }
 
 function getRouteParameter(key: string) {
-  return function (request: Request): unknown {
-    return request.params[key]
-  }
+  return (request: Request): unknown => request.params[key]
 }
 
 function getQueryParameter(key: string) {
-  return function (request: Request): unknown {
-    return request.query[key]
-  }
+  return (request: Request): unknown => request.query[key]
 }
 
 function setLocalValue<T>(key: string) {
-  return function (response: Response, value: T): void {
+  return (response: Response, value: T): void => {
     response.locals[key] = value
   }
 }
