@@ -15,7 +15,6 @@ jobs:
     defaults:
       run:
         working-directory: ./server
-    environment: ci
     steps:
       - uses: actions/checkout@v4
 
@@ -30,7 +29,6 @@ jobs:
     defaults:
       run:
         working-directory: ./server
-    environment: ci
     steps:
       - uses: actions/checkout@v4
 
