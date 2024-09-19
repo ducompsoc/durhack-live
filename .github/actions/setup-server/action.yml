@@ -16,4 +16,5 @@ runs:
 
     - name: Install dependencies
       shell: bash
+      working-directory: server
       run: pnpm install
