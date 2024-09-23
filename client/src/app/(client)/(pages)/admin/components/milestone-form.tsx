@@ -48,11 +48,12 @@ const MilestoneContent = React.memo(() => {
   )
 })
 
-export const Milestone = React.memo(() => {
+export const MilestoneForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["milestone"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["milestone"]
     if (!hackathon) return
     values.when = values.when ? new Date(values.when).toISOString() : ""
     pushHackathon({

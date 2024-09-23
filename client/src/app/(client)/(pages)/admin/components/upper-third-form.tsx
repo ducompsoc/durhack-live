@@ -34,11 +34,12 @@ const UpperThirdContent = React.memo(() => {
   )
 })
 
-export const UpperThird = React.memo(() => {
+export const UpperThirdForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["upperThird"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["upperThird"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, upperThird: values } })
   }

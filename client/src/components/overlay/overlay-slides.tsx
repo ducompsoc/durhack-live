@@ -286,7 +286,7 @@ export function OverlaySlides() {
     const timeout = setTimeout(progressActiveSlideIndex, millisToAnimateOut + millisDisplayTime)
 
     return () => {
-      clearTimeout(timeout)
+      window.clearTimeout(timeout)
     }
   }, [slides, nextUp, activeSlideIndex])
 

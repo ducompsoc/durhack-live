@@ -83,11 +83,12 @@ const YoutubeContent = React.memo(() => {
   )
 })
 
-export const YouTube = React.memo(() => {
+export const YoutubeForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["youtube"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["youtube"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, youtube: values } })
   }

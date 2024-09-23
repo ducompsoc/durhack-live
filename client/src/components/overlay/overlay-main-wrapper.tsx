@@ -10,9 +10,7 @@ import { OverlayFeature, OverlayTextPatternBackground } from "./"
 
 export function OverlayMainWrapper({ children }: { children: React.ReactNode }) {
   const [initialSwitch, setInitialSwitch] = React.useState<boolean>(false)
-  const [sceneSwitchInterval, setSceneSwitchInterval] = React.useState<ReturnType<typeof setInterval> | undefined>(
-    undefined,
-  )
+  const [sceneSwitchInterval, setSceneSwitchInterval] = React.useState<number | undefined>(undefined)
   const [currentScene, setCurrentScene] = React.useState<IOverlayState["currentScene"] | undefined>(undefined)
   const [currentDarkMode, setCurrentDarkMode] = React.useState<boolean | undefined>(undefined)
   const { state } = useHackathon()
@@ -71,15 +69,15 @@ export function OverlayMainWrapper({ children }: { children: React.ReactNode }) 
 
     let hasSwitchedScene = false
 
-    clearInterval(sceneSwitchInterval)
-    const newSceneSwitchInterval = setInterval(async () => {
+    window.clearInterval(sceneSwitchInterval)
+    const newSceneSwitchInterval = window.setInterval(async () => {
       if (!hasSwitchedScene && currentCountdown <= (sceneName.startsWith("Recording") ? 3 : 8)) {
         await switchSceneTo(sceneName)
         hasSwitchedScene = true
       }
 
       if (currentCountdown <= 0) {
-        clearInterval(sceneSwitchInterval)
+        window.clearInterval(sceneSwitchInterval)
 
         classList(".text-pattern-bg")?.remove("animate-in")
         classList(".text-pattern-bg")?.add("animate-out")

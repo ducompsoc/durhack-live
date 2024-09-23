@@ -44,10 +44,10 @@ export function useCountdown(countdownTo: Date, granularity = 1000) {
     if (Number.isNaN(newCountdownMillis)) return
 
     setCountdownMillis(newCountdownMillis)
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setCountdownMillis(calcCountdownMillis())
     }, granularity)
-    return () => clearInterval(interval)
+    return () => window.clearInterval(interval)
   }, [countdownToMillis])
 
   return getCountdownValues(countdownMillis)

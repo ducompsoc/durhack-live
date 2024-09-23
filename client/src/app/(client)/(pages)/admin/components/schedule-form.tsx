@@ -162,11 +162,12 @@ const ScheduleContent = React.memo(() => {
   )
 })
 
-export const Schedule = React.memo(() => {
+export const ScheduleForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: Pick<IHackathonState, "schedule">) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as Pick<IHackathonState, "schedule">
     if (!hackathon) return
     for (const item of values.schedule) {
       item.start = item.start ? new Date(item.start).toISOString() : ""

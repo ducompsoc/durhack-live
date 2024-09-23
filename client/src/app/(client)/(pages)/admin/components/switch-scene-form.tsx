@@ -52,11 +52,12 @@ const SwitchSceneContent = React.memo(() => {
   )
 })
 
-export const SwitchScene = React.memo(() => {
+export const SwitchSceneForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["currentScene"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["currentScene"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, currentScene: values } })
   }

@@ -50,11 +50,12 @@ const FeatureContent = React.memo(() => {
   )
 })
 
-export const Feature = React.memo(() => {
+export const FeatureForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["feature"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["feature"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, feature: values } })
   }

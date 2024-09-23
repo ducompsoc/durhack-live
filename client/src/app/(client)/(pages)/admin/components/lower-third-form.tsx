@@ -72,11 +72,12 @@ const LowerThirdContent = React.memo(() => {
   )
 })
 
-export const LowerThird = React.memo(() => {
+export const LowerThirdForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["lowerThird"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["lowerThird"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, lowerThird: { ...values, managedBy: "admin" } } })
   }

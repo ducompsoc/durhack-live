@@ -23,7 +23,7 @@ export function OverlayLowerThird() {
   })
 
   const youtubeState = React.useContext(YoutubeContext)
-  const [hideTimeout, setHideTimeout] = React.useState<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const [hideTimeout, setHideTimeout] = React.useState<number | undefined>(undefined)
 
   const containerRef = React.useRef<HTMLDivElement | null>(null)
 
@@ -62,14 +62,14 @@ export function OverlayLowerThird() {
       managedBy: "youtube",
     })
 
-    const timeout = setTimeout(() => {
+    const timeout = window.setTimeout(() => {
       void animateOutLowerThird()
     }, 16000)
     setHideTimeout(timeout)
   }
 
   async function animateOutLowerThird() {
-    clearTimeout(hideTimeout)
+    window.clearTimeout(hideTimeout)
     const lowerThirdContainer = containerRef.current
     if (!lowerThirdContainer) return
 

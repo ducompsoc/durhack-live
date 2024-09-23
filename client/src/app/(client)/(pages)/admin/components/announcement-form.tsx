@@ -54,11 +54,12 @@ export const AnnouncementContent = React.memo(() => {
   )
 })
 
-const Announcement = React.memo(() => {
+export const AnnouncementForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IHackathonState["announcement"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IHackathonState["announcement"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, announcement: values })
   }

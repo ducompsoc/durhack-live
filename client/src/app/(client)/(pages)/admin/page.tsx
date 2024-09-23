@@ -11,8 +11,8 @@ import {
   AnnouncementForm,
   FeatureForm,
   LowerThirdForm,
+  MainForm,
   MilestoneForm,
-  OverlayMainForm,
   ScheduleForm,
   SwitchSceneForm,
   TipsForm,
@@ -59,7 +59,7 @@ export default React.memo(() => {
 
           <div className="row">
             <Card className="grow basis-0">
-              <OverlayMainForm />
+              <MainForm />
             </Card>
             <Card className="grow basis-0">
               <LowerThirdForm />

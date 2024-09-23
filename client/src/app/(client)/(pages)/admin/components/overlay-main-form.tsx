@@ -91,11 +91,12 @@ const MainContent = React.memo(() => {
   )
 })
 
-export const Main = React.memo(() => {
+export const MainForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: IOverlayState["main"]) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as IOverlayState["main"]
     if (!hackathon) return
     pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, main: values } })
   }

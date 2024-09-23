@@ -56,11 +56,12 @@ const TipsContent = React.memo(() => {
   )
 })
 
-export const Tips = React.memo(() => {
+export const TipsForm = React.memo(() => {
   const hackathon = React.useContext(HackathonContext)
   if (!hackathon) return <></>
 
-  function handleSubmit(values: Pick<IHackathonState, "tips">) {
+  function handleSubmit(_values: unknown) {
+    const values = _values as Pick<IHackathonState, "tips">
     if (!hackathon) return
     pushHackathon({ ...hackathon, tips: values.tips })
   }

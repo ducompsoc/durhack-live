@@ -17,7 +17,7 @@ export function MusicVolumeController() {
     setMusicEnabled(newOverlayState.currentScene.music)
   }, [state])
 
-  const { result }: { result: [interval: number, currentVolume: number] } = useAsyncEffect(
+  const { result }: { result: [interval: number, currentVolume: number] | undefined } = useAsyncEffect(
     async () => {
       if (musicEnabled === null) return
 
@@ -35,14 +35,16 @@ export function MusicVolumeController() {
       return [interval, currentVolume]
     },
     async () => {
-      const [interval, currentVolume] = result
-      clearInterval(interval)
+      if (result) {
+        const [interval, currentVolume] = result
+        window.clearInterval(interval)
 
-      if (typeof currentVolume === "undefined") return
+        if (typeof currentVolume === "undefined") return
+        await obsSocket
+          .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: currentVolume })
+          .catch(console.error)
+      }
 
-      await obsSocket
-        .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: currentVolume })
-        .catch(console.error)
       await obsSocket
         .call("SetInputMute", { inputName: "Desktop Audio", inputMuted: !musicEnabled })
         .catch(console.error)
@@ -53,11 +55,11 @@ export function MusicVolumeController() {
   async function startMuting(originalVolume: number) {
     console.info("starting mute")
     let tweenVolume = originalVolume
-    const interval = setInterval(async () => {
+    const interval = window.setInterval(async () => {
       tweenVolume -= 0.05
 
       if (tweenVolume <= 0) {
-        clearInterval(interval)
+        window.clearInterval(interval)
 
         // Now mute it altogether.
         await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: true }).catch(console.error)
@@ -86,10 +88,10 @@ export function MusicVolumeController() {
 
     // Slowly drag the volume up
     let tweenVolume = 0
-    const interval = setInterval(async () => {
+    const interval = window.setInterval(async () => {
       tweenVolume += 0.05
       if (tweenVolume >= originalVolume) {
-        clearInterval(interval)
+        window.clearInterval(interval)
 
         await obsSocket
           .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: originalVolume })

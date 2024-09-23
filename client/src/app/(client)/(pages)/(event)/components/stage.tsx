@@ -38,13 +38,13 @@ const TopTip = React.memo(() => {
       lastPicked.current = Date.now()
     }
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setTip(state.tips[Math.floor(Math.random() * state.tips.length)])
       lastPicked.current = Date.now()
     }, delay)
 
     return () => {
-      clearInterval(interval)
+      window.clearInterval(interval)
     }
   }, [state])
 
@@ -100,12 +100,12 @@ export const Stage = React.memo(() => {
     }
 
     setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : "a moment")
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setUpNextTimeToGo(startDate >= new Date() ? formatDistanceToNow(startDate) : "a moment")
     }, 1000)
 
     return () => {
-      clearInterval(interval)
+      window.clearInterval(interval)
     }
   }, [upNext])
 
