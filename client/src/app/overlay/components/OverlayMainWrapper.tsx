@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import * as React from "react";
 
 import { classList, waitFor } from "@/app/util/util";
 import { useHackathon, IOverlayState } from "@/app/util/socket";

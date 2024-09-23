@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import * as React from "react";
 
 import useCountdown from "@/app/util/countdownHook";
 import { zeroPad } from "@/app/util/util";

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import * as React from "react";
 import { Field } from "formik";
 
 import { IHackathonState, pushHackathon } from "@/app/util/socket";

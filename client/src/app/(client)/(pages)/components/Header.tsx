@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import * as React from "react";
 import styled from "styled-components";
 
 import ContentContainer from "@/app/(client)/components/ContentContainer";

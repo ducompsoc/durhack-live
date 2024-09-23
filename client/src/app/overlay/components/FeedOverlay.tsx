@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import * as React from "react";
 import YouTube, { YouTubePlayer, YouTubeProps } from "react-youtube";
 import { isEqual } from "lodash";
 

@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 
 function getCountdownValues(countdownMillis: number) {
   if (isNaN(countdownMillis)) return {

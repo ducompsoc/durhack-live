@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React from "react";
+import * as React from "react";
 import styled, { keyframes } from "styled-components";
 import { Inter } from "next/font/google";
 

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import * as React from "react";
 import { Field } from "formik";
 
 import { IOverlayState, pushHackathon } from "@/app/util/socket";

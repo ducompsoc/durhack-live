@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import * as React from "react";
 import { Form, Formik, FormikValues } from "formik";
 
 interface IOverlayFormProps {
