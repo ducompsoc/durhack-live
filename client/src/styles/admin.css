@@ -1,0 +1,41 @@
+.segment {
+  margin: 12px 0;
+
+  > div {
+    width: 100%;
+
+    input {
+      box-sizing: border-box;
+
+      &[type=text], &[type=number], &[type=datetime-local] {
+        width: 100%;
+      }
+    }
+
+    select, textarea {
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+}
+
+.label {
+  width: 33% !important;
+}
+
+.buttons {
+  text-align: right
+}
+
+.table {
+  width: 100%;
+
+  th, td {
+    text-align: left;
+    padding: 2px;
+  }
+
+  input {
+    box-sizing: border-box;
+  }
+}

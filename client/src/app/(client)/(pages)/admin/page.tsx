@@ -1,12 +1,12 @@
 "use client";
 
 import * as React from "react";
+import { Card } from "@durhack/web-components/ui/card";
 
-import { useHackathon } from "@/app/util/socket";
+import { useHackathon } from "@/lib/socket";
+import { Section } from "@/components/client/section";
 
-import Card from "../components/Card";
-import Section from "../components/Section";
-import { HackathonContext } from "./util";
+import { HackathonContext } from "@/lib/hackathon-context";
 import {
   AnnouncementForm,
   TipsForm,
@@ -19,7 +19,6 @@ import {
   FeatureForm,
   YoutubeForm,
 } from "./components";
-
 
 export default React.memo(() => {
   const hackathon = useHackathon();

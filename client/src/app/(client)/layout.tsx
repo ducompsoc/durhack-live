@@ -1,33 +1,23 @@
-import "./globals.scss";
 import type { Metadata } from "next";
-import { Audiowide, Space_Grotesk } from "next/font/google";
 
-import StyledComponentsRegistry from "./styledComponentsRegistry";
-
-const headings = Audiowide({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--durhack-font",
-});
-
-const font = Space_Grotesk({ subsets: ["latin"] });
+import "@/styles/globals.css";
+import { cn } from "@/lib/utils";
+import { audiowide, spaceGrotesk } from "@/lib/google-fonts"
 
 export const metadata: Metadata = {
   title: "DurHack: Live",
   description: "DurHack's live event website",
 };
 
-export default function RootLayout({
+export default function LoginLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={headings.variable + " " + font.className}>
-        <StyledComponentsRegistry>
-          {children}
-        </StyledComponentsRegistry>
+    <html lang="en" className="dark">
+      <body className={cn(audiowide.variable, spaceGrotesk.className)}>
+        {children}
       </body>
     </html>
   );

@@ -1,0 +1,20 @@
+.navbar-gradient-background {
+  background: linear-gradient(
+    88deg,
+    #020316 0%,
+    #3c2f62 32%,
+    rgba(60, 163, 189, 0.85) 80%,
+    #707b89 100%
+  );
+  @media (min-width: 768px) {
+    background: linear-gradient(
+      88deg,
+      #020316 0%,
+      #3c2f62 16.67%,
+      rgba(60, 163, 189, 0.85) 34.38%,
+      #707b89 50%,
+      rgba(205, 52, 44, 0.76) 72.4%,
+      #e37f60 99.99%
+    );
+  }
+}

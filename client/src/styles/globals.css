@@ -1,0 +1,208 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --brand: 269 21% 49%;
+    --brand-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 145 63% 49%;
+    --success-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 96.7% 36.1%;
+    --destructive-foreground: 210 40% 98%;
+
+    --success: 145 63% 42%;
+    --success-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@font-face {
+  font-family: 'Deciso';
+  font-weight: bold;
+  src: url('/Deciso-Bold.otf');
+}
+
+.dh-box {
+  @apply bg-neutral-200/90 dark:bg-neutral-600/90 rounded p-6;
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.3);
+
+  label {
+    font-weight: normal;
+    text-transform: none;
+    margin-bottom: .25em;
+  }
+
+  a {
+    @apply text-black dark:text-neutral-200;
+  }
+}
+
+.dh-input {
+  @apply block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-accent sm:text-sm sm:leading-6 dark:bg-neutral-800/50 dark:placeholder:text-neutral-400 dark:text-neutral-200;
+}
+
+.dh-btn {
+  @apply rounded px-2 py-1 bg-accent text-white hover:bg-gray-500 !important;
+  cursor: pointer;
+}
+
+.plain-btn {
+  @apply rounded px-2 py-1 bg-gray-300 text-black hover:bg-gray-500;
+  cursor: pointer;
+}
+
+.dh-check {
+  @apply h-4 w-4 rounded border-gray-300 text-accent bg-gray-100 border-gray-300 rounded focus:ring-accent focus:ring-2 disabled:text-gray-300 disabled:bg-gray-300 dark:disabled:bg-neutral-500 dark:bg-neutral-300;
+}
+
+.dh-err {
+  @apply text-red-600 dark:text-red-400;
+}
+
+@keyframes dh-login-background {
+  0% {
+    background-color: rgba(125, 99, 153, 1);
+  }
+
+  100% {
+    background-color: rgba(125, 99, 153, 0.8);
+  }
+}
+
+.dh-login {
+  min-height: 100vh;
+  background-color: rgba(125, 99, 153, 1);
+
+  animation-name: dh-login-background;
+  animation-delay: 1s;
+  animation-duration: 1s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+
+  .dh-box {
+    @apply xl:p-8;
+  }
+
+  .dh-btn {
+    @apply xl:px-3 xl:py-2 !important;
+  }
+
+  .dh-input {
+    @apply xl:text-lg xl:min-w-[15em];
+  }
+
+  label {
+    @apply xl:text-lg;
+  }
+}
+
+body {
+  @apply bg-accent dark:text-white;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+h3,
+label {
+  display: block;
+  font-weight: 800;
+  font-size: 15px;
+  text-transform: uppercase;
+}
+
+h3 {
+  margin: 0 0 6px 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.center,
+.align-center {
+  align-items: center;
+}
+
+.center {
+  justify-content: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}

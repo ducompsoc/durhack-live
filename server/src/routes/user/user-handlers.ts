@@ -1,5 +1,4 @@
 import createHttpError from "http-errors"
-import { default as pick } from "lodash/pick.js"
 import type { UserinfoResponse } from "openid-client"
 import { z } from "zod"
 

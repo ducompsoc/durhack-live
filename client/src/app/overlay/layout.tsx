@@ -1,6 +1,7 @@
 import { Space_Grotesk } from "next/font/google";
-import "./overlay.scss";
 import type { Metadata } from "next";
+
+import "@/styles/overlay.css";
 
 export const metadata: Metadata = {
   title: "DurHack: Live - Overlay",

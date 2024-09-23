@@ -1,0 +1,146 @@
+.timeline-container {
+  position: relative;
+
+  @media screen and (min-width: 1080px) {
+    &:before,
+    .event .line:before,
+    .event .line:after {
+      content: "";
+      height: 2px;
+      @apply bg-secondary;
+    }
+
+    &:before {
+      position: absolute;
+      top: 97px;
+      right: 100%;
+      left: -100vh;
+    }
+
+    .group {
+      &:nth-child(even) .set {
+        flex-direction: row-reverse;
+      }
+
+      .set {
+        .event {
+          width: 320px;
+        }
+      }
+
+      .bracket {
+        position: absolute;
+        display: flex !important;
+        width: 12px;
+        height: 244px;
+        border-style: solid;
+        margin-top: -149px;
+        @apply border-border;
+
+        @media (prefers-color-scheme: light) {
+          border-color: black;
+        }
+
+        .day {
+          width: 164px;
+          font-weight: bold;
+          text-align: center;
+          transform: rotate(-90deg);
+          margin-left: -48px;
+          @apply text-secondary;
+        }
+      }
+
+      &:nth-child(even) .bracket {
+        right: -12px;
+        border-width: 2px 2px 2px 0px;
+        border-radius: 0px 3px 3px 0px;
+      }
+
+      &:nth-child(odd) .bracket {
+        left: -12px;
+        border-width: 2px 0px 2px 2px;
+        border-radius: 3px 0px 0px 3px;
+      }
+
+      &:nth-child(odd):last-child .event:last-child .line:after,
+      &:nth-child(even):last-child .event:last-child .line:before {
+        background-color: transparent;
+      }
+    }
+  }
+
+  .group {
+    .set .event {
+      text-align: center;
+
+      .time {
+        display: inline-block;
+        @apply bg-secondary;
+        border: solid 2px;
+        border-radius: 4px;
+        @apply border-border;
+        line-height: 18px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 4px 9px;
+        margin-bottom: 4px;
+      }
+
+      &.done {
+        .time,
+        .icon,
+        .title {
+          opacity: 0.5;
+        }
+
+        .time {
+          background: none;
+          color: #fff;
+        }
+      }
+
+      .line {
+        line-height: 20px;
+
+        &:before,
+        &:after {
+          width: 100%;
+        }
+
+        .icon {
+          font-size: 32px;
+          margin: 16px;
+        }
+      }
+
+      .title {
+        padding: 0px 6px 12px 6px;
+      }
+    }
+
+    .bracket {
+      display: none;
+    }
+  }
+}
+
+.play-button {
+  display: inline-block;
+  border: solid 2px #fff;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #fff;
+  padding: 4px 12px 5px 12px;
+
+  &:hover {
+    background-color: #fff;
+    color: #111;
+  }
+
+  > span {
+    margin-right: 9px;
+  }
+}

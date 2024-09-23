@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { query } from "@/app/util/api";
+import { query } from "@/lib/api";
 
 interface IOAuthResponse {
 	access_token?: string;

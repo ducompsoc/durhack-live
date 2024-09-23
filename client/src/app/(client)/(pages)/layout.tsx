@@ -1,15 +1,13 @@
 "use client";
 
 import React, { useEffect } from "react";
-import styled from "styled-components";
 import { useRouter } from "next/navigation";
 
-import { makeLiveApiRequest } from "@/app/util/api";
-import ContentContainer from "@/app/(client)/components/ContentContainer";
-
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import ConnectionBar from "./components/ConnectionBar";
+import { makeLiveApiRequest } from "@/lib/api";
+import { ContentContainer } from "@/components/client/content-container";
+import { Header } from "@/components/client/header";
+import { Footer } from "@/components/client/footer";
+import { ConnectionBar } from "@/components/client/connection-bar";
 
 const PageLayout = React.memo(
   ({
