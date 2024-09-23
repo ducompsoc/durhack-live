@@ -1,9 +1,9 @@
 import { sign, unsign } from "@otterhttp/cookie-signature"
 
-import { cookieParserConfig } from "@/config"
+import { cookieSigningConfig } from "@/config"
 
 export function signCookie(value: string): string {
-  return encodeURIComponent(`s:${sign(value, cookieParserConfig.secret)}`)
+  return encodeURIComponent(`s:${sign(value, cookieSigningConfig.secret)}`)
 }
 
 export function matchSignedCookie(value: string): boolean {
@@ -11,7 +11,7 @@ export function matchSignedCookie(value: string): boolean {
 }
 
 export function unsignCookie(encodedValue: string): string {
-  const result = unsign(decodeURIComponent(encodedValue).slice(2), cookieParserConfig.secret)
+  const result = unsign(decodeURIComponent(encodedValue).slice(2), cookieSigningConfig.secret)
   if (result === false) throw new Error("Failed to unsign cookie")
   return result
 }

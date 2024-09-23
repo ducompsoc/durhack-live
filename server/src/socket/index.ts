@@ -8,7 +8,6 @@ import { type IHackathonState, hackathonStateSchema } from "@/common/schema/hack
 import type { User } from "@/database"
 
 import { getHackathonState, setHackathonState } from "./state"
-import "./oauth-client"
 
 class HackathonStateSocketConnection {
   declare connectedUser?: User

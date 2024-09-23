@@ -24,15 +24,13 @@ const config = await loadConfig({
 export const {
   listen: listenConfig,
   flags: configFlags,
-  database: databaseConfig,
   csrf: csrfConfig,
-  cookieParser: cookieParserConfig,
+  cookieSigning: cookieSigningConfig,
   jsonwebtoken: jwtConfig,
-  oauth: oauthConfig,
   session: sessionConfig,
   discord: discordConfig,
   keycloak: keycloakConfig,
-  hostname,
+  origin,
   hackathonStateSocket: hackathonStateSocketConfig,
 } = config
 

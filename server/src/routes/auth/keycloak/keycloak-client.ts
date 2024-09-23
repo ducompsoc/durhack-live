@@ -1,3 +1,5 @@
+import assert from "node:assert/strict"
+import KeycloakAdminClient from "@keycloak/keycloak-admin-client"
 import { type ClientMetadata, Issuer } from "openid-client"
 
 import { keycloakConfig } from "@/config"
@@ -11,10 +13,15 @@ function adaptClientConfig(clientConfig: typeof keycloakConfig): ClientMetadata 
   } satisfies ClientMetadata
 }
 
-export const keycloakIssuer = await Issuer.discover(keycloakConfig.url)
+const keycloakIssuerUrl = new URL(`/realms/${keycloakConfig.realm}`, keycloakConfig.baseUrl)
+export const keycloakIssuer = await Issuer.discover(keycloakIssuerUrl.toString())
 
 const keycloakClientConfig = adaptClientConfig(keycloakConfig)
 export const keycloakClient = new keycloakIssuer.Client(keycloakClientConfig)
+const keycloakAdminClient = new KeycloakAdminClient({
+  baseUrl: keycloakConfig.adminBaseUrl,
+  realmName: keycloakConfig.realm,
+})
 
 async function fetchKeycloakClientCredentials() {
   return await keycloakClient.grant({
@@ -30,14 +37,19 @@ export async function getKeycloakClientCredentials() {
   return keycloakClientCredentials
 }
 
-export async function fetchWithClientCredentials(input: string | URL | Request, init?: RequestInit): Promise<Response> {
-  const { headers, ...restInit } = init ?? {}
+export async function getKeycloakAdminClient() {
   const credentials = await getKeycloakClientCredentials()
-  return await fetch(input, {
-    headers: {
-      Authorization: `Bearer ${keycloakClientCredentials.access_token}`,
-      ...headers,
-    },
-    ...restInit,
-  })
+  assert(credentials.access_token != null)
+  keycloakAdminClient.setAccessToken(credentials.access_token)
+  return keycloakAdminClient
+}
+
+export type KeycloakUserInfo = {
+  groups: string[]
+  first_names: string
+  preferred_names?: string | undefined
+  last_names: string
+  email: string
+  phone_number?: string | undefined
+  pronouns?: string | undefined
 }

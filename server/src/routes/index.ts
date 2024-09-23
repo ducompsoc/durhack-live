@@ -5,12 +5,10 @@ import { json, urlencoded } from "milliparsec"
 import { doubleCsrfProtection } from "@/auth/csrf"
 import { getSession } from "@/auth/session"
 import { handleMethodNotAllowed } from "@/common/middleware"
-import { cookieParserConfig, csrfConfig } from "@/config"
+import { csrfConfig } from "@/config"
 import { type User, prisma } from "@/database"
 import type { Request } from "@/request"
 import type { Response } from "@/response"
-import { oauthProvider } from "@/routes/auth/oauth/oauth-server"
-import type { Middleware } from "@/types/middleware"
 
 import { authApp } from "./auth"
 import apiErrorHandler from "./error-handler"
@@ -24,11 +22,6 @@ const apiApp = new App<Request, Response>({
 apiApp.use(json())
 apiApp.use(urlencoded())
 
-apiApp.use(
-  oauthProvider.authenticate({
-    scope: "api" as unknown as string[], // https://github.com/node-oauth/node-oauth2-server/pull/305
-  }) as unknown as Middleware,
-)
 apiApp.use(async (request: Request & { user?: User }, response, next): Promise<void> => {
   const session = await getSession(request, response)
   const userId: unknown = session.userId

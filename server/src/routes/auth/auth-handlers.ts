@@ -1,14 +1,13 @@
+import { TokenType } from "@durhack/token-vault/lib"
+import createHttpError from "http-errors"
+
 import { requireLoggedIn } from "@/auth/decorators"
+import { getSession } from "@/auth/session"
+import TokenVault from "@/auth/tokens"
 import type { User } from "@/database"
 import type { Request } from "@/request"
 import type { Response } from "@/response"
-import getStateSocketClient from "@/socket/oauth-client"
-
-import { getSession } from "@/auth/session"
-import { adaptDatabaseOAuthClient } from "@/routes/auth/oauth/adapt-database-oauth-client"
 import type { Middleware } from "@/types/middleware"
-import createHttpError from "http-errors"
-import { oauthModel } from "./oauth/model"
 
 export class AuthHandlers {
   handleLoginSuccess() {
@@ -30,12 +29,12 @@ export class AuthHandlers {
   handleGetSocketToken(): Middleware {
     return async (request: Request & { user?: User }, response: Response) => {
       if (request.user == null) throw createHttpError(500)
-      const client = await getStateSocketClient()
-      const auth_token = await oauthModel.generateAccessToken(
-        adaptDatabaseOAuthClient(client),
-        request.user,
-        "socket:state",
-      )
+      const auth_token = await TokenVault.createToken(TokenType.accessToken, request.user, {
+        scope: ["socket:*"],
+        claims: {
+          client_id: "megateams-socket",
+        },
+      })
       response.status(200)
       response.json({ status: 200, message: "Token generation OK", token: auth_token })
     }

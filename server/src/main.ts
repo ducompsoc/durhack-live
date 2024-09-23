@@ -4,12 +4,11 @@ import { Server as SocketIO } from "socket.io"
 
 import { matchSignedCookie, signCookie, unsignCookie } from "@/common/cookies"
 
-import { listenConfig } from "./config"
+import { origin, listenConfig } from "./config"
 import { Request } from "./request"
 import { Response } from "./response"
 import { apiApp } from "./routes"
 import HackathonStateSocketManager from "./socket"
-import getStateSocketClient, { updateStateSocketSecret } from "./socket/oauth-client"
 
 const environment = process.env.NODE_ENV
 const dev = environment !== "production"
@@ -47,15 +46,12 @@ function getServer(app: App<Request, Response>): Server<typeof Request, typeof R
 }
 
 async function main() {
-  const client = await getStateSocketClient()
-  await updateStateSocketSecret(client)
-
   const app = getApp()
   const server = getServer(app)
 
   server.listen(listenConfig.port, listenConfig.host, () => {
     console.log(
-      `> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}`,
+      `> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}, access via ${origin}`,
     )
   })
 }
