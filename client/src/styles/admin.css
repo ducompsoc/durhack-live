@@ -7,12 +7,15 @@
     input {
       box-sizing: border-box;
 
-      &[type=text], &[type=number], &[type=datetime-local] {
+      &[type="text"],
+      &[type="number"],
+      &[type="datetime-local"] {
         width: 100%;
       }
     }
 
-    select, textarea {
+    select,
+    textarea {
       width: 100%;
       box-sizing: border-box;
     }
@@ -24,13 +27,14 @@
 }
 
 .buttons {
-  text-align: right
+  text-align: right;
 }
 
 .table {
   width: 100%;
 
-  th, td {
+  th,
+  td {
     text-align: left;
     padding: 2px;
   }

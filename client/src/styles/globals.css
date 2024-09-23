@@ -85,9 +85,9 @@
 }
 
 @font-face {
-  font-family: 'Deciso';
+  font-family: "Deciso";
   font-weight: bold;
-  src: url('/Deciso-Bold.otf');
+  src: url("/Deciso-Bold.otf");
 }
 
 .dh-box {
@@ -169,7 +169,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 h3,

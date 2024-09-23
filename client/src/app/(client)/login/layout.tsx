@@ -1,16 +1,16 @@
-import * as React from "react";
+import type * as React from "react"
 
 import { inter } from "@/lib/google-fonts"
 
 export default function LoginLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
     <div
       style={{
-        backgroundImage: "url(\"/images/login-background.jpg\")",
+        backgroundImage: 'url("/images/login-background.jpg")',
         backgroundPosition: "center 0",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
@@ -24,5 +24,5 @@ export default function LoginLayout({
         </div>
       </div>
     </div>
-  );
+  )
 }

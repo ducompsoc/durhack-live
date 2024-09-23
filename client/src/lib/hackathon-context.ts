@@ -1,5 +1,5 @@
-import * as React from "react";
+import * as React from "react"
 
-import { IHackathonState } from "@/lib/socket";
+import type { IHackathonState } from "@/lib/socket"
 
-export const HackathonContext = React.createContext<IHackathonState | null>(null);
+export const HackathonContext = React.createContext<IHackathonState | null>(null)

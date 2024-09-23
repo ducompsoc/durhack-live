@@ -1,13 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&display=swap");
 
 @font-face {
-  font-family: 'Deciso Bold';
+  font-family: "Deciso Bold";
   font-weight: bold;
-  src: url('/Deciso-Bold.woff') format('woff');
+  src: url("/Deciso-Bold.woff") format("woff");
 }
 
-html, body {
-  font-family: 'Exo 2', sans-serif;
+html,
+body {
+  font-family: "Exo 2", sans-serif;
   margin: 0;
   -webkit-font-smoothing: antialiased;
 }
@@ -37,23 +38,23 @@ html, body {
   &.dark {
     .gradient-bg {
       .a {
-        background-image: radial-gradient(closest-side, #1F1C9E 0%, #1F1C9E 0%, transparent 50%);
+        background-image: radial-gradient(closest-side, #1f1c9e 0%, #1f1c9e 0%, transparent 50%);
       }
 
       .b {
-        background-image: radial-gradient(closest-side, #59145A 0%, #59145A 30%, transparent 100%);
+        background-image: radial-gradient(closest-side, #59145a 0%, #59145a 30%, transparent 100%);
       }
 
       .c {
-        background-image: radial-gradient(closest-side, #751C9E 0%, #751C9E 30%, transparent 100%);
+        background-image: radial-gradient(closest-side, #751c9e 0%, #751c9e 30%, transparent 100%);
       }
 
       .d {
-        background-image: radial-gradient(closest-side, #5B2FD7 0%, #5B2FD7 30%, transparent 100%);
+        background-image: radial-gradient(closest-side, #5b2fd7 0%, #5b2fd7 30%, transparent 100%);
       }
 
       .base {
-        background-color: #1F1C9E;
+        background-color: #1f1c9e;
       }
     }
 
@@ -142,12 +143,9 @@ html, body {
       height: 32px;
     }
 
-    .minor-text, .major-text {
-    //width: 0px;
+    .minor-text,
+    .major-text {
       overflow: hidden;
-    //animation-duration: 1s;
-    //animation-timing-function: linear;
-    //animation-fill-mode: forwards;
 
       > div {
         color: #fff;
@@ -190,7 +188,8 @@ html, body {
     &.animate-in {
       display: block;
 
-      .minor-text, .major-text {
+      .minor-text,
+      .major-text {
         > div > div {
           animation-name: text-animate-in;
         }
@@ -199,7 +198,8 @@ html, body {
 
     &.visible {
       display: block;
-      .minor-text, .major-text {
+      .minor-text,
+      .major-text {
         > div > div {
           width: 100%;
         }
@@ -209,7 +209,8 @@ html, body {
     &.animate-out {
       display: block;
 
-      .minor-text, .major-text {
+      .minor-text,
+      .major-text {
         > div > div {
           animation-name: text-animate-out;
           animation-fill-mode: backwards;
@@ -241,7 +242,7 @@ html, body {
 
 .gradient-bg {
   height: 720px;
-  background-image: url('/images/livestream-slate-0.png');
+  background-image: url("/images/livestream-slate-0.png");
   background-size: cover;
   background-repeat: no-repeat;
   animation-name: hue-pulse;
@@ -250,11 +251,11 @@ html, body {
   animation-iteration-count: infinite, infinite;
 
   &.bg-1 {
-    background-image: url('/images/livestream-slate-1.png');
+    background-image: url("/images/livestream-slate-1.png");
   }
 
   &.bg-2 {
-    background-image: url('/images/livestream-slate-2.png');
+    background-image: url("/images/livestream-slate-2.png");
   }
 
   /* Everything below this point is for the wacky animated gradient */
@@ -487,7 +488,7 @@ html, body {
 
     > div {
       height: 55px;
-      background-image: url('/images/text-pattern.png');
+      background-image: url("/images/text-pattern.png");
       background-position: top center;
       margin-bottom: 6px;
 
@@ -521,8 +522,6 @@ html, body {
     }
 
     @keyframes text-pattern-move-left {
-      0% {}
-
       50% {
         transform: translateX(-147px);
       }
@@ -533,8 +532,6 @@ html, body {
     }
 
     @keyframes text-pattern-move-right {
-      0% {}
-
       50% {
         transform: translateX(147px);
       }
@@ -555,7 +552,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: 'Deciso Bold', sans-serif;
+    font-family: "Deciso Bold", sans-serif;
     font-size: 72px;
     color: #fff;
     transform: rotate(20deg);
@@ -641,7 +638,7 @@ html, body {
     display: flex;
     width: 1152px;
     align-items: center;
-    background-color: #751C9E;
+    background-color: #751c9e;
     box-sizing: border-box;
     font-size: 32px;
     color: #fff;
@@ -654,7 +651,7 @@ html, body {
       right: 0px;
       bottom: 0px;
       left: 0px;
-      background-image: url('/images/icon-white.png');
+      background-image: url("/images/icon-white.png");
       background-size: 104px 104px;
       background-repeat: repeat-y;
       background-position: calc(100% + 12px) -16px;
@@ -683,7 +680,6 @@ html, body {
     }
   }
 }
-
 
 .upper-third {
   position: absolute;
@@ -738,25 +734,12 @@ html, body {
 
 .feature {
   &.animate-in {
-  // .icon-bg {
-  //   display: block;
-  //   opacity: 0.2;
-  //   animation-name: icon-move;
-  //   animation-duration: 3s;
-  //   animation-timing-function: linear;
-  //   animation-iteration-count: infinite;
-  // }
-
     .cover {
       animation-name: feature-in;
     }
   }
 
   &.animate-out {
-  // .icon-bg {
-  //   display: block;
-  // }
-
     .cover {
       animation-name: feature-out;
     }
@@ -769,14 +752,12 @@ html, body {
     bottom: -64px;
     left: -64px;
     display: none;
-    background-image: url('/images/icon-white.png');
+    background-image: url("/images/icon-white.png");
     background-size: 64px 64px;
     transition: opacity 1s;
     opacity: 0;
 
     @keyframes icon-move {
-      0% {}
-
       100% {
         transform: translateX(64px) translateY(64px); /* transforms are way faster than background-position */
       }
@@ -827,7 +808,7 @@ html, body {
       }
 
       .icon {
-        font-size: 128px;;
+        font-size: 128px;
       }
 
       .title {

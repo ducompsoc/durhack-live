@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { ContentContainer } from "@/components/client/content-container";
+import { ContentContainer } from "@/components/client/content-container"
 
 export const Footer = React.memo(() => (
   <div className="text-center text-white pb-16 pt-6">
@@ -12,12 +12,13 @@ export const Footer = React.memo(() => (
         <a
           href="https://hackp.ac/coc"
           target="_blank"
-          rel="noopener"
+          rel="noreferrer noopener"
           className="font-bold no-underline hover:underline"
         >
           MLH Code of Conduct
-        </a>. If something goes wrong, please talk to an organiser.
+        </a>
+        . If something goes wrong, please talk to an organiser.
       </p>
     </ContentContainer>
   </div>
-));
+))

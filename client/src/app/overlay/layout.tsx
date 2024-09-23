@@ -1,14 +1,14 @@
-import { Space_Grotesk } from "next/font/google";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
+import { Space_Grotesk } from "next/font/google"
 
-import "@/styles/overlay.css";
+import "@/styles/overlay.css"
 
 export const metadata: Metadata = {
   title: "DurHack: Live - Overlay",
   description: "DurHack's livestream overlay for OBS",
-};
+}
 
-const font = Space_Grotesk({ subsets: ["latin"] });
+const font = Space_Grotesk({ subsets: ["latin"] })
 
 export default function RootLayout({
   children,
@@ -17,9 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={font.className}>
-        {children}
-      </body>
+      <body className={font.className}>{children}</body>
     </html>
-  );
+  )
 }

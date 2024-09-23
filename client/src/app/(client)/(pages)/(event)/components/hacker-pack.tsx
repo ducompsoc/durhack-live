@@ -1,10 +1,10 @@
-"use client";
+"use client"
 
-import * as React from "react";
 import { Card } from "@durhack/web-components/ui/card"
+import * as React from "react"
 
-import { Section } from "@/components/client/section";
-import { Schedule } from "@/components/client/schedule";
+import { Schedule } from "@/components/client/schedule"
+import { Section } from "@/components/client/section"
 
 export const HackerPack = React.memo(() => (
   <Section>
@@ -12,4 +12,4 @@ export const HackerPack = React.memo(() => (
       <Schedule />
     </Card>
   </Section>
-));
+))

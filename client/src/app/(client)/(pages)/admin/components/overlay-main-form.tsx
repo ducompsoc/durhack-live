@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { ArrayHelpers, Field, FieldArray, useFormikContext } from "formik";
+import { type ArrayHelpers, Field, FieldArray, useFormikContext } from "formik"
+import * as React from "react"
 
-import { IOverlayState, pushHackathon } from "@/lib/socket";
-import { HackathonContext } from "@/lib/hackathon-context";
+import { HackathonContext } from "@/lib/hackathon-context"
+import { type IOverlayState, pushHackathon } from "@/lib/socket"
 
-import { Segment, Label, OverlayForm, DefaultButtons } from "./";
+import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 const MainContent = React.memo(() => {
-  const formik = useFormikContext<IOverlayState["main"]>();
+  const formik = useFormikContext<IOverlayState["main"]>()
 
   return (
     <>
@@ -17,29 +17,39 @@ const MainContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Dark Mode:</Label>
-        <div><Field type="checkbox" className="dh-check" name="darkMode" /></div>
+        <div>
+          <Field type="checkbox" className="dh-check" name="darkMode" />
+        </div>
       </Segment>
 
       <h4>Next up</h4>
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" className="dh-check" name="nextUp.enabled" /></div>
+        <div>
+          <Field type="checkbox" className="dh-check" name="nextUp.enabled" />
+        </div>
       </Segment>
 
       <Segment className="row">
         <Label>Pre-text:</Label>
-        <div><Field type="text" className="dh-input" name="nextUp.pretext" /></div>
+        <div>
+          <Field type="text" className="dh-input" name="nextUp.pretext" />
+        </div>
       </Segment>
 
       <Segment className="row">
         <Label>Text:</Label>
-        <div><Field type="text" className="dh-input" name="nextUp.text" /></div>
+        <div>
+          <Field type="text" className="dh-input" name="nextUp.text" />
+        </div>
       </Segment>
 
       <Segment className="row">
         <Label>When:</Label>
-        <div><Field type="text" className="dh-input" name="nextUp.when" /></div>
+        <div>
+          <Field type="text" className="dh-input" name="nextUp.when" />
+        </div>
       </Segment>
 
       <h4>Additional slides</h4>
@@ -50,39 +60,49 @@ const MainContent = React.memo(() => {
         name="slides"
         render={(arrayHelpers: ArrayHelpers) => (
           <Segment>
-            {(formik.values.slides).map((_, index) => (
+            {formik.values.slides.map((_, index) => (
               <div className="row" key={index}>
                 <div className="grow basis-0">
                   <Field as="textarea" className="dh-input" name={`slides.${index}`} rows="5" />
                 </div>
                 <div>
-                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>-</button>
-                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, "")}>+</button>
+                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>
+                    -
+                  </button>
+                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, "")}>
+                    +
+                  </button>
                 </div>
               </div>
             ))}
-            <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(formik.values.slides.length, "")}>+ Add Slide</button>
+            <button
+              type="button"
+              className="plain-btn"
+              onClick={() => arrayHelpers.insert(formik.values.slides.length, "")}
+            >
+              + Add Slide
+            </button>
           </Segment>
         )}
       />
 
       <DefaultButtons />
     </>
-  );
-});
+  )
+})
 
 export const Main = React.memo(() => {
-  const hackathon = React.useContext(HackathonContext);
-  if (!hackathon) return <></>;
+  const hackathon = React.useContext(HackathonContext)
+  if (!hackathon) return <></>
 
   function handleSubmit(values: IOverlayState["main"]) {
-    if (!hackathon) return;
-    pushHackathon({...hackathon, overlay: {...hackathon.overlay, main: values}});
+    if (!hackathon) return
+    pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, main: values } })
   }
 
   return (
     <OverlayForm initialValues={hackathon.overlay.main} handleSubmit={handleSubmit}>
       <MainContent />
     </OverlayForm>
-  );
-});
+  )
+})

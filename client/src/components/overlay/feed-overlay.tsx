@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import YouTube, { YouTubePlayer, YouTubeProps } from "react-youtube";
-import isEqual from "lodash/isEqual";
+import isEqual from "lodash/isEqual"
+import * as React from "react"
+import YouTube, { type YouTubePlayer, type YouTubeProps } from "react-youtube"
 
-import { IOverlayState, useHackathon } from "@/lib/socket";
+import { type IOverlayState, useHackathon } from "@/lib/socket"
 
-import { OverlayUpperThird, OverlayLowerThird } from "./";
+import { OverlayLowerThird, OverlayUpperThird } from "./"
 
 interface YoutubePlayerState {
-  currentlyPlaying: string;
-  lowerThirdText?: string;
+  currentlyPlaying: string
+  lowerThirdText?: string
 }
 
-export const YoutubeContext = React.createContext<YoutubePlayerState | null>(null);
+export const YoutubeContext = React.createContext<YoutubePlayerState | null>(null)
 
 export function FeedOverlay() {
-  const { state } = useHackathon();
-  const [lastOverlayYoutube, setLastOverlayYoutube] = React.useState<IOverlayState["youtube"] | null>(null);
+  const { state } = useHackathon()
+  const [lastOverlayYoutube, setLastOverlayYoutube] = React.useState<IOverlayState["youtube"] | null>(null)
   const [youtubeOpts, setYoutubeOpts] = React.useState<YouTubeProps["opts"]>({
     height: "720",
     width: "1280",
@@ -25,121 +25,112 @@ export function FeedOverlay() {
       controls: 0,
       autoplay: 1,
     },
-  });
-  const [videoInProgress, setVideoInProgress] = React.useState<boolean>(false);
-  const [enabled, setEnabled] = React.useState<boolean | null>(null);
-  const [queue, setQueue] = React.useState<IOverlayState["youtube"]["queue"]>(state?.overlay.youtube.queue || []);
-  const [lastPlayerStateIndex, setLastPlayerStateIndex] = React.useState<number>(YouTube.PlayerState.UNSTARTED);
-  const [contextState, setContextState] = React.useState<YoutubePlayerState | null>(null);
-  const youtubeRef = React.useRef<YouTube | null>( null);
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  })
+  const [videoInProgress, setVideoInProgress] = React.useState<boolean>(false)
+  const [enabled, setEnabled] = React.useState<boolean | null>(null)
+  const [queue, setQueue] = React.useState<IOverlayState["youtube"]["queue"]>(state?.overlay.youtube.queue || [])
+  const [lastPlayerStateIndex, setLastPlayerStateIndex] = React.useState<number>(YouTube.PlayerState.UNSTARTED)
+  const [contextState, setContextState] = React.useState<YoutubePlayerState | null>(null)
+  const youtubeRef = React.useRef<YouTube | null>(null)
+  const containerRef = React.useRef<HTMLDivElement | null>(null)
 
   React.useEffect(() => {
-    void onHackathonStateChange();
-  }, [state]);
+    void onHackathonStateChange()
+  }, [state])
 
   async function onHackathonStateChange() {
-    const newOverlayState = state?.overlay;
-    if (!newOverlayState) return;
+    const newOverlayState = state?.overlay
+    if (!newOverlayState) return
 
-    if (!isEqual(lastOverlayYoutube, newOverlayState.youtube)
-    ) {
-      setLastOverlayYoutube(newOverlayState.youtube);
-      void updateYoutube(newOverlayState.youtube);
+    if (!isEqual(lastOverlayYoutube, newOverlayState.youtube)) {
+      setLastOverlayYoutube(newOverlayState.youtube)
+      void updateYoutube(newOverlayState.youtube)
     }
   }
 
   async function teardownPlayer() {
-    const containerElement = containerRef.current;
-    if (!containerElement) return;
+    const containerElement = containerRef.current
+    if (!containerElement) return
 
-    containerElement.classList.remove("animate-in");
+    containerElement.classList.remove("animate-in")
 
-    const youtubeElement = youtubeRef.current;
-    if (!youtubeElement) return;
+    const youtubeElement = youtubeRef.current
+    if (!youtubeElement) return
 
     if (youtubeElement.internalPlayer) {
-      await youtubeElement.destroyPlayer();
+      await youtubeElement.destroyPlayer()
     }
 
-    setContextState(null);
+    setContextState(null)
 
-    return;
+    return
   }
 
   async function updateYoutube(options: IOverlayState["youtube"]) {
-    const youtubeElement = youtubeRef.current;
-    if (!youtubeElement) return;
+    const youtubeElement = youtubeRef.current
+    if (!youtubeElement) return
 
-    const { enabled, queue } = options;
+    const { enabled, queue } = options
 
-    setEnabled(enabled);
+    setEnabled(enabled)
 
     if (!enabled) {
-      await teardownPlayer();
+      await teardownPlayer()
     }
 
-    setQueue(queue);
+    setQueue(queue)
 
-    await youtubeElement.resetPlayer();
+    await youtubeElement.resetPlayer()
   }
 
   const onPlayerReady: YouTubeProps["onReady"] = async (event) => {
     if (!enabled) {
-      return await teardownPlayer();
+      return await teardownPlayer()
     }
 
-    console.info("Youtube ready.");
+    console.info("Youtube ready.")
 
-    const containerElement = containerRef.current;
-    if (!containerElement) return;
+    const containerElement = containerRef.current
+    if (!containerElement) return
 
-    containerElement.classList.add("animate-in");
-    await event.target.loadPlaylist(queue.map(({ id }) => id));
-  };
+    containerElement.classList.add("animate-in")
+    await event.target.loadPlaylist(queue.map(({ id }) => id))
+  }
 
   async function onInitialPlayback(player: YouTubePlayer) {
-    setVideoInProgress(true);
+    setVideoInProgress(true)
 
-    const currentId = new URL(await player.getVideoUrl()).searchParams.get("v");
-    if (!currentId) return;
+    const currentId = new URL(await player.getVideoUrl()).searchParams.get("v")
+    if (!currentId) return
 
-    const queued = queue.find(({ id }) => id === currentId);
+    const queued = queue.find(({ id }) => id === currentId)
 
     setContextState({
       currentlyPlaying: currentId,
-      lowerThirdText: queued?.lowerThird || undefined
-    });
+      lowerThirdText: queued?.lowerThird || undefined,
+    })
   }
 
   const onStateChange: YouTubeProps["onStateChange"] = async (event) => {
-    const playerState = event.data;
+    const playerState = event.data
 
-    console.debug(`Player state is now ${playerState}`);
+    console.debug(`Player state is now ${playerState}`)
 
-    if (
-      lastPlayerStateIndex === YouTube.PlayerState.BUFFERING
-      && playerState === YouTube.PlayerState.UNSTARTED
-    ) {
-      await event.target.playVideo();
+    if (lastPlayerStateIndex === YouTube.PlayerState.BUFFERING && playerState === YouTube.PlayerState.UNSTARTED) {
+      await event.target.playVideo()
     }
 
-    if (
-      !videoInProgress
-      && playerState === YouTube.PlayerState.PLAYING
-    ) {
-      onInitialPlayback(event.target);
+    if (!videoInProgress && playerState === YouTube.PlayerState.PLAYING) {
+      onInitialPlayback(event.target)
     }
 
-    if (
-      playerState === YouTube.PlayerState.ENDED
-    ) {
-      setVideoInProgress(false);
-      setContextState(null);
+    if (playerState === YouTube.PlayerState.ENDED) {
+      setVideoInProgress(false)
+      setContextState(null)
     }
 
-    setLastPlayerStateIndex(playerState);
-  };
+    setLastPlayerStateIndex(playerState)
+  }
 
   return (
     <>
@@ -158,5 +149,5 @@ export function FeedOverlay() {
         <OverlayLowerThird />
       </YoutubeContext.Provider>
     </>
-  );
+  )
 }

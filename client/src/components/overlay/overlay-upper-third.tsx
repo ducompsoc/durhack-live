@@ -1,63 +1,63 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import isEqual from "lodash/isEqual";
+import isEqual from "lodash/isEqual"
+import * as React from "react"
 
-import { useHackathon, IOverlayState } from "@/lib/socket";
-import { waitFor } from "@/lib/utils";
+import { type IOverlayState, useHackathon } from "@/lib/socket"
+import { waitFor } from "@/lib/utils"
 
 export function OverlayUpperThird() {
-  const { state } = useHackathon();
-  const [lastUpperThird, setLastUpperThird] = React.useState<IOverlayState["upperThird"] | null>(null);
+  const { state } = useHackathon()
+  const [lastUpperThird, setLastUpperThird] = React.useState<IOverlayState["upperThird"] | null>(null)
 
-  const [text, setText] = React.useState<string | null>(state?.overlay.upperThird.text || null);
+  const [text, setText] = React.useState<string | null>(state?.overlay.upperThird.text || null)
 
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null)
 
   React.useEffect(() => {
-    void onHackathonStateChange();
-  }, [state]);
+    void onHackathonStateChange()
+  }, [state])
 
   async function onHackathonStateChange() {
-    const newOverlayState = state?.overlay;
-    if (!newOverlayState) return;
+    const newOverlayState = state?.overlay
+    if (!newOverlayState) return
 
-    if (isEqual(lastUpperThird, newOverlayState.upperThird)) return;
+    if (isEqual(lastUpperThird, newOverlayState.upperThird)) return
 
-    setLastUpperThird(newOverlayState.upperThird);
-    void updateUpperThird(newOverlayState.upperThird);
+    setLastUpperThird(newOverlayState.upperThird)
+    void updateUpperThird(newOverlayState.upperThird)
   }
 
   async function animateOutUpperThird() {
-    const upperThirdContainer = containerRef.current;
-    if (!upperThirdContainer) return;
+    const upperThirdContainer = containerRef.current
+    if (!upperThirdContainer) return
 
     // the container is already animated out; do nothing
-    if (!upperThirdContainer.classList.contains("animate-in")) return;
+    if (!upperThirdContainer.classList.contains("animate-in")) return
 
-    upperThirdContainer.classList.remove("animate-in");
-    upperThirdContainer.classList.add("animate-out");
-    await waitFor(1.5);
-    upperThirdContainer.classList.remove("animate-out"); // performance
+    upperThirdContainer.classList.remove("animate-in")
+    upperThirdContainer.classList.add("animate-out")
+    await waitFor(1.5)
+    upperThirdContainer.classList.remove("animate-out") // performance
   }
 
   async function updateUpperThird(options: IOverlayState["upperThird"]) {
-    const { enabled, text } = options;
+    const { enabled, text } = options
 
-    await animateOutUpperThird();
+    await animateOutUpperThird()
 
-    if (!enabled) return;
+    if (!enabled) return
 
-    setText(text);
+    setText(text)
 
-    const upperThirdContainer = containerRef.current;
-    if (!upperThirdContainer) return;
-    upperThirdContainer.classList.add("animate-in");
+    const upperThirdContainer = containerRef.current
+    if (!upperThirdContainer) return
+    upperThirdContainer.classList.add("animate-in")
   }
 
   return (
     <div className="upper-third" ref={containerRef}>
       <div>{text}</div>
     </div>
-  );
+  )
 }

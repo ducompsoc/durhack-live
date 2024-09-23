@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { Field, FieldArray, ArrayHelpers, useFormikContext } from "formik";
+import { type ArrayHelpers, Field, FieldArray, useFormikContext } from "formik"
+import * as React from "react"
 
-import { IOverlayState, pushHackathon } from "@/lib/socket";
-import { HackathonContext } from "@/lib/hackathon-context";
+import { HackathonContext } from "@/lib/hackathon-context"
+import { type IOverlayState, pushHackathon } from "@/lib/socket"
 
-import { Segment, Label, OverlayForm, DefaultButtons } from "./";
+import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 const YoutubeContent = React.memo(() => {
-  const formik = useFormikContext<IOverlayState["youtube"]>();
+  const formik = useFormikContext<IOverlayState["youtube"]>()
 
   return (
     <>
@@ -19,29 +19,49 @@ const YoutubeContent = React.memo(() => {
 
       <Segment className="row">
         <Label>Enabled:</Label>
-        <div><Field type="checkbox" className="dh-check" name="enabled" /></div>
+        <div>
+          <Field type="checkbox" className="dh-check" name="enabled" />
+        </div>
       </Segment>
 
       <Segment className="row">
         <Label>Skipped:</Label>
-        <div><Field type="number" className="dh-input" name="skipped" /></div>
+        <div>
+          <Field type="number" className="dh-input" name="skipped" />
+        </div>
       </Segment>
 
       <FieldArray
         name="queue"
         render={(arrayHelpers: ArrayHelpers) => (
           <Segment>
-            {(formik.values.queue).map((_, index) => (
+            {formik.values.queue.map((_, index) => (
               <div className="row" key={index}>
                 <div className="grow basis-0">
-                  <Field type="text" className="dh-input" name={`queue.${index}.id`} placeholder="YouTube ID (not the full URL)" />
+                  <Field
+                    type="text"
+                    className="dh-input"
+                    name={`queue.${index}.id`}
+                    placeholder="YouTube ID (not the full URL)"
+                  />
                 </div>
                 <div className="grow basis-0">
-                  <Field type="text" className="dh-input" name={`queue.${index}.lowerThird`} placeholder="Lower third" />
+                  <Field
+                    type="text"
+                    className="dh-input"
+                    name={`queue.${index}.lowerThird`}
+                    placeholder="Lower third"
+                  />
                 </div>
                 <div>
-                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>-</button>
-                  <button type="button" className="plain-btn" onClick={() => arrayHelpers.insert(index, { id: "", lowerThird: "" })}>
+                  <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    className="plain-btn"
+                    onClick={() => arrayHelpers.insert(index, { id: "", lowerThird: "" })}
+                  >
                     +
                   </button>
                 </div>
@@ -60,21 +80,21 @@ const YoutubeContent = React.memo(() => {
 
       <DefaultButtons />
     </>
-  );
-});
+  )
+})
 
 export const YouTube = React.memo(() => {
-  const hackathon = React.useContext(HackathonContext);
-  if (!hackathon) return <></>;
+  const hackathon = React.useContext(HackathonContext)
+  if (!hackathon) return <></>
 
   function handleSubmit(values: IOverlayState["youtube"]) {
-    if (!hackathon) return;
-    pushHackathon({...hackathon, overlay: {...hackathon.overlay, youtube: values}});
+    if (!hackathon) return
+    pushHackathon({ ...hackathon, overlay: { ...hackathon.overlay, youtube: values } })
   }
 
   return (
     <OverlayForm initialValues={hackathon.overlay.youtube} handleSubmit={handleSubmit}>
       <YoutubeContent />
     </OverlayForm>
-  );
-});
+  )
+})

@@ -1,108 +1,110 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { useHackathon } from "@/lib/socket";
-import { useAsyncEffect } from "@/hooks/use-async-effect";
-import { obsSocket } from "@/lib/obs-socket";
+import { useAsyncEffect } from "@/hooks/use-async-effect"
+import { obsSocket } from "@/lib/obs-socket"
+import { useHackathon } from "@/lib/socket"
 
 export function MusicVolumeController() {
-  const { state } = useHackathon();
-  const [ musicEnabled, setMusicEnabled ] = React.useState<boolean | null>(null);
+  const { state } = useHackathon()
+  const [musicEnabled, setMusicEnabled] = React.useState<boolean | null>(null)
 
   React.useEffect(() => {
-    const newOverlayState = state?.overlay;
-    if (!newOverlayState) return;
+    const newOverlayState = state?.overlay
+    if (!newOverlayState) return
 
-    setMusicEnabled(newOverlayState.currentScene.music);
-  }, [state]);
+    setMusicEnabled(newOverlayState.currentScene.music)
+  }, [state])
 
   const { result }: { result: [interval: number, currentVolume: number] } = useAsyncEffect(
     async () => {
-      if (musicEnabled === null) return;
+      if (musicEnabled === null) return
 
-      const { inputVolumeMul: currentVolume } = await obsSocket.call("GetInputVolume", { inputName: "Desktop Audio" });
-      const { inputMuted: currentMuted } = await obsSocket.call("GetInputMute", { inputName: "Desktop Audio" });
+      const { inputVolumeMul: currentVolume } = await obsSocket.call("GetInputVolume", { inputName: "Desktop Audio" })
+      const { inputMuted: currentMuted } = await obsSocket.call("GetInputMute", { inputName: "Desktop Audio" })
 
       // What's the volume now?
-      console.info(`Volume is ${currentVolume} and want muted to be ${!musicEnabled}, currently ${currentMuted}.`);
+      console.info(`Volume is ${currentVolume} and want muted to be ${!musicEnabled}, currently ${currentMuted}.`)
 
       // If music is already muted, do nothing
-      if (musicEnabled === !currentMuted) return;
+      if (musicEnabled === !currentMuted) return
 
-      const interval = musicEnabled
-        ? await startUnmuting(currentVolume)
-        : await startMuting(currentVolume);
+      const interval = musicEnabled ? await startUnmuting(currentVolume) : await startMuting(currentVolume)
 
-      return [interval, currentVolume];
+      return [interval, currentVolume]
     },
     async () => {
-      const [interval, currentVolume] = result;
-      clearInterval(interval);
+      const [interval, currentVolume] = result
+      clearInterval(interval)
 
-      if (typeof currentVolume === "undefined") return;
+      if (typeof currentVolume === "undefined") return
 
-      await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: currentVolume })
-        .catch(console.error);
-      await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: !musicEnabled })
-        .catch(console.error);
-
+      await obsSocket
+        .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: currentVolume })
+        .catch(console.error)
+      await obsSocket
+        .call("SetInputMute", { inputName: "Desktop Audio", inputMuted: !musicEnabled })
+        .catch(console.error)
     },
-    [musicEnabled]
-  );
+    [musicEnabled],
+  )
 
   async function startMuting(originalVolume: number) {
-    console.info("starting mute");
-    let tweenVolume = originalVolume;
+    console.info("starting mute")
+    let tweenVolume = originalVolume
     const interval = setInterval(async () => {
-      tweenVolume -= 0.05;
+      tweenVolume -= 0.05
 
       if (tweenVolume <= 0) {
-        clearInterval(interval);
+        clearInterval(interval)
 
         // Now mute it altogether.
-        await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: true })
-          .catch(console.error);
+        await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: true }).catch(console.error)
         // And set the volume back to whatever it was before.
-        await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: originalVolume })
-          .catch(console.error);
+        await obsSocket
+          .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: originalVolume })
+          .catch(console.error)
 
-        return;
+        return
       }
 
-      console.info(`Set volume to ${tweenVolume}...`);
-      await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: tweenVolume })
-        .catch(console.error);
-    }, 500);
+      console.info(`Set volume to ${tweenVolume}...`)
+      await obsSocket
+        .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: tweenVolume })
+        .catch(console.error)
+    }, 500)
 
-    return interval;
+    return interval
   }
 
-  async function startUnmuting(originalVolume: any) {
-    console.info("starting unmute");
+  async function startUnmuting(originalVolume: number) {
+    console.info("starting unmute")
     // set volume to zero and unmute.
-    await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: 0 });
-    await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: false });
+    await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: 0 })
+    await obsSocket.call("SetInputMute", { inputName: "Desktop Audio", inputMuted: false })
 
     // Slowly drag the volume up
-    let tweenVolume = 0;
-    let interval = setInterval(async () => {
-      tweenVolume += 0.05;
+    let tweenVolume = 0
+    const interval = setInterval(async () => {
+      tweenVolume += 0.05
       if (tweenVolume >= originalVolume) {
-        clearInterval(interval);
+        clearInterval(interval)
 
-        await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: originalVolume })
-          .catch(console.error);
+        await obsSocket
+          .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: originalVolume })
+          .catch(console.error)
 
-        return;
+        return
       }
-      console.info(`Set volume to ${tweenVolume}...`);
-      await obsSocket.call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: tweenVolume })
-        .catch(console.error);
-    }, 500);
+      console.info(`Set volume to ${tweenVolume}...`)
+      await obsSocket
+        .call("SetInputVolume", { inputName: "Desktop Audio", inputVolumeMul: tweenVolume })
+        .catch(console.error)
+    }, 500)
 
-    return interval;
+    return interval
   }
 
-  return <></>;
+  return <></>
 }

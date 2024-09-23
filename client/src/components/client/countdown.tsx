@@ -1,39 +1,42 @@
-"use client";
+"use client"
 
-import * as React from "react";
+import * as React from "react"
 
-import { useCountdown } from "@/hooks/use-countdown";
-import { useHackathon } from "@/lib/socket";
+import { useCountdown } from "@/hooks/use-countdown"
+import { useHackathon } from "@/lib/socket"
 
 function zeroPad(num: number): string {
   if (num < 10) {
-    return `0${num}`;
+    return `0${num}`
   }
 
-  return `${num}`;
+  return `${num}`
 }
 
 function digitise(num: string) {
-  return num.split("").map((char, index) => <span className="inline-block w-[50px] text-center" key={index}>{char}</span>);
+  return num.split("").map((char, index) => (
+    <span className="inline-block w-[50px] text-center" key={index}>
+      {char}
+    </span>
+  ))
 }
 
 export const Countdown = React.memo(() => {
-  const { state } = useHackathon();
+  const { state } = useHackathon()
   const [milestoneWhen, setMilestoneWhen] = React.useState<Date>(() => {
-    if (!state?.overlay.milestone.when) return new Date();
-    return new Date(state.overlay.milestone.when);
-  });
-  const countdownValues = useCountdown(milestoneWhen, 500);
+    if (!state?.overlay.milestone.when) return new Date()
+    return new Date(state.overlay.milestone.when)
+  })
+  const countdownValues = useCountdown(milestoneWhen, 500)
 
   React.useEffect(() => {
-    if (!state) return;
+    if (!state) return
 
-    setMilestoneWhen(new Date(state.overlay.milestone.when));
-
-  }, [state]);
+    setMilestoneWhen(new Date(state.overlay.milestone.when))
+  }, [state])
 
   if (!state || !state.overlay.milestone.enabled || !countdownValues) {
-    return <></>;
+    return <></>
   }
 
   return (
@@ -41,13 +44,10 @@ export const Countdown = React.memo(() => {
       <div className="w-full column center grow basis-0">
         <div className="w-full text-2xl font-semibold uppercase mb-[-6px]">{state.overlay.milestone.text}</div>
         <div className="w-full text-[50px] ml-[-32px]">
-          {digitise(zeroPad(countdownValues.hours))}
-          :
-          {digitise(zeroPad(countdownValues.minutes))}
-          :
+          {digitise(zeroPad(countdownValues.hours))}:{digitise(zeroPad(countdownValues.minutes))}:
           {digitise(zeroPad(countdownValues.seconds))}
         </div>
       </div>
     </div>
-  );
-});
+  )
+})

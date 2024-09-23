@@ -1,5 +1,5 @@
-import type { Config } from "tailwindcss"
 import tailwindForms from "@tailwindcss/forms"
+import type { Config } from "tailwindcss"
 
 const config = {
   darkMode: ["class"],
@@ -62,9 +62,9 @@ const config = {
         },
       },
       fontFamily: {
-        "heading": "var(--durhack-font)"
-      }
-    }
+        heading: "var(--durhack-font)",
+      },
+    },
   },
   plugins: [tailwindForms],
 } satisfies Config

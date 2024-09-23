@@ -1,23 +1,17 @@
-"use client";
+"use client"
 
-import dynamic from "next/dynamic";
+import dynamic from "next/dynamic"
 
-import {
-  OverlayMainWrapper,
-  OverlayMilestone,
-  FeedOverlay,
-  MusicVolumeController
-} from "@/components/overlay";
+import { FeedOverlay, MusicVolumeController, OverlayMainWrapper, OverlayMilestone } from "@/components/overlay"
 
-const OverlaySlides = dynamic(() => import("@/components/overlay/overlay-slides").then(mod => mod.OverlaySlides), {
+const OverlaySlides = dynamic(() => import("@/components/overlay/overlay-slides").then((mod) => mod.OverlaySlides), {
   ssr: false,
-});
+})
 
 export default function LivestreamOverlay() {
   return (
     <main>
       <div className="canvas">
-
         <FeedOverlay />
 
         <OverlayMainWrapper>
@@ -28,5 +22,5 @@ export default function LivestreamOverlay() {
         <MusicVolumeController />
       </div>
     </main>
-  );
+  )
 }

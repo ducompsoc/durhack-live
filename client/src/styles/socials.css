@@ -10,7 +10,7 @@
     right: 0px;
     bottom: 100%;
     left: 0px;
-    content: '';
+    content: "";
     transition: .5s ease;
   }
 
