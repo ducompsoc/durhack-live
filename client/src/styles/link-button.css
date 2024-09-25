@@ -1,0 +1,24 @@
+.link-button {
+  display: inline-block;
+  background-color: rgba(17, 17, 17, 0.5);
+  border-radius: 100px;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 12px 32px;
+  transition: .3s ease;
+
+  &:hover {
+    background-color: rgba(17, 17, 17, 0.9);
+  }
+}
+
+.link-button.primary {
+  @apply bg-secondary;
+  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
+  color: #111;
+
+  &:hover {
+    @apply bg-secondary;
+    opacity: 0.8;
+  }
+}

@@ -1,22 +1,10 @@
 {
   "extends": "next/core-web-vitals",
   "rules": {
-    "react/jsx-indent": [
-      "error",
-      2
-    ],
-    "react/jsx-indent-props": [
-      "error",
-      2
-    ],
-    "quotes": [
-      "error",
-      "double"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
+    "react/jsx-indent": ["error", 2],
+    "react/jsx-indent-props": ["error", 2],
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
     "react/display-name": "off",
     "arrow-parens": "off",
     "max-len": ["warn", 140],

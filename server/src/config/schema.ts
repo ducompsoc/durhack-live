@@ -6,18 +6,11 @@ export const listenOptionsSchema = z.object({
   port: z.number().int().positive(),
 })
 
-export const databaseOptionsSchema = z.object({
-  host: z.string(),
-  port: z.number().int().positive(),
-  database: z.string(),
-  username: z.string(),
-  password: z.string(),
-})
-
 export const cookieOptionsSchema = z.object({
-  sameSite: z.union([z.literal("none"), z.literal("lax"), z.literal("strict")]).optional(),
+  sameSite: z.enum(["none", "lax", "strict"]).optional(),
   path: z.string().optional(),
   secure: z.boolean(),
+  domain: z.string().optional(),
 })
 
 export const doubleCsrfOptionsSchema = z.object({
@@ -40,17 +33,10 @@ export const discordOptionsSchema = z.object({
   inviteLink: z.string().url(),
 })
 
-export const oauthOptionsSchema = z.object({
-  accessTokenLifetime: z.number().positive(),
-  refreshTokenLifetime: z.number().positive(),
-  allowEmptyState: z.boolean(),
-  allowExtendedTokenAttributes: z.boolean(),
-  useErrorHandler: z.boolean(),
-  continueMiddleware: z.boolean(),
-})
-
 export const keycloakOptionsSchema = z.object({
-  url: z.string().url(),
+  realm: z.string(),
+  baseUrl: z.string().url(),
+  adminBaseUrl: z.string().url(),
   clientId: z.string(),
   clientSecret: z.string(),
   redirectUris: z.array(z.string()),
@@ -59,22 +45,17 @@ export const keycloakOptionsSchema = z.object({
 
 export const configSchema = z.object({
   listen: listenOptionsSchema,
-  hostname: z.string().url(),
+  origin: z.string().url(),
   flags: z.object({}),
-  database: z.object({
-    data: databaseOptionsSchema,
-    session: databaseOptionsSchema,
-  }),
   csrf: z.object({
     enabled: z.boolean(),
     secret: z.string(),
     options: doubleCsrfOptionsSchema,
   }),
-  cookieParser: z.object({
+  cookieSigning: z.object({
     secret: z.string(),
   }),
   jsonwebtoken: tokenVaultOptionsSchema,
-  oauth: oauthOptionsSchema,
   session: sessionOptionsSchema,
   discord: discordOptionsSchema,
   keycloak: keycloakOptionsSchema,

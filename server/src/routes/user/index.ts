@@ -18,16 +18,6 @@ userApp.use((request: Request & { user?: User }, response: Response, next: NextF
   next()
 })
 
-userApp
-  .route("/")
-  .get(userHandlers.getUserWithDetails())
-  .get(userHandlers.getUser())
-  .patch(userHandlers.patchUserDetails(), handleFailedAuthentication)
-  .all(handleMethodNotAllowed("GET", "PATCH"))
-
-userApp
-  .route("/check-in")
-  .post(userHandlers.checkUserIn(), handleFailedAuthentication)
-  .all(handleMethodNotAllowed("POST"))
+userApp.route("/").get(userHandlers.getUser()).all(handleMethodNotAllowed("GET"))
 
 export { userApp }

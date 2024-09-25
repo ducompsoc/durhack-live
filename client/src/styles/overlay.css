@@ -1,0 +1,827 @@
+@import url("https://fonts.googleapis.com/css2?family=Exo+2:wght@400;600;700;900&display=swap");
+
+@font-face {
+  font-family: "Deciso Bold";
+  font-weight: bold;
+  src: url("/Deciso-Bold.woff") format("woff");
+}
+
+html,
+body {
+  font-family: "Exo 2", sans-serif;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+.canvas {
+  position: relative;
+  width: 1280px;
+  height: 720px;
+  overflow: hidden;
+}
+
+.youtube {
+  display: none;
+
+  &.animate-in {
+    display: block;
+  }
+}
+
+.main-wrapper {
+  display: none;
+
+  &.animate-in {
+    display: block;
+  }
+
+  &.dark {
+    .gradient-bg {
+      .a {
+        background-image: radial-gradient(closest-side, #1f1c9e 0%, #1f1c9e 0%, transparent 50%);
+      }
+
+      .b {
+        background-image: radial-gradient(closest-side, #59145a 0%, #59145a 30%, transparent 100%);
+      }
+
+      .c {
+        background-image: radial-gradient(closest-side, #751c9e 0%, #751c9e 30%, transparent 100%);
+      }
+
+      .d {
+        background-image: radial-gradient(closest-side, #5b2fd7 0%, #5b2fd7 30%, transparent 100%);
+      }
+
+      .base {
+        background-color: #1f1c9e;
+      }
+    }
+
+    .slides > div {
+      > div.major-text > div > div {
+        background-color: #111;
+      }
+
+      > div.minor-text > div > div {
+        background-color: #222;
+      }
+    }
+
+    .milestone {
+      color: #000;
+    }
+  }
+}
+
+.main {
+  position: absolute;
+  top: 64px;
+  right: 64px;
+  bottom: 64px;
+  left: 64px;
+  color: #fff;
+
+  .logo {
+    position: absolute;
+    height: 128px;
+    bottom: -16px;
+  }
+
+  .milestone {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    color: #fff;
+    text-align: right;
+    transition: .5s ease;
+    opacity: 0;
+
+    &.animate-in {
+      opacity: 1;
+    }
+
+    .text {
+      font-size: 26px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .countdown {
+      font-size: 72px;
+      font-weight: bold;
+      line-height: 64px;
+
+      span {
+        text-align: center;
+        float: left;
+        transition: .5s ease;
+        opacity: 1;
+
+        &.animate-out {
+          opacity: 0;
+        }
+
+        &.digit {
+          width: 46px;
+          overflow: hidden;
+          text-align: center;
+        }
+      }
+    }
+  }
+
+  .slides > div {
+    display: none;
+
+    .nextup-countdown {
+      display: inline-block;
+      min-width: 72px;
+    }
+
+    .sep-text {
+      height: 32px;
+    }
+
+    .minor-text,
+    .major-text {
+      overflow: hidden;
+
+      > div {
+        color: #fff;
+        float: left;
+
+        > div {
+          width: 0%;
+          box-sizing: border-box;
+          -webkit-box-decoration-break: clone;
+          box-decoration-break: clone;
+          white-space: nowrap;
+          overflow: hidden;
+          animation-duration: 1s;
+          animation-fill-mode: forwards;
+
+          > div {
+            padding: 12px 32px 12px 32px;
+          }
+        }
+      }
+
+      &.minor-text > div > div {
+        background-color: #111;
+        font-size: 34px;
+        font-weight: 600;
+      }
+
+      &.major-text > div > div {
+        background-color: #111;
+        font-size: 72px;
+        font-weight: 900;
+      }
+
+      img {
+        width: auto;
+        max-height: 300px;
+      }
+    }
+
+    &.animate-in {
+      display: block;
+
+      .minor-text,
+      .major-text {
+        > div > div {
+          animation-name: text-animate-in;
+        }
+      }
+    }
+
+    &.visible {
+      display: block;
+      .minor-text,
+      .major-text {
+        > div > div {
+          width: 100%;
+        }
+      }
+    }
+
+    &.animate-out {
+      display: block;
+
+      .minor-text,
+      .major-text {
+        > div > div {
+          animation-name: text-animate-out;
+          animation-fill-mode: backwards;
+        }
+      }
+    }
+
+    @keyframes text-animate-in {
+      0% {
+        width: 0%;
+      }
+
+      100% {
+        width: 100%;
+      }
+    }
+
+    @keyframes text-animate-out {
+      0% {
+        width: 100%;
+      }
+
+      100% {
+        width: 0%;
+      }
+    }
+  }
+}
+
+.gradient-bg {
+  height: 720px;
+  background-image: url("/images/livestream-slate-0.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  animation-name: hue-pulse;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite, infinite;
+
+  &.bg-1 {
+    background-image: url("/images/livestream-slate-1.png");
+  }
+
+  &.bg-2 {
+    background-image: url("/images/livestream-slate-2.png");
+  }
+
+  /* Everything below this point is for the wacky animated gradient */
+
+  /* > div {
+      position: absolute;
+      width: 160%;
+      height: 200%;
+  }
+
+  > .a, > .b, > .c, > .d {
+      animation-name: hover-horiz, hover-vert;
+      animation-duration: 45s, 15s;
+      animation-timing-function: ease-in-out, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+      animation-direction: alternate-reverse, alternate-reverse;
+      animation-fill-mode: backwards;
+  }
+
+  > .c {
+      animation-name: hover-horiz-exagg, hover-vert;
+      animation-duration: 45s, 15s;
+      animation-timing-function: ease-in-out, ease-in-out;
+      animation-iteration-count: infinite, infinite;
+      animation-direction: alternate-reverse, alternate-reverse;
+  } */
+
+  /* > .b, > .d {
+      animation-name: hue-pulse;
+      animation-duration: 60s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-direction: alternate-reverse;
+  } */
+
+  /* > .a {
+      left: -60%;
+      bottom: -80%;
+      background-image: radial-gradient(closest-side, #842FD7 0%, #842FD7 0%, transparent 50%);
+  }
+
+  > .b {
+      left: -60%;
+      top: -100%;
+      background-image: radial-gradient(closest-side, #C5E3B3 0%, #C5E3B3 30%, transparent 100%);
+      animation-delay: 1s;
+  }
+
+  > .c {
+      left: 0%;
+      top: -100%;
+      background-image: radial-gradient(closest-side, #92CED4 0%, #92CED4 30%, transparent 100%);
+      animation-delay: 3s;
+  }
+
+  > .d {
+      right: -100%;
+      bottom: -100%;
+      background-image: radial-gradient(closest-side, #DAB8E9 0%, #DAB8E9 30%, transparent 100%);
+      animation-delay: 4s;
+  }
+
+  > .base {
+      background-color: #842FD7;
+  }
+
+  @keyframes hover-horiz {
+      0% {
+          margin-left: 0%;
+      }
+
+      20% {
+          margin-left: 15%;
+      }
+
+      40% {
+          margin-left: -15%;
+      }
+
+      60% {
+          margin-left: 0%;
+      }
+
+      80% {
+          margin-left: 5%;
+      }
+
+      100% {
+          margin-left: -10%;
+      }
+  }
+
+  @keyframes hover-horiz-exagg {
+      0% {
+          margin-left: 0%;
+      }
+
+      50% {
+          margin-left: -60%;
+      }
+
+      100% {
+          margin-left: 0%;
+      }
+  }
+
+  @keyframes hover-vert {
+      0% {
+          margin-bottom: 0%;
+      }
+
+      20% {
+          margin-bottom: 5%;
+      }
+
+      40% {
+          margin-bottom: -5%;
+      }
+
+      60% {
+          margin-bottom: -15%;
+      }
+
+      80% {
+          margin-bottom: 5%;
+      }
+
+      100% {
+          margin-bottom: 0%;
+      }
+  } */
+
+  @keyframes hue-pulse {
+    0% {
+      filter: hue-rotate(0deg);
+    }
+
+    100% {
+      filter: hue-rotate(360deg);
+    }
+  }
+}
+
+.text-pattern-bg {
+  display: none;
+  position: absolute;
+  top: -300px;
+  right: 500px;
+  bottom: -300px;
+  left: 500px;
+  background-color: #111;
+  transform: rotate(-20deg);
+  overflow: hidden;
+  animation-fill-mode: forwards;
+
+  &.animate-in-out {
+    display: block;
+    animation-name: text-pattern-in-out;
+    animation-duration: 7s;
+
+    .lines > div {
+      animation-timing-function: linear;
+    }
+  }
+
+  &.animate-in {
+    display: block;
+    animation-name: text-pattern-in;
+    animation-duration: 1s;
+  }
+
+  &.animate-out {
+    display: block;
+    animation-name: text-pattern-out;
+    animation-duration: 1s;
+  }
+
+  @keyframes text-pattern-in {
+    0% {
+      right: 800px;
+      left: 800px;
+    }
+
+    100% {
+      right: -100px;
+      left: -100px;
+    }
+  }
+
+  @keyframes text-pattern-out {
+    0% {
+      right: -100px;
+      left: -100px;
+    }
+
+    100% {
+      right: 640px;
+      left: 640px;
+    }
+  }
+
+  @keyframes text-pattern-in-out {
+    0% {
+      right: 1450px;
+      left: -150px;
+    }
+
+    20% {
+      right: -100px;
+      left: -100px;
+    }
+
+    80% {
+      right: -100px;
+      left: -100px;
+    }
+
+    100% {
+      right: -150px;
+      left: 1450px;
+    }
+  }
+
+  .lines {
+    position: absolute;
+    top: 0px;
+    left: -500px;
+    right: -500px;
+    bottom: 0px;
+
+    > div {
+      height: 55px;
+      background-image: url("/images/text-pattern.png");
+      background-position: top center;
+      margin-bottom: 6px;
+
+      animation-name: text-pattern-move-left;
+      animation-duration: 2s;
+      animation-iteration-count: infinite;
+
+      &:nth-child(even) {
+        animation-name: text-pattern-move-right;
+      }
+
+      &.a {
+        margin-left: 96px;
+      }
+
+      &.b {
+        margin-left: 32px;
+      }
+
+      &.c {
+        margin-left: 128px;
+      }
+
+      &.d {
+        margin-left: 0px;
+      }
+
+      &.e {
+        margin-left: 64px;
+      }
+    }
+
+    @keyframes text-pattern-move-left {
+      50% {
+        transform: translateX(-147px);
+      }
+
+      100% {
+        transform: translateX(-294px);
+      }
+    }
+
+    @keyframes text-pattern-move-right {
+      50% {
+        transform: translateX(147px);
+      }
+
+      100% {
+        transform: translateX(294px);
+      }
+    }
+  }
+
+  .foreground {
+    position: absolute;
+    top: 300px;
+    right: -100px;
+    bottom: 300px;
+    left: -100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Deciso Bold", sans-serif;
+    font-size: 72px;
+    color: #fff;
+    transform: rotate(20deg);
+
+    > div {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+
+      .countdown {
+        position: absolute;
+        top: 160px;
+        width: 100%;
+        font-size: 256px;
+        text-align: center;
+        text-shadow: 0px 0px 32px #000;
+        text-align: center;
+      }
+    }
+  }
+}
+
+.lower-third {
+  position: absolute;
+  bottom: 64px;
+  left: 64px;
+  width: 0px;
+  overflow: hidden;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+
+  &.animate-in {
+    animation-name: lower-third-in;
+  }
+
+  &.animate-out {
+    animation-name: lower-third-out;
+  }
+
+  @keyframes lower-third-in {
+    0% {
+      width: 0px;
+    }
+
+    100% {
+      width: 1152px;
+    }
+  }
+
+  @keyframes lower-third-out {
+    0% {
+      width: 1152px;
+    }
+
+    100% {
+      width: 0px;
+    }
+  }
+
+  .pre-text {
+    position: relative;
+    display: none;
+    width: 1152px;
+    opacity: 0.8;
+    float: left;
+
+    &.active {
+      display: flex;
+    }
+
+    .text {
+      display: inline-block;
+      background-color: #333;
+      font-size: 24px;
+      font-weight: bold;
+      color: #fff;
+      padding: 16px 24px;
+    }
+  }
+
+  .main-text {
+    position: relative;
+    display: flex;
+    width: 1152px;
+    align-items: center;
+    background-color: #751c9e;
+    box-sizing: border-box;
+    font-size: 32px;
+    color: #fff;
+    padding: 16px 120px 16px 24px;
+    opacity: 0.95;
+
+    .bg {
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      bottom: 0px;
+      left: 0px;
+      background-image: url("/images/icon-white.png");
+      background-size: 104px 104px;
+      background-repeat: repeat-y;
+      background-position: calc(100% + 12px) -16px;
+      opacity: 0.3;
+    }
+
+    .icon {
+      font-size: 36px;
+      padding-right: 16px;
+    }
+
+    .text {
+      display: flex;
+      flex: 1;
+      padding: 0px 0px 4px 12px;
+
+      > div {
+        width: 100%;
+      }
+    }
+
+    .countdown {
+      min-width: 100px;
+      font-weight: bold;
+      text-align: right;
+    }
+  }
+}
+
+.upper-third {
+  position: absolute;
+  top: 64px;
+  left: 64px;
+  width: 0px;
+  overflow: hidden;
+  animation-duration: 1.5s;
+  animation-fill-mode: forwards;
+
+  &.animate-in {
+    animation-name: upper-third-in;
+  }
+
+  &.animate-out {
+    animation-name: upper-third-out;
+  }
+
+  @keyframes upper-third-in {
+    0% {
+      width: 0px;
+    }
+
+    100% {
+      width: 680px;
+    }
+  }
+
+  @keyframes upper-third-out {
+    0% {
+      width: 680px;
+    }
+
+    100% {
+      width: 0px;
+    }
+  }
+
+  > div {
+    position: relative;
+    display: flex;
+    width: 680px;
+    align-items: center;
+    background-color: #111;
+    box-sizing: border-box;
+    font-size: 32px;
+    color: #fff;
+    padding: 16px 128px 16px 24px;
+    opacity: 0.95;
+  }
+}
+
+.feature {
+  &.animate-in {
+    .cover {
+      animation-name: feature-in;
+    }
+  }
+
+  &.animate-out {
+    .cover {
+      animation-name: feature-out;
+    }
+  }
+
+  .icon-bg {
+    position: absolute;
+    top: -64px;
+    right: -64px;
+    bottom: -64px;
+    left: -64px;
+    display: none;
+    background-image: url("/images/icon-white.png");
+    background-size: 64px 64px;
+    transition: opacity 1s;
+    opacity: 0;
+
+    @keyframes icon-move {
+      100% {
+        transform: translateX(64px) translateY(64px); /* transforms are way faster than background-position */
+      }
+    }
+  }
+
+  @keyframes feature-in {
+    0% {
+      width: 0px;
+    }
+
+    100% {
+      width: 100%;
+    }
+  }
+
+  @keyframes feature-out {
+    0% {
+      width: 100%;
+    }
+
+    100% {
+      width: 0px;
+    }
+  }
+
+  .cover {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    width: 0px;
+    background-color: rgba(0, 0, 0, 0.9);
+    box-sizing: border-box;
+    color: #fff;
+    overflow: hidden;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+
+    > div {
+      width: calc(1280px - 64px - 64px - 16px);
+      padding: 64px 64px 64px calc(64px + 16px);
+
+      .logo {
+        position: absolute;
+        height: 128px;
+        left: 64px;
+        bottom: calc(64px - 16px);
+      }
+
+      .icon {
+        font-size: 128px;
+      }
+
+      .title {
+        font-size: 48px;
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 32px 0px;
+      }
+
+      .text {
+        font-size: 32px;
+        font-weight: bold;
+      }
+    }
+  }
+}

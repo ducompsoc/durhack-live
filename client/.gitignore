@@ -1,35 +1,45 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Exclude everything
+/*
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Specific includes
 
-# testing
-/coverage
+## Editorconfig
+!.editorconfig
 
-# next.js
-/.next/
-/out/
+## Package manager
+!/package.json
+!/pnpm-lock.yaml
 
-# production
-/build
+## Config files
+!/*config.ts
+!/*config.mjs
+!/*config.cjs
+!/*config.js
+!/*config.json
+!/*rc.json
 
-# misc
-.DS_Store
-*.pem
+## Next.js
+!/components.json
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+## Biome.js
+!/biome.json
 
-# local env files
-.env*.local
+## Markdowns
+!*.md
+!LICENSE
 
-# vercel
-.vercel
+## important Git files
+!.gitmodules
+!.gitignore
+!.gitattributes
+!.git-blame-ignore-revs
 
-# typescript
-*.tsbuildinfo
-next-env.d.ts
+## GitHub specific
+!/.github/
+
+## Sources
+!/asset-src
+!/public
+!/src
+
+# Explicit exceptions/ignores

@@ -1,0 +1,24 @@
+.social-button {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  transition: .3s ease;
+
+  &:before {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 100%;
+    left: 0px;
+    content: "";
+    transition: .5s ease;
+  }
+
+  &:hover:before {
+    bottom: 0px;
+  }
+
+  &:hover {
+    color: #1e1e1e;
+  }
+}

@@ -9,12 +9,7 @@ import type { Response } from "@/response"
 import { ConflictError, NullError, ValueError } from "@/common/errors"
 import { sendHttpErrorResponse, sendOAuthErrorResponse, sendZodErrorResponse } from "@/common/response"
 
-export default function apiErrorHandler(
-  this: App<Request, Response>,
-  error: unknown,
-  request: Request,
-  response: Response,
-) {
+export function apiErrorHandler(this: App<Request, Response>, error: unknown, request: Request, response: Response) {
   if (response.headersSent) {
     return
   }

@@ -4,17 +4,27 @@ import type { DeepPartial } from "@/types/deep-partial"
 import type { ConfigIn } from "./schema"
 
 export default {
+  origin: "https://live.durhack.com",
   csrf: {
     enabled: true,
     options: {
       cookieOptions: {
-        name: "__Host-psifi.x-csrf-token",
+        name: "__Host-durhack-live.x-csrf-token",
+        domain: undefined,
+        sameSite: "strict",
+        path: "/",
         secure: true,
       },
     },
   },
   session: {
-    cookie: { secure: true },
+    cookie: {
+      name: "__Host-durhack-live-session",
+      domain: undefined,
+      path: "/",
+      secure: true,
+      sameSite: "lax",
+    },
   },
   jsonwebtoken: {
     issuer: "https://live.durhack.com",
@@ -42,5 +52,9 @@ export default {
   },
   discord: {
     redirectUri: "https://live.durhack.com/api/auth/discord/redirect",
+  },
+  keycloak: {
+    realm: "durhack",
+    redirectUris: ["https://live.durhack.com/api/auth/keycloak/callback"],
   },
 } satisfies DeepPartial<ConfigIn>

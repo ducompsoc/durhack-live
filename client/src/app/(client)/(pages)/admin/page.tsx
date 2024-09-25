@@ -1,35 +1,38 @@
-"use client";
+"use client"
 
-import React from "react";
+import { Card } from "@durhack/web-components/ui/card"
+import * as React from "react"
 
-import { useHackathon } from "@/app/util/socket";
+import { Section } from "@/components/client/section"
+import { useHackathon } from "@/lib/socket"
 
-import Card from "../components/Card";
-import Section from "../components/Section";
-import { HackathonContext } from "./util";
+import { HackathonContext } from "@/lib/hackathon-context"
 import {
   AnnouncementForm,
-  TipsForm,
-  ScheduleForm,
-  OverlayMainForm,
-  LowerThirdForm,
-  UpperThirdForm,
-  SwitchSceneForm,
-  MilestoneForm,
   FeatureForm,
+  LowerThirdForm,
+  MainForm,
+  MilestoneForm,
+  ScheduleForm,
+  SwitchSceneForm,
+  TipsForm,
+  UpperThirdForm,
   YoutubeForm,
-} from "./components";
-
+} from "./components"
 
 export default React.memo(() => {
-  const hackathon = useHackathon();
+  const hackathon = useHackathon()
 
   if (!hackathon.connected || !hackathon.state) {
-    return <main>Not connected.</main>;
+    return <main>Not connected.</main>
   }
 
-  if (hackathon.role !== "admin") {
-    return <main>You do not have permission to view this page.</main>;
+  if (hackathon.authenticationLoading) {
+    return <main>Waiting for authentication...</main>
+  }
+
+  if (!hackathon.roles?.includes("/admins")) {
+    return <main>You do not have permission to view this page.</main>
   }
 
   return (
@@ -38,8 +41,8 @@ export default React.memo(() => {
         <Section>
           <div>
             <Card>
-              This admin page controls both content on this website, and what shows on the livestream.{" "}
-              Changes take effect immediately after you hit Submit.
+              This admin page controls both content on this website, and what shows on the livestream. Changes take
+              effect immediately after you hit Submit.
             </Card>
           </div>
 
@@ -60,7 +63,7 @@ export default React.memo(() => {
 
           <div className="row">
             <Card className="grow basis-0">
-              <OverlayMainForm />
+              <MainForm />
             </Card>
             <Card className="grow basis-0">
               <LowerThirdForm />
@@ -88,5 +91,5 @@ export default React.memo(() => {
         </Section>
       </main>
     </HackathonContext.Provider>
-  );
-});
+  )
+})

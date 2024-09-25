@@ -17,6 +17,9 @@ export default await getTokenVault<User>({
       where: {
         keycloakUserId: userId,
       },
+      include: {
+        tokenSet: true,
+      },
     })
   },
   filePathResolver: resolveFilePathFromProjectRoot,

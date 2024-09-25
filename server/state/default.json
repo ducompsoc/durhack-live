@@ -2,7 +2,7 @@
   "schedule": [
     {
       "name": "Registration",
-      "icon": "fas fa-clipboard-list",
+      "icon": " fa-clipboard-list",
       "liveLink": "",
       "recordingLink": "",
       "start": "2021-02-19T09:30:00.000Z",
