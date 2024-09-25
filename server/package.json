@@ -25,14 +25,17 @@
     "node": ">=20"
   },
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
-  "contributors": ["Joe Clack <durhack@joeclack.me.uk>", "Jacob Wrenn <jacob@wrenn.me>"],
+  "contributors": [
+    "Joe Clack <durhack@joeclack.me.uk>",
+    "Jacob Wrenn <jacob@wrenn.me>"
+  ],
   "license": "UNLICENSED",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@types/http-errors": "^2.0.4",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash": "^4.17.7",
-    "@types/node": "^20.14.11",
+    "@types/node": "^22.7.0",
     "glob": "^11.0.0",
     "prisma": "^5.17.0",
     "tsup": "^8.2.2",
