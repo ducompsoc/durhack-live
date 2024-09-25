@@ -16,11 +16,11 @@ type DynamicFaIconProps = {
 export const DynamicFaIcon = React.memo(
   ({ iconClassName, style, className, width, height, ...props }: DynamicFaIconProps) => {
     let [prefix, iconName] = iconClassName.split(" ")
-    if (iconName.startsWith("fa-")) iconName = iconName.substring(3)
+    if (iconName?.startsWith("fa-")) iconName = iconName.substring(3)
 
     const iconDefinition: IconDefinition | null | undefined = findIconDefinition({
       prefix: prefix as IconPrefix,
-      iconName: iconName as IconName,
+      iconName: (iconName ?? "") as IconName,
     })
 
     if (!iconDefinition) return <svg {...{ style, className, width, height }} />
