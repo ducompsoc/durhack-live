@@ -4,11 +4,11 @@ import { Server as SocketIO } from "socket.io"
 
 import { matchSignedCookie, signCookie, unsignCookie } from "@/common/cookies"
 
-import { origin, listenConfig } from "./config"
+import { listenConfig, origin } from "./config"
 import { Request } from "./request"
 import { Response } from "./response"
 import { apiApp } from "./routes"
-import HackathonStateSocketManager from "./socket"
+import { HackathonStateSocketManager } from "./socket"
 
 const environment = process.env.NODE_ENV
 const dev = environment !== "production"
@@ -31,32 +31,18 @@ function getApp(): App<Request, Response> {
   return app
 }
 
-// @ts-expect-error
-function getServer(app: App<Request, Response>): Server<typeof Request, typeof Response> {
-  // @ts-expect-error
-  const server = createServer<typeof Request, typeof Response>({
-    IncomingMessage: Request,
-    ServerResponse: Response,
-  })
-  server.on("request", app.attach)
-  const io = new SocketIO(server as Server)
-  HackathonStateSocketManager.initialise(io)
+const app = getApp()
 
-  return server
-}
+const server = createServer<typeof Request, typeof Response>({
+  IncomingMessage: Request,
+  ServerResponse: Response,
+})
+server.on("request", app.attach)
+const io = new SocketIO(server as Server)
+const stateSocketManager = new HackathonStateSocketManager(io)
 
-async function main() {
-  const app = getApp()
-  const server = getServer(app)
-
-  server.listen(listenConfig.port, listenConfig.host, () => {
-    console.log(
-      `> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}, access via ${origin}`,
-    )
-  })
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
+server.listen(listenConfig.port, listenConfig.host, () => {
+  console.log(
+    `> Server listening on http://${listenConfig.host}:${listenConfig.port} as ${dev ? "development" : environment}, access via ${origin}`,
+  )
 })

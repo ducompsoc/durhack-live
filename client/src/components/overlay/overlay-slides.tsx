@@ -15,7 +15,8 @@ const MainTextStyle = {
 
 type MainTextStyleType = (typeof MainTextStyle)[keyof typeof MainTextStyle]
 
-const fakeCanvasContext = document.createElement("canvas").getContext("2d")
+let fakeCanvasContext: CanvasRenderingContext2D | null
+if (document !== undefined) fakeCanvasContext = document.createElement("canvas").getContext("2d")
 
 function breakUpParagraph(paragraph: string, style: MainTextStyleType) {
   if (fakeCanvasContext == null) {

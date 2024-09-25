@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@durhack/token-vault':
-        specifier: ^0.1.1
-        version: 0.1.1(jose@5.6.3)(zod@3.23.8)
+        specifier: ^0.1.2
+        version: 0.1.2(jose@5.6.3)(zod@3.23.8)
       '@keycloak/keycloak-admin-client':
         specifier: ^25.0.6
         version: 25.0.6
@@ -26,6 +26,12 @@ importers:
       '@otterhttp/csrf-csrf':
         specifier: ^3.2.0
         version: 3.2.0
+      '@otterhttp/errors':
+        specifier: ^0.2.1
+        version: 0.2.1
+      '@otterhttp/parsec':
+        specifier: ^0.2.1
+        version: 0.2.1
       '@otterhttp/session':
         specifier: ^0.3.1
         version: 0.3.1
@@ -47,9 +53,6 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
-      milliparsec:
-        specifier: ^3.0.0
-        version: 3.0.0
       mysql2:
         specifier: ^3.10.3
         version: 3.10.3
@@ -92,13 +95,13 @@ importers:
         version: 5.17.0
       tsup:
         specifier: ^8.2.2
-        version: 8.2.2(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5)
+        version: 8.2.2(postcss@8.4.39)(tsx@4.16.2)(typescript@5.6.2)(yaml@2.4.5)
       tsx:
         specifier: ^4.16.2
         version: 4.16.2
       typescript:
-        specifier: ^5.5.4
-        version: 5.5.4
+        specifier: ^5.6.2
+        version: 5.6.2
       vitest:
         specifier: ^2.0.4
         version: 2.0.4(@types/node@20.14.11)
@@ -162,8 +165,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@durhack/token-vault@0.1.1':
-    resolution: {integrity: sha512-rAgf2ZmnG0y5hXZ+xKkT3bTb0nPps/hLphSl5tj3le+BPPivg/ESxotJHJjxqU9oq+vhIVD2pQt+kRTDlM3k/g==}
+  '@durhack/token-vault@0.1.2':
+    resolution: {integrity: sha512-Ak32LCaKVINXtzipH48OhB0MEpMy7ZJG51CMJnRSErt/UEPKh3GRy2B8nClQoy/N89kAUQg2386IoQHlkensOg==}
     engines: {node: '>=18'}
     peerDependencies:
       jose: ^5
@@ -511,6 +514,10 @@ packages:
     resolution: {integrity: sha512-2fK3d2eIdMttd9/wdWf1F14N/rgYBFPabTuL31pbJzDhmYJYzqgod7RJw1eqwEEBZTmcfAh+OuacyCadGE/Bqg==}
     engines: {node: '>=20.16.0'}
 
+  '@otterhttp/content-type@0.4.0':
+    resolution: {integrity: sha512-BNK3Ow+m5zasu7cdNGHbLUAQim4h9t2OVqTnMslpB6bdIVzllRsS6GSJZ+LPsb5AyTEaFQ+6uh+0P0xmM0EY+A==}
+    engines: {node: '>=20.16.0'}
+
   '@otterhttp/content-type@0.5.0':
     resolution: {integrity: sha512-2qFRWOwTQ2ylO0LURyqvOKua0DDxZBl1hD5pZl/GLnoPfUlbX9edUcgbNrWyqTiQ44i63Wi8UhqiXMoJqbBuGA==}
     engines: {node: '>=20.16.0'}
@@ -550,6 +557,10 @@ packages:
   '@otterhttp/parameters@0.1.0':
     resolution: {integrity: sha512-yhqvMwsEZNA5iSssRzcjxi+sDUWg1TUyvxe6P5EeMgHFprsLoqh1TJgQO6Vji0wciHgkZduNzKSrlPdjyV7qyA==}
     engines: {node: '>=20.16.0'}
+
+  '@otterhttp/parsec@0.2.1':
+    resolution: {integrity: sha512-843P1YYhjKRRXVJeRvWXdTRfpICUMXwMH0IgYdciRrthtK0/yt4nsYnybGcsLvLtYMhey0lZuAysURa6tgKbDg==}
+    engines: {node: '>=20.16'}
 
   '@otterhttp/proxy-address@3.0.0':
     resolution: {integrity: sha512-FVD/OTmlyQbD9MfPjgTcdLpglEmJknIXSc8KBGtdgmnfx+nAahy9tZt7JFWQKR/K9nzDreBO6FQD5Bg9YhhmuQ==}
@@ -806,6 +817,10 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       esbuild: '>=0.18'
+
+  bytes@3.1.2:
+    resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
+    engines: {node: '>= 0.8'}
 
   cac@6.7.14:
     resolution: {integrity: sha512-b6Ilus+c3RrdDk+JhLKUAQfzzgLEPy6wcXqS7f/xe1EETvsDP6GORG7SFuOs6cID5YkqchW/LXZbX5bc8j7ZcQ==}
@@ -1144,10 +1159,6 @@ packages:
   micromatch@4.0.7:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
     engines: {node: '>=8.6'}
-
-  milliparsec@3.0.0:
-    resolution: {integrity: sha512-ZnhRJMDFgtvMwzfxHv8bAzVAHv7MgE5b1tPljzWdQT0YJ2GiLuCHuW4x7wz5Tf7nyPnHZEWBHMJIviB1FiiPHg==}
-    engines: {node: '>=12.20'}
 
   mime-db@1.52.0:
     resolution: {integrity: sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==}
@@ -1518,8 +1529,8 @@ packages:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
 
-  typescript@5.5.4:
-    resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
+  typescript@5.6.2:
+    resolution: {integrity: sha512-NW8ByodCSNCwZeghjN3o+JX5OFH0Ojg6sadjEKY4huZ52TqbJTJnDo5+Tw98lSy63NZvi4n+ez5m2u5d4PkZyw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -1699,7 +1710,7 @@ snapshots:
   '@biomejs/cli-win32-x64@1.8.3':
     optional: true
 
-  '@durhack/token-vault@0.1.1(jose@5.6.3)(zod@3.23.8)':
+  '@durhack/token-vault@0.1.2(jose@5.6.3)(zod@3.23.8)':
     dependencies:
       jose: 5.6.3
       module-error: 1.0.2
@@ -1920,6 +1931,10 @@ snapshots:
     dependencies:
       '@otterhttp/parameters': 0.1.0
 
+  '@otterhttp/content-type@0.4.0':
+    dependencies:
+      '@otterhttp/parameters': 0.1.0
+
   '@otterhttp/content-type@0.5.0':
     dependencies:
       '@otterhttp/parameters': 0.1.0
@@ -1946,6 +1961,15 @@ snapshots:
   '@otterhttp/forwarded@3.0.0': {}
 
   '@otterhttp/parameters@0.1.0': {}
+
+  '@otterhttp/parsec@0.2.1':
+    dependencies:
+      '@otterhttp/content-disposition': 3.1.0
+      '@otterhttp/content-type': 0.4.0
+      '@otterhttp/errors': 0.2.1
+      '@otterhttp/type-is': 4.0.1
+      bytes: 3.1.2
+      iconv-lite: 0.6.3
 
   '@otterhttp/proxy-address@3.0.0':
     dependencies:
@@ -2180,6 +2204,8 @@ snapshots:
     dependencies:
       esbuild: 0.23.0
       load-tsconfig: 0.2.5
+
+  bytes@3.1.2: {}
 
   cac@6.7.14: {}
 
@@ -2553,8 +2579,6 @@ snapshots:
       braces: 3.0.3
       picomatch: 2.3.1
 
-  milliparsec@3.0.0: {}
-
   mime-db@1.52.0: {}
 
   mime-types@2.1.35:
@@ -2864,7 +2888,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  tsup@8.2.2(postcss@8.4.39)(tsx@4.16.2)(typescript@5.5.4)(yaml@2.4.5):
+  tsup@8.2.2(postcss@8.4.39)(tsx@4.16.2)(typescript@5.6.2)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -2884,7 +2908,7 @@ snapshots:
       tree-kill: 1.2.2
     optionalDependencies:
       postcss: 8.4.39
-      typescript: 5.5.4
+      typescript: 5.6.2
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -2903,7 +2927,7 @@ snapshots:
       media-typer: 0.3.0
       mime-types: 2.1.35
 
-  typescript@5.5.4: {}
+  typescript@5.6.2: {}
 
   undici-types@5.26.5: {}
 

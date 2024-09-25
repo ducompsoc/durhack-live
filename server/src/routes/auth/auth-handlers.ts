@@ -1,3 +1,4 @@
+import assert from "node:assert/strict"
 import { TokenType } from "@durhack/token-vault/lib"
 import createHttpError from "http-errors"
 
@@ -27,10 +28,12 @@ export class AuthHandlers {
 
   @requireLoggedIn()
   handleGetSocketToken(): Middleware {
-    return async (request: Request & { user?: User }, response: Response) => {
+    return async (request: Request, response: Response) => {
       if (request.user == null) throw createHttpError(500)
+      assert(request.userProfile)
+
       const auth_token = await TokenVault.createToken(TokenType.accessToken, request.user, {
-        scope: ["socket:*"],
+        scope: ["socket:state"],
         claims: {
           client_id: "megateams-socket",
         },

@@ -1,32 +1,40 @@
+import assert from "node:assert/strict"
 import { TokenType } from "@durhack/token-vault/lib"
+import { ServerError } from "@otterhttp/errors"
 import type { JWTPayload } from "jose"
-import type { Server, Socket } from "socket.io"
+import type { Socket, Server as SocketIOServer } from "socket.io"
 import { ZodError } from "zod"
 
+import { adaptTokenSetToClient, adaptTokenSetToDatabase } from "@/auth/adapt-token-set"
+import { type KeycloakUserInfo, keycloakClient } from "@/auth/keycloak-client"
 import TokenVault from "@/auth/tokens"
+import { isNetworkError } from "@/common/is-network-error"
 import { type IHackathonState, hackathonStateSchema } from "@/common/schema/hackathon-state"
-import type { User } from "@/database"
+import { type User, prisma } from "@/database"
 
+import type { UserinfoResponse } from "openid-client"
 import { getHackathonState, setHackathonState } from "./state"
 
 class HackathonStateSocketConnection {
-  declare connectedUser?: User
-  declare manager: HackathonStateSocketManager
-  declare socket: Socket
+  connectedUser?: User
+  manager: HackathonStateSocketManager
+  socket: Socket
 
   constructor(manager: HackathonStateSocketManager, socket: Socket) {
     this.manager = manager
     this.socket = socket
-    this.addSocketEventListeners()
+
+    this.performInitialConnectActions()
   }
 
-  private addSocketEventListeners() {
+  private performInitialConnectActions() {
     this.socket.on("authenticate", this.onAuthenticate.bind(this))
-    this.socket.on("pushState", this.onPushState.bind(this))
     this.socket.on("disconnect", this.onDisconnect.bind(this))
+    this.socket.join("state:global")
+    this.socket.emit("globalState", getHackathonState())
   }
 
-  private async onAuthenticate(token: unknown, cb: (err: string | null) => void) {
+  private async onAuthenticate(token: unknown, cb: (err: string | null, userRoles: string[] | null) => void) {
     if (this.connectedUser) return
     if (typeof token !== "string" || typeof cb !== "function") return
 
@@ -34,7 +42,7 @@ class HackathonStateSocketConnection {
     try {
       decodedPayload = (await TokenVault.decodeToken(TokenType.accessToken, token)).payload
     } catch (error) {
-      return cb("Auth failed.")
+      return cb("Auth failed.", null)
     }
 
     let user: User
@@ -42,26 +50,62 @@ class HackathonStateSocketConnection {
     try {
       ;({ user, scope } = await TokenVault.getUserAndScopeClaims(decodedPayload))
     } catch (error) {
-      return cb("Auth failed.")
+      return cb("Auth failed.", null)
     }
 
-    if (!scope.includes("socket:state")) return cb("Auth failed.")
+    if (user.tokenSet == null) return cb("Auth failed.", null)
+    if (!scope.includes("socket:state")) return cb("Auth failed.", null)
+
+    // if the token set has expired, we try to refresh it
+    let tokenSet = adaptTokenSetToClient(user.tokenSet)
+    if (tokenSet.expired() && tokenSet.refresh_token != null) {
+      try {
+        tokenSet = await keycloakClient.refresh(tokenSet.refresh_token)
+        await prisma.tokenSet.update({
+          where: { userId: user.keycloakUserId },
+          data: adaptTokenSetToDatabase(tokenSet),
+        })
+      } catch (error) {
+        if (isNetworkError(error)) {
+          return cb("Encountered network error while attempting to refresh a token set", null)
+        }
+        assert(error instanceof Error)
+        console.error(`Failed to refresh access token for ${tokenSet.claims().email}: ${error.stack}`)
+      }
+    }
+
+    // if the token set is still expired, the user needs to log in again
+    if (tokenSet.expired() || tokenSet.access_token == null) {
+      return cb("Auth failed.", null)
+    }
+
+    // use the token set to get the user profile
+    let profile: UserinfoResponse<KeycloakUserInfo> | undefined
+    try {
+      profile = await keycloakClient.userinfo<KeycloakUserInfo>(tokenSet.access_token)
+    } catch (error) {
+      if (isNetworkError(error)) {
+        throw new ServerError("Encountered network error while attempting to fetch profile info", {
+          statusCode: 500,
+          exposeMessage: false,
+          cause: error,
+        })
+      }
+
+      assert(error instanceof Error)
+      console.error(`Failed to fetch profile info for ${tokenSet.claims().email}: ${error.stack}`)
+
+      // if the access token is rejected, the user needs to log in again
+      return cb("Auth failed.", null)
+    }
 
     this.connectedUser = user
 
-    this.socket.join("state:global")
-    this.socket.join(`state:user:${this.connectedUser.keycloakUserId}`)
-    this.socket.emit("userState", {})
-
-    cb(null)
-    this.socket.emit("globalState", getHackathonState())
+    if (profile.groups?.includes("/admins")) this.socket.on("pushState", this.onPushState.bind(this))
+    cb(null, profile.groups ?? [])
   }
 
   private async onPushState(state: unknown, cb: (error: Error | null) => void) {
-    // todo: ensure the connected user is an administrator using KeyCloak
-    if (!this.connectedUser) return
-    if (this.manager.server == null) return
-
     let parsedState: IHackathonState
     try {
       parsedState = hackathonStateSchema.parse(state)
@@ -75,37 +119,25 @@ class HackathonStateSocketConnection {
   }
 
   private onDisconnect() {
-    this.manager.connections.delete(this)
+    this.manager.connections.delete(this.socket.id)
   }
 }
 
-class HackathonStateSocketManager {
-  declare server?: Server
-  declare connections: Set<HackathonStateSocketConnection>
+export class HackathonStateSocketManager {
+  server: SocketIOServer
+  connections: Map<string, HackathonStateSocketConnection>
 
-  constructor() {
-    this.connections = new Set()
-  }
-
-  public initialise(server: Server): void {
+  constructor(server: SocketIOServer) {
     this.server = server
+    this.connections = new Map()
     this.addServerEventListeners()
   }
 
-  public getServer(): Server | undefined {
-    return this.server
-  }
-
   private addServerEventListeners(): void {
-    if (!this.server) throw new Error("Manager not initialized.")
-
     this.server.on("connection", this.onConnection.bind(this))
   }
 
   private onConnection(socket: Socket) {
-    if (!this.server) return
-    this.connections.add(new HackathonStateSocketConnection(this, socket))
+    this.connections.set(socket.id, new HackathonStateSocketConnection(this, socket))
   }
 }
-
-export default new HackathonStateSocketManager()

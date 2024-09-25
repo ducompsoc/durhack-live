@@ -27,7 +27,11 @@ export default React.memo(() => {
     return <main>Not connected.</main>
   }
 
-  if (hackathon.role !== "admin") {
+  if (hackathon.authenticationLoading) {
+    return <main>Waiting for authentication...</main>
+  }
+
+  if (!hackathon.roles?.includes("/admins")) {
     return <main>You do not have permission to view this page.</main>
   }
 

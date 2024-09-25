@@ -80,20 +80,22 @@ export interface IHackathonState {
   tips: string[]
 }
 
-export interface IHackathonConnectedConnection {
+export type HackathonConnectedConnection = {
   connected: true
-  role: string | null
+  authenticationLoading: boolean
+  roles: string[] | null
   state: IHackathonState
 }
 
-export type THackathonConnection =
-  | IHackathonConnectedConnection
-  | { connected: false; role: string | null; state: IHackathonState | null }
+export type HackathonConnection =
+  | HackathonConnectedConnection
+  | { connected: false; authenticationLoading: false; roles: string[] | null; state: IHackathonState | null }
 
 const events = new EventEmitter()
-let lastConnection: THackathonConnection = { connected: false, role: null, state: null }
+let lastConnection: HackathonConnection = { connected: false, authenticationLoading: false, roles: null, state: null }
 let socket: Socket | null = null
-const userRole: string | null = null
+let userRoles: string[] | null = null
+let authenticationLoading = true
 
 async function getBearerToken(): Promise<string> {
   const request = await makeLiveApiRequest("/auth/socket-token")
@@ -105,51 +107,50 @@ async function getBearerToken(): Promise<string> {
   return token
 }
 
-export async function attemptStateSocketAuth() {
+export async function attemptStateSocketAuth(): Promise<void> {
   if (!socket) return
 
-  if (!sessionStorage.getItem("durhack-live-socket-token-2023")) {
+  if (!sessionStorage.getItem("durhack-live-socket-token-2024")) {
     try {
-      sessionStorage.setItem("durhack-live-socket-token-2023", await getBearerToken())
+      sessionStorage.setItem("durhack-live-socket-token-2024", await getBearerToken())
     } catch (error) {
-      console.error(error)
+      // assume the error is because the user is unauthenticated
+      authenticationLoading = false
       return
     }
   }
 
-  const retrieveRole = new Promise<string>((resolve, reject) => {
+  const retrieveRoles = new Promise<void>((resolve, reject) => {
     if (!socket) return
 
-    function authenticateCallback(err: Error | string | null): void {
+    function authenticateCallback(err: string | null, roles: string[] | null): void {
       if (err) {
         if (err === "Auth failed.") {
-          sessionStorage.removeItem("durhack-live-socket-token-2023")
-          console.error("Couldn't authenticate socket connection - bad socket token")
-          reject(err)
+          sessionStorage.removeItem("durhack-live-socket-token-2024")
+          void attemptStateSocketAuth()
+          reject(new Error("Couldn't authenticate socket connection - bad socket token"))
           return
         }
 
-        console.error(err)
-        reject(err)
+        reject(new Error(err))
         return
       }
 
-      // todo: replace with keycloak
-      reject(new Error("User role is null"))
-      return
+      userRoles = roles
+      authenticationLoading = false
 
-      // biome-ignore lint/correctness/noUnreachable: see todo
       if (lastConnection.connected) {
-        events.emit("connection", lastConnection)
+        events.emit("connection", { ...lastConnection, authenticationLoading, roles: userRoles })
       }
 
-      console.info("Authenticated.")
+      resolve()
     }
 
-    socket.emit("authenticate", sessionStorage.getItem("durhack-live-socket-token-2023"), authenticateCallback)
+    socket.emit("authenticate", sessionStorage.getItem("durhack-live-socket-token-2024"), authenticateCallback)
   })
 
-  return await retrieveRole
+  await retrieveRoles
+  return
 }
 
 export function connectStateSocket() {
@@ -158,19 +159,25 @@ export function connectStateSocket() {
 
   socket = io(window.location.origin)
 
-  socket.on("connect", async () => {
+  socket.on("connect", () => {
     if (!socket) return
     console.log("Connected. Authenticating...")
-    void (await attemptStateSocketAuth())
+    void attemptStateSocketAuth()
   })
 
   socket.on("globalState", (state: IHackathonState) => {
-    lastConnection = { connected: true, role: userRole, state }
+    lastConnection = { connected: true, authenticationLoading, roles: userRoles, state }
     events.emit("connection", lastConnection)
   })
 
   socket.on("disconnect", () => {
-    lastConnection = { connected: false, role: userRole, state: lastConnection?.state || null }
+    authenticationLoading = false
+    lastConnection = {
+      connected: false,
+      authenticationLoading: false,
+      roles: userRoles,
+      state: lastConnection?.state || null,
+    }
     events.emit("connection", lastConnection)
   })
 }
@@ -183,11 +190,11 @@ export function pushHackathon(newState: IHackathonState) {
   })
 }
 
-export function useHackathon(): THackathonConnection {
-  const [connection, setConnection] = React.useState<THackathonConnection>(lastConnection)
+export function useHackathon(): HackathonConnection {
+  const [connection, setConnection] = React.useState<HackathonConnection>(lastConnection)
 
   React.useEffect(() => {
-    function handleConnection(result: THackathonConnection) {
+    function handleConnection(result: HackathonConnection) {
       setConnection(result)
     }
 

@@ -27,7 +27,7 @@ export const ConnectionBar = React.memo(() => {
         </div>
         <div className="grow basis-0">
           Connecting to DurHack.{" "}
-          <span className="text-muted">Taking too long? Try a refresh, or ping an organiser on Slack.</span>
+          <span className="text-muted-foreground">Taking too long? Try a refresh, or ping an organiser on Slack.</span>
         </div>
       </ContentContainer>
     </div>

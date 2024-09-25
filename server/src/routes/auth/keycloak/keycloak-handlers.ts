@@ -10,7 +10,7 @@ import type { Request } from "@/request"
 import type { Response } from "@/response"
 import type { Middleware } from "@/types/middleware"
 
-import { keycloakClient } from "./keycloak-client"
+import { keycloakClient } from "../../../auth/keycloak-client"
 
 export class KeycloakHandlers {
   client: Client
