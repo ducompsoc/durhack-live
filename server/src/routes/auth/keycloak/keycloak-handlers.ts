@@ -84,7 +84,7 @@ export class KeycloakHandlers {
         },
         include: {
           tokenSet: true,
-        }
+        },
       })
 
       session.userId = userId
