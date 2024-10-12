@@ -191,7 +191,7 @@ export const Stage = React.memo(() => {
   )
 
   return (
-    <Section className="flex items-start flex-row md:flex-row" style={{ marginBottom: 0 }}>
+    <Section className="flex flex-col md:flex-row" style={{ marginBottom: 0 }}>
       <Card className="p-1 md:w-[66%]">
         <div className="bg-black md:h-[447px] h-[250px]">
           <iframe
