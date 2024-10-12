@@ -12,7 +12,7 @@ const MainContent = React.memo(() => {
   const formik = useFormikContext<IOverlayState["main"]>()
 
   return (
-    <>
+    <div className="space-y-2">
       <h3>Default screen</h3>
 
       <Segment className="row">
@@ -87,7 +87,7 @@ const MainContent = React.memo(() => {
       />
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

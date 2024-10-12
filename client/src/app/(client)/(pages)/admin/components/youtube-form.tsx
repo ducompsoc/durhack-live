@@ -12,7 +12,7 @@ const YoutubeContent = React.memo(() => {
   const formik = useFormikContext<IOverlayState["youtube"]>()
 
   return (
-    <>
+    <div className="space-y-2">
       <h3>YouTube</h3>
 
       <p>DANGER ZONE: these controls are not intuitive at all; please don&apos;t touch without asking first.</p>
@@ -79,7 +79,7 @@ const YoutubeContent = React.memo(() => {
       />
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

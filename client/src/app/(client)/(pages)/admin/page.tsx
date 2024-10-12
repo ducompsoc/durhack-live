@@ -67,6 +67,7 @@ export default React.memo(() => {
             </Card>
             <Card className="grow basis-0">
               <LowerThirdForm />
+              <div className="mt-4"></div>
               <UpperThirdForm />
             </Card>
           </div>

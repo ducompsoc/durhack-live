@@ -9,7 +9,7 @@ import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 export const AnnouncementContent = React.memo(() => {
   return (
-    <>
+    <div className="space-y-2">
       <h3>Announcement</h3>
 
       <p>This message shows just below socials on the website.</p>
@@ -50,7 +50,7 @@ export const AnnouncementContent = React.memo(() => {
       </Segment>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

@@ -13,7 +13,7 @@ const TipsContent = React.memo(() => {
   const formik = useFormikContext<Pick<IHackathonState, "tips">>()
 
   return (
-    <>
+    <div className="space-y-1">
       <h3>Top Tips</h3>
 
       <p>
@@ -52,7 +52,7 @@ const TipsContent = React.memo(() => {
       />
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 
