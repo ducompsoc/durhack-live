@@ -30,7 +30,7 @@ const TipsContent = React.memo(() => {
                 <div className="grow basis-0">
                   <Field as="textarea" className="dh-input" name={`tips.${index}`} rows="5" />
                 </div>
-                <div>
+                <div className="items-start">
                   <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>
                     -
                   </button>

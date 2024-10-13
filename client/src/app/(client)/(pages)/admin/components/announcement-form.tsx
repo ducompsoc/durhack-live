@@ -12,17 +12,17 @@ export const AnnouncementContent = React.memo(() => {
     <div className="space-y-2">
       <h3>Announcement</h3>
 
-      <p>This message shows just below socials on the website.</p>
+      <p>This message shows just below socials on the website. Button text and button link is optional.</p>
 
       <Segment className="row">
-        <Label>Enabled:</Label>
+        <Label className="center">Enabled:</Label>
         <div>
           <Field type="checkbox" className="dh-check" name="enabled" />
         </div>
       </Segment>
 
-      <Segment className="row">
-        <Label>Title:</Label>
+      <Segment className="row ">
+        <Label className="flex items-center">Title:</Label>
         <div>
           <Field type="text" className="dh-input" name="title" />
         </div>
@@ -36,14 +36,14 @@ export const AnnouncementContent = React.memo(() => {
       </Segment>
 
       <Segment className="row">
-        <Label>Button text (optional):</Label>
+        <Label>Button text:</Label>
         <div>
           <Field type="text" className="dh-input" name="buttonText" />
         </div>
       </Segment>
 
       <Segment className="row">
-        <Label>Button link (optional):</Label>
+        <Label>Button link:</Label>
         <div>
           <Field type="text" className="dh-input" name="buttonLink" />
         </div>
