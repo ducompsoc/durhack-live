@@ -12,8 +12,10 @@ const MainContent = React.memo(() => {
   const formik = useFormikContext<IOverlayState["main"]>()
 
   return (
-    <>
+    <div className="space-y-2">
       <h3>Default screen</h3>
+
+      <p>This is the up-next announcement that shows in the top left corner of the Default scene.</p>
 
       <Segment className="row">
         <Label>Dark Mode:</Label>
@@ -22,7 +24,6 @@ const MainContent = React.memo(() => {
         </div>
       </Segment>
 
-      <h4>Next up</h4>
 
       <Segment className="row">
         <Label>Enabled:</Label>
@@ -87,7 +88,7 @@ const MainContent = React.memo(() => {
       />
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

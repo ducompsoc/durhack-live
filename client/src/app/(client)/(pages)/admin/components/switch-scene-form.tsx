@@ -12,7 +12,7 @@ const scenes = ["Default", "Feed A", "Feed B", "Feed C", "Recording A", "Recordi
 
 const SwitchSceneContent = React.memo(() => {
   return (
-    <>
+    <div className="space-y-2">
       <h3>Switch Scene</h3>
 
       <p>
@@ -48,7 +48,7 @@ const SwitchSceneContent = React.memo(() => {
       </Segment>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

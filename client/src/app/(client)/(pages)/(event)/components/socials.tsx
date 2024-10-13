@@ -30,7 +30,7 @@ export const Socials = React.memo(() => (
   <Section>
     <div>
       <Card
-        className="flex flex-col md:flex-row gap-4 !p-0 !pl-6 !py-4 md:!py-6 md:!px-4"
+        className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:flex-row !p-0 !pl-6 !py-4 md:!py-6 md:!px-4"
         style={{ justifyContent: "space-evenly" }}
       >
         <SocialOption href="/api/auth/discord" icon={DiscordIcon} pretext="Chat to others on" text="Discord" />

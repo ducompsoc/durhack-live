@@ -13,7 +13,7 @@ const TipsContent = React.memo(() => {
   const formik = useFormikContext<Pick<IHackathonState, "tips">>()
 
   return (
-    <>
+    <div className="space-y-1">
       <h3>Top Tips</h3>
 
       <p>
@@ -30,7 +30,7 @@ const TipsContent = React.memo(() => {
                 <div className="grow basis-0">
                   <Field as="textarea" className="dh-input" name={`tips.${index}`} rows="5" />
                 </div>
-                <div>
+                <div className="items-start">
                   <button type="button" className="plain-btn mx-1" onClick={() => arrayHelpers.remove(index)}>
                     -
                   </button>
@@ -52,7 +52,7 @@ const TipsContent = React.memo(() => {
       />
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

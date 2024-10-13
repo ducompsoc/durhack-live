@@ -11,7 +11,7 @@ import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 const MilestoneContent = React.memo(() => {
   return (
-    <>
+    <div className="space-y-2">
       <h3>Milestone</h3>
 
       <p>This is the countdown that shows in the bottom right of the Default scene.</p>
@@ -44,7 +44,7 @@ const MilestoneContent = React.memo(() => {
       </Segment>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

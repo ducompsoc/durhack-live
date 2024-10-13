@@ -10,7 +10,7 @@ import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 const UpperThirdContent = React.memo(() => {
   return (
-    <>
+    <div className="space-y-2">
       <h3>Upper Third</h3>
 
       <p>Behaves similarly, except this shows in the top left.</p>
@@ -30,7 +30,7 @@ const UpperThirdContent = React.memo(() => {
       </Segment>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

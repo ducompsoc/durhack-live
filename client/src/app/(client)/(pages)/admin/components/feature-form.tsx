@@ -10,7 +10,7 @@ import { DefaultButtons, Label, OverlayForm, Segment } from "./"
 
 const FeatureContent = React.memo(() => {
   return (
-    <>
+    <div className="space-y-2">
       <h3>Feature</h3>
 
       <p>This is a special, persistent announcement that shows over the top of the Default scene.</p>
@@ -46,7 +46,7 @@ const FeatureContent = React.memo(() => {
       </Segment>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 

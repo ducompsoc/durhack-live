@@ -28,7 +28,7 @@ const ScheduleContent = React.memo(() => {
   }
 
   return (
-    <>
+    <div>
       <h3>Schedule</h3>
 
       <p>This schedule solely affects what is shown on this website. It does not affect the livestream.</p>
@@ -140,7 +140,7 @@ const ScheduleContent = React.memo(() => {
                   <td>
                     <button
                       type="button"
-                      className="plain-btn mb-2"
+                      className="plain-btn mb-2 mt-2"
                       onClick={() =>
                         arrayHelpers.insert(formik.values.schedule.length, {
                           ...newItem,
@@ -158,7 +158,7 @@ const ScheduleContent = React.memo(() => {
       </Table>
 
       <DefaultButtons />
-    </>
+    </div>
   )
 })
 
