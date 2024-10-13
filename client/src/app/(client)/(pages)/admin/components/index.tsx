@@ -24,9 +24,9 @@ export const Label = ({ className, ...props }: React.HTMLAttributes<HTMLDivEleme
 }
 
 export const Buttons = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  return <div className={cn("buttons ", className)} {...props} />
+  return <div className={cn("buttons", className)} {...props} />
 }
 
 export const Table = ({ className, ...props }: React.HTMLAttributes<HTMLTableElement>) => {
-  return <table className={cn("table ", className)} {...props} />
+  return <table className={cn("table", className)} {...props} />
 }
