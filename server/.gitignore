@@ -1,44 +1,9 @@
-# Exclude everything
-/*
+# ignore everything in 'state' except 'default.json'
+!state
+state/*
+!state/default.json
 
-# Specific includes
-
-## Editorconfig
-!.editorconfig
-
-## Package manager
-!/package.json
-!/pnpm-lock.yaml
-
-## Config files
-!/*config.ts
-!/*config.mjs
-!/*config.cjs
-!/*config.js
-!/*config.json
-!/*rc.json
-
-## Biome
-!/biome.json
-
-## Markdowns
-!*.md
-!LICENSE
-
-## important Git files
-!.gitmodules
-!.gitignore
-!.gitattributes
-!.git-blame-ignore-revs
-
-## GitHub specific
-!/.github/
-
-## Sources
-!/src
-!config
-!/prisma
-!/state/default.json
-!/keys/.gitkeep
-
-# Explicit exceptions/ignores
+# ignore everything in 'keys' except '.gitkeep'
+!keys
+keys/*
+!keys/.gitkeep
