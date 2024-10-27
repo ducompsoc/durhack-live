@@ -10,14 +10,13 @@ runs:
     - uses: actions/setup-node@v4
       with:
         node-version-file: server/.node-version
-        cache-dependency-path: server/pnpm-lock.yaml
+        cache-dependency-path: pnpm-lock.yaml
         registry-url: https://registry.npmjs.org/
         cache: 'pnpm'
 
     - name: Install dependencies
       shell: bash
-      working-directory: server
-      run: pnpm install
+      run: pnpm --filter "{server}" install
 
     - name: Generate sources
       shell: bash
