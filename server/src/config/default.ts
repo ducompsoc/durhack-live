@@ -3,7 +3,7 @@ import type { ConfigIn } from "./schema"
 
 export default {
   listen: {
-    host: "localhost",
+    host: "127.0.0.1",
     port: 3201, // Live project has ports 3200-3299
   },
   origin: "http://live.durhack-dev.com",
