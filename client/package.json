@@ -1,6 +1,7 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@durhack/live-client",
+  "description": "Client for DurHack event/livestream site",
   "private": true,
   "author": "Ethan Waite <ethan.w.waite@durham.ac.uk>",
   "contributors": ["Joe Clack <durhack@joeclack.me.uk>", "Jacob Wrenn <jacob@wrenn.me>"],
@@ -50,6 +51,5 @@
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.30",
     "tailwindcss": "^3.3.3"
-  },
-  "packageManager": "pnpm@9.10.0+sha256.355a8ab8dbb6ad41befbef39bc4fd6b5df85e12761d2724bd01f13e878de4b13"
+  }
 }
