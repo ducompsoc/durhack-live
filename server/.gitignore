@@ -36,11 +36,9 @@
 
 ## Sources
 !/src
+!config
 !/prisma
 !/state/default.json
 !/keys/.gitkeep
-
-## Config
-/src/config/local*
 
 # Explicit exceptions/ignores
