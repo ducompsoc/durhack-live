@@ -5,7 +5,7 @@ import { directoryAdapter } from "zod-config/directory-adapter"
 import { dirname } from "@/dirname"
 
 import { configSchema } from "./schema"
-import { typescriptAdapter } from "./typescript-adapter";
+import { typescriptAdapter } from "./typescript-adapter"
 
 export type * from "./schema"
 

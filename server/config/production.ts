@@ -1,7 +1,7 @@
 import { TokenType } from "@durhack/token-vault/lib"
 
-import type { DeepPartial } from "@/types/deep-partial"
 import type { ConfigIn } from "@/config/schema"
+import type { DeepPartial } from "@/types/deep-partial"
 
 export default {
   origin: "https://live.durhack.com",
