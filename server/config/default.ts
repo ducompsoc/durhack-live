@@ -1,5 +1,6 @@
 import { TokenType } from "@durhack/token-vault/lib"
-import type { ConfigIn } from "./schema"
+
+import type { ConfigIn } from "@/config/schema"
 
 export default {
   listen: {

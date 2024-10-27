@@ -1,21 +1,22 @@
 import path from "node:path"
 import { loadConfig } from "zod-config"
 import { directoryAdapter } from "zod-config/directory-adapter"
-import { scriptAdapter } from "zod-config/script-adapter"
 
 import { dirname } from "@/dirname"
 
 import { configSchema } from "./schema"
+import { typescriptAdapter } from "./typescript-adapter";
+
 export type * from "./schema"
 
 const config = await loadConfig({
   schema: configSchema,
   adapters: directoryAdapter({
-    paths: path.join(dirname, "config"),
+    paths: path.resolve(dirname, "..", "config"),
     adapters: [
       {
         extensions: [".ts", ".js"],
-        adapterFactory: (filePath: string) => scriptAdapter({ path: filePath }),
+        adapterFactory: (filePath: string) => typescriptAdapter({ path: filePath }),
       },
     ],
   }),
