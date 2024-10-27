@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "next dev -p 3200",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3200",
     "lint": "next lint",
     "check": "biome check .",
     "check:fix": "biome check --write ."
