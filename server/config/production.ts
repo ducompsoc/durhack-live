@@ -10,7 +10,7 @@ export default {
     options: {
       cookieOptions: {
         name: "__Host-durhack-live.x-csrf-token",
-        domain: undefined,
+        domain: null,
         sameSite: "strict",
         path: "/",
         secure: true,
@@ -20,7 +20,7 @@ export default {
   session: {
     cookie: {
       name: "__Host-durhack-live-session",
-      domain: undefined,
+      domain: null,
       path: "/",
       secure: true,
       sameSite: "lax",
