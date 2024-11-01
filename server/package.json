@@ -57,6 +57,6 @@
     "openid-client": "^5.6.5",
     "socket.io": "^4.7.5",
     "zod": "^3.23.8",
-    "zod-config": "^0.0.5"
+    "zod-config": "^0.1.0"
   }
 }
