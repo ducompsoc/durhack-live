@@ -143,7 +143,6 @@ function NextUpSlide(props: NextUpSlideProps) {
           incrementAnimationDelay()
           return element
         })}
-        ;
       </>
     )
   }
