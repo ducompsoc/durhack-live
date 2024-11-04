@@ -17,7 +17,7 @@ const LowerThirdContent = React.memo(() => {
   const disableSubmit = hackathon.overlay.lowerThird.managedBy === "admin" && !formik.dirty
 
   return (
-    <>
+    <div className="space-y-2">
       <h3>Lower Third</h3>
 
       <p>
@@ -68,7 +68,7 @@ const LowerThirdContent = React.memo(() => {
           Submit
         </button>
       </Buttons>
-    </>
+    </div>
   )
 })
 

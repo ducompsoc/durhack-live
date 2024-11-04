@@ -20,7 +20,7 @@ export const Segment = ({ className, ...props }: React.HTMLAttributes<HTMLDivEle
 }
 
 export const Label = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
-  return <div className={cn("label", className)} {...props} />
+  return <div className={cn("label flex items-center pr-2", className)} {...props} />
 }
 
 export const Buttons = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {

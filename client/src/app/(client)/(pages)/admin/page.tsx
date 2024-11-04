@@ -46,45 +46,46 @@ export default React.memo(() => {
             </Card>
           </div>
 
-          <div className="row">
-            <Card className="grow basis-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <Card className="grow">
               <AnnouncementForm />
             </Card>
-            <Card className="grow basis-0">
+            <Card className="grow">
               <TipsForm />
             </Card>
           </div>
 
-          <div>
+          <div className="hidden xl:block">
             <Card>
               <ScheduleForm />
             </Card>
           </div>
 
-          <div className="row">
-            <Card className="grow basis-0">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
+            <Card className="grow">
               <MainForm />
             </Card>
-            <Card className="grow basis-0">
+            <Card className="grow">
               <LowerThirdForm />
+              <div className="mt-4"></div>
               <UpperThirdForm />
             </Card>
           </div>
 
-          <div className="row">
-            <Card className="grow basis-0">
+          <div className="grid grid-cols-1 lg:grid-cols-3">
+            <Card className="grow">
               <SwitchSceneForm />
             </Card>
-            <Card className="grow basis-0">
+            <Card className="grow">
               <MilestoneForm />
             </Card>
-            <Card className="grow basis-0">
+            <Card className="grow">
               <FeatureForm />
             </Card>
           </div>
 
           <div>
-            <Card className="grow basis-0">
+            <Card className="grow">
               <YoutubeForm />
             </Card>
           </div>
