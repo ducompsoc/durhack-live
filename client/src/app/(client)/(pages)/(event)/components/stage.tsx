@@ -49,7 +49,7 @@ const TopTip = React.memo(() => {
   }, [state])
 
   if (!tip) {
-    return <></>
+    return null
   }
 
   return (
@@ -213,7 +213,7 @@ export const Stage = React.memo(() => {
         {nowPlayingEl}
         {onTheSideEl}
         {upNextEl}
-        {(!nowPlayingEl || !onTheSideEl || !upNextEl) && topTipEl}
+        {(!nowPlayingEl || !onTheSideEl || !upNextEl) && (state.tips.length > 0) && topTipEl}
       </div>
     </Section>
   )
