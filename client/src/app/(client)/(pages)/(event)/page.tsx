@@ -11,7 +11,6 @@ import { Stage } from "./components/stage"
 export default React.memo(() => (
   <main>
     <Stage />
-    <Socials />
     <Announcement />
     <HackerPack />
     <MainWebsiteLink />
